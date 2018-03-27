@@ -1,0 +1,515 @@
+﻿#s4-bodyContainer{
+    padding-bottom: 0px;
+}
+
+#DeltaWebPartAdderUpdatePanelContainer{
+    z-index:999;
+}
+
+.container-fluid * {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+}
+
+.container-fluid{
+    padding-left: 0px;
+    padding-right:0px;
+}
+
+a, a:hover, a:visited{
+    color:#00669C;
+    text-decoration:none;
+}
+
+.o-hidden{
+    overflow: hidden;
+}
+
+/*TAMAÑOS FUENTE*/
+.font-weight-semi-bold{
+    font-weight: 600;
+}
+
+/*MÁRGENES*/
+.mt-6{
+    margin-top: 65px;
+}
+
+.no-margin{
+    margin: 0px !important;
+}
+
+.mb-0{
+    margin-bottom: 0px;
+}
+
+.no-padding{
+    padding: 0px;
+}
+
+.no-padding-right{
+    padding-right: 0px;
+}
+
+/*ALTURAS*/
+.h-50p{
+    height: 50%;
+}
+
+.h-200{
+    height: 200px;
+}
+
+/*ANCHOS*/
+.w-75{
+    width:75%;
+}
+
+/*BACKGROUND*/
+.bg-dark-blue{
+    background-color: #003354;
+}
+
+/*HEADER*/
+.navbar{
+    height:100px;
+}
+
+.s4-tn{
+    margin-top: 65px;
+}
+
+.s4-tn li.static{
+    margin-left:40px;
+}
+
+.s4-tn li.static > a {
+	display: none !important;
+}
+
+.s4-tn li.static > ul a {
+	display: block !important;
+    color: #fff;
+    font-weight: 600;
+    text-transform:uppercase;
+}
+
+.s4-tn li.static > ul a:hover{
+    color: #fff;
+}
+
+.search-box{
+    background: url('/style library/images/search.png') #194865 no-repeat 97% center !important;
+    border:none !important;
+    width:100% !important;
+    padding:15px 15px 15px 80px !important;
+    height: 60px !important;
+    color:#fff !important;
+    border-radius:0px !important;
+    font-size:1.2rem !important;
+    margin-bottom: 1px;
+}
+
+/*CONTENT*/
+.content{
+    min-height: 400px;
+    margin-top: 20px;
+    padding: 0px 20px;
+}
+
+/*HOME*/
+
+#home .row{
+    margin-bottom: 20px;
+}
+
+#top-zone{
+    background-color:#f5f5f5;
+    padding: 5px 5px;
+    overflow:hidden;
+}
+
+/*FIN HOME*/
+
+/*FOOTER*/
+footer{
+    background-color: #003354;
+    min-height:300px;
+    padding: 60px 0px;
+    margin-top:20px;
+}
+
+footer div{
+    text-align: center;
+}
+
+footer p{
+    color:#fff;
+}
+
+#quickLinks{
+    display:inline-block;
+    list-style: none;
+    padding:10px 0px;
+    list-style: none;
+}
+
+#quickLinks ul{
+    padding-left: 0px;
+    list-style:none;
+}
+
+#quickLinks li{
+    text-align: left;
+}
+
+#quickLinks li.group-list{
+    float:left;
+    margin-right: 100px;
+    color:#66CCFF;
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+#quickLinks li.group-list:last-child{
+    margin-right:0px;
+}
+
+#quickLinks li.group-list ul li a{
+    color:#fff;
+    font-weight: 500;
+}
+
+#quickLinks li.group-list ul li a:hover{
+    text-decoration: none;
+}
+
+#socialLinks{
+    list-style: none;
+    display:inline-block;
+    padding: 0px;
+    margin-top: 20px;
+}
+
+#socialLinks li{
+    float:left;
+    margin-right: 20px;
+}
+
+#socialLinks li:last-child{
+    float:left;
+    margin-right: 0px;
+}
+
+#socialLinks li a, #socialLinks li a:hover{
+    color:#fff;
+    text-decoration: none;
+}
+
+#socialLinks li a span{
+    font-size:3em;
+}
+
+#contactLinks{
+    list-style:none;
+    display:inline-block;
+    padding: 0px;
+}
+
+#contactLinks li{
+    float:left;
+    padding: 0px 10px;
+    border-right:solid 1px #fff;
+}
+
+#contactLinks li:last-child{
+    border-right:none;
+}
+
+#contactLinks li a, #contactLinks li a:hover{
+    color: #fff;
+    text-decoration: none;
+}
+
+/*COMPONENTES*/
+.card{
+    border: none;
+}
+
+.card-body{
+    padding: 0px;
+}
+
+.card-title{
+    background-color: #EDEDED;
+    height: 30px;
+    line-height: 30px;
+    padding-left: 10px;
+    font-size: 1rem;
+    color: #00669C;
+}
+
+.card-title span{
+    font-size:1rem;
+}
+
+.card ul{
+    list-style:none;
+    padding:0px;
+}
+
+.card li{
+    background-color: #F5F5F5;
+    padding: 10px 20px 5px 20px;
+    margin-bottom: 10px;
+}
+
+.card li:last-child{
+    margin-bottom: 0px;
+}
+
+.card li h4{
+    font-weight: bold;
+}
+
+.card.icon-left [class^="icon-"], [class*=" icon-"]{
+    font-size: 2rem;
+}
+
+.card .toolbar{
+    border-bottom: solid 1px #ccc;
+    padding: 0px 0px 5px 10px;
+}
+
+.card .toolbar a{
+    font-size: 0.7rem;
+    text-transform:uppercase;
+    font-weight:bold;
+}
+
+.card .toolbar a.add:before{
+    font-family: 'vass' !important;
+    content: "\e90a";
+    margin-right:5px;
+}
+
+
+/*DATE*/
+.date:before{
+    font-family: 'vass' !important;
+    content: "\e905";
+    margin-right: 5px;
+}
+
+.clock:before{
+    font-family: 'vass' !important;
+    content: "\e906";
+    margin-right: 5px;
+    margin-left: 15px;
+}
+
+/*BANNER*/
+.banner{
+    height: 100%;
+    border-radius: 0px;
+}
+
+.banner .card-body{
+    padding: 30px;
+    position:relative;
+}
+
+.banner .card-body a{
+    color: #000;
+    font-size: 2.5rem;
+    font-weight: 300;
+    display: inline-block;
+    line-height:1.1;
+}
+
+.banner .card-body a.w-75{
+    line-height: 1.5;
+}
+
+.banner .card-body p{
+    margin-top: 20px;
+}
+
+.banner.image .card-body{
+    margin: 30px;
+    background-color: rgba(245, 245,245, 0.9);
+}
+
+#top-zone .banner a{
+    position: absolute;
+    font-size: 1rem;
+    bottom: 10px;
+    left: 20px;
+}
+
+#top-zone .banner.image .card-body{
+    background-color: rgba(245, 245,245, 0.9);
+    padding: 10px;
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    margin: 0px;
+    width:90%;
+}
+
+#top-zone .banner.image .card-body a{
+    position:relative;
+    margin-left: 0px;
+    font-size: 1rem;
+    font-weight: 500;
+    bottom: 0;
+    left: 0;
+}
+
+#top-zone .banner.image .card-body p{
+    font-size: 0.8rem;
+    font-weight: 300;
+    width: 100% !important;
+}
+
+/*CALENDAR*/
+#calendar ul {list-style-type: none;}
+
+#calendar .month {
+    width: 100%;
+    background: #ededed;
+    text-align: center;
+}
+
+#calendar .month ul {
+    margin: 0;
+    padding: 0;
+}
+
+#calendar .month ul li {
+    color: #022540;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 500;
+}
+
+#calendar .month .prev {
+    float: left;
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+#calendar .month .next {
+    float: right;
+    margin-top: 3px;
+    margin-right: 3px;
+}
+
+#calendar .month .current-month{
+    padding: 10px 0px;
+}
+
+#calendar .weekdays {
+    margin: 0;
+    padding: 5px 0;
+    background-color: #ededed;
+}
+
+#calendar .weekdays li {
+    display: inline-block;
+    width: 13%;
+    color: #022540;
+    font-weight: 500;
+    text-align: center;
+}
+
+#calendar .days {
+    padding: 10px 0;
+    background: #ededed;
+    margin: 0;
+}
+
+#calendar .days li {
+    list-style-type: none;
+    display: inline-block;
+    width: 13%;
+    text-align: center;
+    margin-bottom: 5px;
+    font-size:12px;
+    color: #777;
+}
+
+#calendar .days li .active {
+    padding: 5px;
+    background: #629e4d;
+    color: white !important
+}
+
+.event-today{
+    background: #629e4d;
+    color: #fff;
+    height:100%
+}
+
+.event-date{
+    text-align: center;
+    padding: 10px;
+    line-height: 1.2;
+}
+
+.event-date span{
+    display: block;
+}
+
+.event-day-number{
+    font-size: 2rem;
+}
+
+.events{
+    padding: 0px;
+    list-style: none;
+    line-height: 1.5;
+    margin: 0px;
+}
+.events li{
+    text-align: left;
+}
+
+.events li span{
+    display: inline;
+    font-size: 11px;
+}
+
+/* Add media queries for smaller screens */
+@media screen and (max-width:720px) {
+    #calendar .weekdays li, .days li {width: 13.1%;}
+}
+
+@media screen and (max-width: 420px) {
+    #calendar .weekdays li, .days li {width: 12.5%;}
+    #calendar .days li .active {padding: 2px;}
+}
+
+@media screen and (max-width: 290px) {
+    #calendar .weekdays li, .days li {width: 12.2%;}
+}
+
+/*WEBPARTS SHAREPOINT*/
+.ms-webpart-chrome-title{
+    background-color: #EDEDED;
+    height: 30px;
+    padding-left: 10px;
+    padding-top: 5px;
+}
+
+.ms-webpart-chrome-title span{
+    font-size:1rem;
+    color: #00669C;
+    font-weight:400;
+}
+
+/*Encuesta*/
+.ms-surveyHBar{
+    background-color: #2b96ea;
+    border-color: #2b96ea;
+}

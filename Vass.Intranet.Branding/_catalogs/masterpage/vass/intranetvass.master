@@ -45,6 +45,12 @@ To build the master page directly from this HTML file, simply edit the page as y
 
         <SharePoint:SoapDiscoveryLink runat="server"></SharePoint:SoapDiscoveryLink>
 
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="/style library/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+        <script type="text/javascript" src="/style library/js/master.js"></script>
+
         <SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">
             <asp:ContentPlaceHolder ID="PlaceHolderAdditionalPageHead" runat="server">
             </asp:ContentPlaceHolder>
@@ -88,9 +94,11 @@ To build the master page directly from this HTML file, simply edit the page as y
                     <div class="container-fluid">
                         <header>
                             <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
-                                <a class="navbar-brand" href="/desarrollo">
-                                    <img src="/style library/images/logo.png" />
-                                </a>
+                                <div class="logo">
+                                    <a class="navbar-brand" href="/desarrollo">
+                                        <img src="/style library/images/logo.png" />
+                                    </a>
+                                </div>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                                     <span class="navbar-toggler-icon"></span>
                                 </button>
@@ -184,11 +192,5 @@ To build the master page directly from this HTML file, simply edit the page as y
         <asp:ContentPlaceHolder ID="SPNavigation" Visible="False" runat="server" />
         <asp:ContentPlaceHolder ID="PlaceHolderQuickLaunchTop" Visible="False" runat="server" />
         <asp:ContentPlaceHolder ID="PlaceHolderQuickLaunchBottom" Visible="False" runat="server" />
-
-        <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <script src="/style library/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-
-        <script type="text/javascript" src="/style library/js/master.js"></script>
     </body>
 </SharePoint:SPHtmlTag>

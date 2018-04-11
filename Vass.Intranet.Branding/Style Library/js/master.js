@@ -124,7 +124,7 @@
                 var result = results[0];
                 var link = jQuery('<a href="' + result.URL.Url + '">' + result.Title + '</a>');
 
-                jQuery($this).find('.card-body').append(link);
+                jQuery($this).find('.panel-body').append(link);
 
 
                 var bgColor;
@@ -170,8 +170,8 @@
 
                 if (result.Image != null) {
                     jQuery($this).addClass('image');
-                    jQuery($this).css('background', 'url("' + bgImagen + '") no-repeat');
-                    jQuery($this).css('background-size', 'cover');
+                    jQuery($this).parent().css('background', 'url("' + bgImagen + '") no-repeat');
+                    jQuery($this).parent().css('background-size', 'cover');
                 }
                 else if (bgImagen == '')
                 {
@@ -187,7 +187,7 @@
                 if (result.Description == null)
                     $(link).addClass('w-75');
                 else
-                    jQuery($this).find('.card-body').append('<p class="w-75">' + result.Description + '</p>');
+                    jQuery($this).find('.panel-body').append('<p class="w-75">' + result.Description + '</p>');
             }
         });
     };
@@ -211,3 +211,39 @@ jQuery(document).ready(function () {
         $(this).banner();
     });
 });
+
+var maxLength = 255;
+function stripHtml(html, length) {
+    if (length == null)
+        length = maxLength;
+
+    var tmp = document.createElement("DIV");
+    tmp.innerHTML = html;
+    var strippedHtml = tmp.textContent || tmp.innerText || "";
+
+    if (strippedHtml.length > length) {
+        strippedHtml = strippedHtml.substring(0, length);
+        strippedHtml += '[...]';
+    }
+
+    return strippedHtml;
+}
+
+function getUrlParam(param, url) {
+    var returnValue = '';
+
+    if (url == null)
+        url = window.location.href;
+
+    var newUrl = url.split('?');
+    if (newUrl.length > 1) {
+        var qs = newUrl[1];
+        var values = qs.split('&');
+
+        for (var i = 0; i < values.length; i++) {
+            var keyValue = values[i].split('=');
+            if (keyValue[0] == param)
+                return keyValue[1].replace("#", "");
+        }
+    }
+}

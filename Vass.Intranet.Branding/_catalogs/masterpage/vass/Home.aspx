@@ -37,8 +37,8 @@
                 <div class="col">
                     <div class="row" style="height: 250px;">
                         <div class="col">
-                            <div data-target="Banner 1" class="card banner">
-                                <div class="card-body"></div>
+                            <div data-target="Banner 1" class="panel banner">
+                                <div class="panel-body"></div>
                             </div>
                         </div>
                     </div>
@@ -149,13 +149,13 @@
                     </div>
                     <div class="row" style="height: 100px;">
                         <div class="col">
-                            <div data-target="Banner 3" class="card banner">
-                                <div class="card-body"></div>
+                            <div data-target="Banner 3" class="panel banner">
+                                <div class="panel-body"></div>
                             </div>
                         </div>
                         <div class="col">
-                            <div data-target="Banner 4" class="card banner">
-                                <div class="card-body"></div>
+                            <div data-target="Banner 4" class="panel banner">
+                                <div class="panel-body"></div>
                             </div>
                         </div>
                     </div>
@@ -172,9 +172,9 @@
             <div class="col">
                 <div class="row">
                     <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <p class="card-title"><span class="font-weight-semi-bold">Próximos</span> eventos</p>
+                        <div class="panel">
+                          <div class="panel-body">
+                            <p class="panel-title"><span class="font-weight-semi-bold">Próximos</span> eventos</p>
                             <ul>
                                 <li>
                                     <h4>Showroom mobile app</h4>
@@ -192,9 +192,9 @@
                         <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone4" />
                     </div>
                     <div class="col">
-                        <div class="card">
-                          <div class="card-body">
-                            <p class="card-title"><span class="font-weight-semi-bold">Tareas</span> pendientes</p>
+                        <div class="panel">
+                          <div class="panel-body">
+                            <p class="panel-title"><span class="font-weight-semi-bold">Tareas</span> pendientes</p>
                             <ul>
                                 <li>
                                     <h4>Aprobación de noticia para la Home</h4>
@@ -218,9 +218,9 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div class="card icon-left">
-                          <div class="card-body">
-                            <p class="card-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
+                        <div class="panel icon-left">
+                          <div class="panel-body">
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
                             <ul>
                                 <li>
                                     <div class="row">
@@ -263,16 +263,16 @@
                         <WebPartPages:WebPartZone runat="server" Title="Zona 3" ID="WebPartZone6" />
                     </div>
                     <div class="col">
-                        <div data-target="Banner 5" class="card banner">
-                          <div class="card-body"></div>
+                        <div data-target="Banner 5" class="panel banner">
+                          <div class="panel-body"></div>
                         </div>
                         <WebPartPages:WebPartZone runat="server" Title="Zona 4" ID="WebPartZone2" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div data-target="Banner 6" class="card banner">
-                            <div class="card-body"></div>
+                        <div data-target="Banner 6" class="panel banner">
+                            <div class="panel-body"></div>
                         </div>
                         <WebPartPages:WebPartZone runat="server" Title="Zona 6" ID="WebPartZone7" />
                     </div>

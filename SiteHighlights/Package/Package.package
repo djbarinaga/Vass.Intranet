@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="ef639d4e-69cf-42b7-9572-81b5c4ebfa11" 
+        solutionId="ef639d4e-69cf-42b7-9572-81b5c4ebfa11" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="SiteHighlights"
+        sharePointProductVersion="16.0">
+  <features>
+        <featureReference itemId="e6881411-4142-4ef4-9636-ce499a750119" />
+  </features>
+</package>

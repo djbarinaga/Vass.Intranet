@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestAddin1", "TestAddin1\TestAddin1.csproj", "{F28B8321-EBDB-400F-8B3F-DBCB5D7344C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vass.Intranet.Branding", "Vass.Intranet.Branding\Vass.Intranet.Branding.csproj", "{DE13DCE5-EABE-4144-9AA9-926475638BBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vass.Intranet.Branding", "Vass.Intranet.Branding\Vass.Intranet.Branding.csproj", "{DE13DCE5-EABE-4144-9AA9-926475638BBA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SiteHighlights", "SiteHighlights\SiteHighlights.csproj", "{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,6 +25,12 @@ Global
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB0EF778-0FFB-4258-9A87-0A46BF9BBD6A}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

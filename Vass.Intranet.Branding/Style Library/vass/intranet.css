@@ -1,4 +1,26 @@
-﻿#s4-bodyContainer{
+﻿/*
+h2 {
+    font-size: 2em;
+}
+
+h3 {
+    font-size: 1.5em;
+}
+
+h4 {
+    font-size: 1.3em;
+}
+
+h5 {
+    font-size: 1.2em;
+}
+
+h6 {
+    font-size: 1.1em;
+}
+*/
+
+#s4-bodyContainer{
     padding-bottom: 0px;
 }
 
@@ -8,7 +30,12 @@
 
 .container-fluid * {
     font-family: 'Montserrat', sans-serif;
-    font-size: 12px;
+    font-size: 13px;
+}
+
+p, p span {
+    font-family: 'Montserrat', sans-serif !important;
+    font-size: 13px !important;
 }
 
 .container-fluid{
@@ -72,7 +99,7 @@ a, a:hover, a:visited{
 
 /*HEADER*/
 .navbar{
-    height:100px;
+    height:120px;
 }
 
 .s4-tn{
@@ -110,8 +137,44 @@ a, a:hover, a:visited{
     margin-bottom: 1px;
 }
 
+.menu-item.dynamic-children span{
+    background:none !important;
+}
+
+.s4-tn li.static {
+    padding: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.ms-core-listMenu-horizontalBox .dynamic-children.additional-background{
+    padding:0px;
+}
+
+.ms-core-listMenu-horizontalBox li.static > .ms-core-listMenu-item{
+    margin-right: 0px;
+}
+
+ul.root > li ul li.static.dynamic-children ul {
+    list-style: none;
+    background-color: #003354;
+    border: none;
+    box-shadow: none;
+    left: 0px !important;
+    min-width: 200px !important;
+}
+
+ul.root > li ul li.selected {
+    background-color: #C2ECFA;
+    border-radius: 5px;
+}
+
+.ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:link, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:visited, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:hover, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected, .ms-tv-selected:link {
+    color: #003354;
+}
+
 /*CONTENT*/
-.content{
+.content {
     min-height: 400px;
     margin-top: 20px;
     padding: 0px 20px;
@@ -131,12 +194,166 @@ a, a:hover, a:visited{
 
 /*FIN HOME*/
 
+/*SUBHOME*/
+#current-menu {
+    background-color: #D9F3FC;
+    min-height: 300px;
+    padding: 40px 0px;
+}
+
+#current-menu ul{
+    list-style: none;
+    padding-left: 0px;
+}
+
+#current-menu ul li {
+    margin-bottom: 10px;
+    padding-left: 60px;
+}
+
+#current-menu ul li a{
+    font-size: 1.2em !important;
+    color: #000;
+}
+
+#current-menu ul li a, #current-menu ul li a:hover, #current-menu ul li a:visited {
+    text-decoration: none;
+}
+
+#current-menu ul li.active {
+    background-color: #c2ecfa;
+    font-weight: normal;
+}
+
+#current-submenu {
+    background-color: #c2ecfa;
+    min-height: 300px;
+    padding: 40px 0px;
+}
+
+#current-submenu ul {
+    list-style: none;
+    padding-left: 0px;
+}
+
+#current-submenu ul li {
+    margin-bottom: 10px;
+    padding-left: 20px;
+}
+
+#current-submenu ul li a {
+    font-size: 1.2em !important;
+    color: #000;
+}
+
+#current-submenu ul li a, #current-submenu ul li a:hover, #current-submenu ul li a:visited {
+    text-decoration: none;
+}
+
+#current-submenu ul li.active {
+    background-color: #fff;
+    font-weight: normal;
+}
+
+
+#subhome h2, #article h2 {
+    color: #194865;
+    border-bottom: solid 1px;
+    margin-top: 20px;
+    font-size: 2em;
+}
+
+#subhome #carouselNews .carousel-image {
+    height: 400px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+}
+
+#subhome #carouselNews .carousel-caption {
+    left: 0;
+    bottom: 0;
+    color: #000;
+    text-align: left;
+    background-color: rgba(235, 235, 235, 0.8);
+    width: 100%;
+    padding: 20px;
+}
+
+#subhome #carouselNews .carousel-caption h3 a {
+    font-size: 1.5em;
+    color: #194865;
+}
+
+#subhome #carouselNews .carousel-control-prev, #subhome #carouselNews .carousel-control-next {
+    top: 100px;
+    bottom: 50%;
+}
+
+#subhome #main-highlight {
+    padding-right: 40px;
+}
+
+#secondary-highlight {
+    margin-top: 20px;
+}
+
+#secondary-highlight h3 {
+    color: #194865;
+    font-size: 1.5em;
+}
+
+#secondary-highlight .content{
+    padding: 0px 20px;
+    min-height: 0px;
+}
+/*FIN SUBHOME*/
+
+/*ARTICLE*/
+#article img{
+    max-width: 100%;
+    height: auto;
+}
+
+#article #summary-zone #summary {
+    display: block !important;
+    padding-right: 40px;
+}
+
+#article #content-zone, #article #sections{
+    margin-top: 20px;
+    padding: 0px 20px;
+}
+
+#article #sections {
+    margin-top: 20px;
+    padding: 0px 40px;
+}
+/*FIN ARTICLE*/
+/*MÓDULOS*/
+.module {
+    margin-bottom: 20px;
+}
+.module h3 {
+    margin: 20px 0px;
+    font-size: 1.5em;
+    color: #194865;
+    background-color: #D9F3FC;
+    padding: 5px 20px;
+}
+
+.module .module-content{
+    padding:0px 20px;
+}
+/*FIN MÓDULOS*/
+
 /*FOOTER*/
-footer{
+footer {
     background-color: #003354;
-    min-height:300px;
+    min-height: 300px;
     padding: 60px 0px;
-    margin-top:20px;
+    margin-top: 20px;
 }
 
 footer div{
@@ -232,15 +449,34 @@ footer p{
 }
 
 /*COMPONENTES*/
-.card{
+.table tbody tr td a, .table tbody tr td span {
+    display: block;
+    border-right: solid 1px #ccc;
+    line-height: 2rem;
+}
+
+.table tbody tr td:last-child a, .table tbody tr td:last-child span {
+    border-right: none;
+}
+.card .card-title {
+    background-color: #fff;
+    padding: 0px;
+    margin-bottom: 10px;
+}
+
+.card .card-title a{
+    font-size: 1.3em;
+}
+
+.panel{
     border: none;
 }
 
-.card-body{
+.panel-body{
     padding: 0px;
 }
 
-.card-title{
+.panel-title{
     background-color: #EDEDED;
     height: 30px;
     line-height: 30px;
@@ -249,45 +485,45 @@ footer p{
     color: #00669C;
 }
 
-.card-title span{
+.panel-title span{
     font-size:1rem;
 }
 
-.card ul{
+.panel ul{
     list-style:none;
     padding:0px;
 }
 
-.card li{
+.panel li{
     background-color: #F5F5F5;
     padding: 10px 20px 5px 20px;
     margin-bottom: 10px;
 }
 
-.card li:last-child{
+.panel li:last-child{
     margin-bottom: 0px;
 }
 
-.card li h4{
+.panel li h4{
     font-weight: bold;
 }
 
-.card.icon-left [class^="icon-"], [class*=" icon-"]{
+.panel.icon-left [class^="icon-"], [class*=" icon-"]{
     font-size: 2rem;
 }
 
-.card .toolbar{
+.panel .toolbar{
     border-bottom: solid 1px #ccc;
     padding: 0px 0px 5px 10px;
 }
 
-.card .toolbar a{
+.panel .toolbar a{
     font-size: 0.7rem;
     text-transform:uppercase;
     font-weight:bold;
 }
 
-.card .toolbar a.add:before{
+.panel .toolbar a.add:before{
     font-family: 'vass' !important;
     content: "\e90a";
     margin-right:5px;
@@ -308,18 +544,25 @@ footer p{
     margin-left: 15px;
 }
 
+.clock-bold:before {
+    font-family: 'vass' !important;
+    content: "\e906";
+    margin-right: 5px;
+    margin-left: 15px;
+    font-weight:bold;
+}
+
 /*BANNER*/
 .banner{
     height: 100%;
     border-radius: 0px;
 }
 
-.banner .card-body{
+.banner .panel-body{
     padding: 30px;
-    position:relative;
 }
 
-.banner .card-body a{
+.banner .panel-body a{
     color: #000;
     font-size: 2.5rem;
     font-weight: 300;
@@ -327,15 +570,15 @@ footer p{
     line-height:1.1;
 }
 
-.banner .card-body a.w-75{
+.banner .panel-body a.w-75 {
     line-height: 1.5;
 }
 
-.banner .card-body p{
+.banner .panel-body p {
     margin-top: 20px;
 }
 
-.banner.image .card-body{
+.banner.image .panel-body {
     margin: 30px;
     background-color: rgba(245, 245,245, 0.9);
 }
@@ -347,18 +590,18 @@ footer p{
     left: 20px;
 }
 
-#top-zone .banner.image .card-body{
+#top-zone .banner.image .panel-body {
     background-color: rgba(245, 245,245, 0.9);
     padding: 10px;
     position: absolute;
     bottom: 0px;
     right: 0px;
     margin: 0px;
-    width:90%;
+    width: 90%;
 }
 
-#top-zone .banner.image .card-body a{
-    position:relative;
+#top-zone .banner.image .panel-body a {
+    position: relative;
     margin-left: 0px;
     font-size: 1rem;
     font-weight: 500;
@@ -366,7 +609,7 @@ footer p{
     left: 0;
 }
 
-#top-zone .banner.image .card-body p{
+#top-zone .banner.image .panel-body p {
     font-size: 0.8rem;
     font-weight: 300;
     width: 100% !important;

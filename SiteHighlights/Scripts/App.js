@@ -62,6 +62,5 @@ function retrieveListItems() {
         console.log('Site Highlights. Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
     }
 }
-$(document).ready(function () {
-    SP.SOD.executeFunc('sp.js', 'SP.ClientContext', retrieveListItems);
-})
+
+ExecuteOrDelayUntilScriptLoaded(retrieveListItems, "sp.js");

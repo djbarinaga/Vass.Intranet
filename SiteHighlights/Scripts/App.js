@@ -2,6 +2,8 @@
 
 function retrieveListItems() {
 
+    alert('j');
+
     var clientContext = new SP.ClientContext("https://grupovass.sharepoint.com/es-es/peopleandtalent/noticias/");
     var oList = clientContext.get_web().get_lists().getByTitle('Páginas');
 

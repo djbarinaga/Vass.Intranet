@@ -9,9 +9,9 @@
 <html>
 <head>
     <title></title>
-
-    <script type="text/javascript" src="../Scripts/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/_layouts/1033/init.js"></script>
     <script type="text/javascript" src="/_layouts/15/MicrosoftAjax.js"></script>
+    <script  type="text/javascript" src="/_layouts/15/sp.core.js"></script>
     <script type="text/javascript" src="/_layouts/15/sp.runtime.js"></script>
     <script type="text/javascript" src="/_layouts/15/sp.js"></script>
     <script type="text/javascript" src="../Scripts/App.js"></script>

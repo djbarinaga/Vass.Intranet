@@ -27,7 +27,7 @@
                     var result = results[i];
                     var tr = $('<tr/>');
                     var tdCurso = $('<td><a href="curso.aspx?curso=' + result.Id + '">' + result.Title + '</a></td>');
-                    var tdHoras = $('<td><span class="clock-bold">' + result.CourseHours + '</span></td>');
+                    var tdHoras = $('<td><span class="clock-bold">' + result.CourseHours + ' hrs.</span></td>');
                     var tdFormador = $('<td><span>' + result.Trainer.Title + '</span></td>');
 
                     tr.append(tdCurso);

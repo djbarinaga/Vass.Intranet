@@ -57,6 +57,10 @@ a, a:hover, a:visited{
     font-weight: 600;
 }
 
+.bold{
+    font-weight: bold;
+}
+
 /*MÁRGENES*/
 .mt-6{
     margin-top: 65px;

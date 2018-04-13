@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="f5c5253d-227d-49c8-8f5e-5e07be2a03cb" description="SharePoint Add-in Feature" featureId="f5c5253d-227d-49c8-8f5e-5e07be2a03cb" imageUrl="" solutionId="00000000-0000-0000-0000-000000000000" title="Carousel Feature1" version="" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
+<feature xmlns:dm0="http://schemas.microsoft.com/VisualStudio/2008/DslTools/Core" dslVersion="1.0.0.0" Id="6ef76cfa-9edc-48e8-9afa-e8e543775820" description="SharePoint Add-in Feature" featureId="6ef76cfa-9edc-48e8-9afa-e8e543775820" imageUrl="" solutionId="00000000-0000-0000-0000-000000000000" title="Carousel Feature1" version="AAEAAAD/////AQAAAAAAAAAEAQAAAA5TeXN0ZW0uVmVyc2lvbgQAAAAGX01ham9yBl9NaW5vcgZfQnVpbGQJX1JldmlzaW9uAAAAAAgICAgBAAAAAAAAAAAAAAADAAAACw==" deploymentPath="$SharePoint.Project.FileNameWithoutExtension$_$SharePoint.Feature.FileNameWithoutExtension$" xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/FeatureModel">
   <projectItems>
-    <projectItemReference itemId="7d038f58-9b32-4bd4-938b-4c477be31f16" />
-    <projectItemReference itemId="7353e3fa-49a1-43e8-b455-8a67297eb0ba" />
-    <projectItemReference itemId="e786a293-60ce-4558-aa51-0807b2caad26" />
-    <projectItemReference itemId="df7d0d25-fc9e-4559-a6be-040f5878aa52" />
+    <projectItemReference itemId="90c8da9b-44c8-4860-88c4-bb8dec2a30b9" />
+    <projectItemReference itemId="68448f14-0da4-480a-9f14-d99fc2ec2aca" />
+    <projectItemReference itemId="7dfe87c9-6a10-4b13-b507-0a7ec964e250" />
+    <projectItemReference itemId="b5648767-aeb5-4310-a6c0-c9b50953d91c" />
   </projectItems>
 </feature>

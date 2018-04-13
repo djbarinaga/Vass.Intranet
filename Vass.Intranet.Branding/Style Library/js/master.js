@@ -247,3 +247,23 @@ function getUrlParam(param, url) {
         }
     }
 }
+
+function toDate(text) {
+    var language = _spPageContextInfo.currentLanguage;
+    var d = null;
+
+    if (language == 3082) {
+        //español
+        var textAsDate = text.split('/');
+        d = new Date(textAsDate[2], Number(textAsDate[1]) - 1, textAsDate[0]);
+    }
+    else {
+        d = new Date(text);
+    }
+
+    return d;
+}
+
+function dateDiff(first, second) {
+    return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}

@@ -8,7 +8,6 @@
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
     <script type="text/javascript" src="/style library/js/currentnavigation.js"></script>
-    <script type="text/javascript" src="/style library/js/tests/course-detail.js"></script>
 	<SharePointWebControls:FieldValue id="PageStylesField" FieldName="HeaderStyleDefinitions" runat="server"/>
 </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderPageTitle" runat="server">
@@ -28,28 +27,16 @@
                 <div class="col-4" id="current-menu"></div>
                 <div class="col-2" style="display:none" id="current-submenu"></div>
                 <div class="col-8">
-                    <h2 id="list-item-title">
-                        
-                    </h2>
-                    <div id="summary-zone">
-                        <div class="row">
-                            <div class="col-12">
-                                <div id="list-item-picture"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone1" />
                 </div>
             </div>
         </div>
         <div id="content-zone">
             <div class="row">
                 <div class="col-md-12">
-                    <div id="list-item-content"></div>
+                    <WebPartPages:WebPartZone runat="server" Title="Zona 2" ID="WebPartZone2" />
                 </div>
             </div>
-        </div>
-        <div id="sections">
-            <WebPartPages:WebPartZone runat="server" Title="Módulos" ID="modules" />
         </div>
 	</div>
 </asp:Content>

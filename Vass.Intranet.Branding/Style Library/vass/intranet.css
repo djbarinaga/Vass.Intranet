@@ -727,6 +727,33 @@ footer p{
     font-size: 11px;
 }
 
+/*CÍRCULOS*/
+#my-stock .big-circle {
+    color: #fff;
+    border-radius: 50%;
+    line-height: 240px;
+    font-size: 2em !important;
+    width: 240px;
+    height: 240px;
+    margin: 0 auto;
+}
+
+#my-stock .big-circle {
+    color: #fff;
+    border-radius: 50%;
+    line-height: 240px;
+    font-size: 2em !important;
+    width: 240px;
+    height: 240px;
+    margin: 0 auto;
+}
+
+#my-stock .big {
+    font-size: 2em !important;
+    margin: 20px 0px;
+}
+
+
 /* Add media queries for smaller screens */
 @media screen and (max-width:720px) {
     #calendar .weekdays li, .days li {width: 13.1%;}

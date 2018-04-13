@@ -8,7 +8,6 @@
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
     <script type="text/javascript" src="/style library/js/currentnavigation.js"></script>
-    <script type="text/javascript" src="/style library/js/tests/courses.js"></script>
 	<SharePointWebControls:FieldValue id="PageStylesField" FieldName="HeaderStyleDefinitions" runat="server"/>
 </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderPageTitle" runat="server">

@@ -2,8 +2,8 @@
 <!--Created:cb85b80c-f585-40ff-8bfc-12ff4d0e34a9-->
 <App xmlns="http://schemas.microsoft.com/sharepoint/2012/app/manifest"
      Name="Carousel"
-     ProductID="{7d038f58-9b32-4bd4-938b-4c477be31f16}"
-     Version="1.0.0.10"
+     ProductID="{90c8da9b-44c8-4860-88c4-bb8dec2a30b9}"
+     Version="1.0.0.4"
      SharePointMinVersion="16.0.0.0"
 >
   <Properties>
@@ -12,7 +12,7 @@
   </Properties>
 
   <AppPrincipal>
-    <Internal AllowedRemoteHostUrl="https://grupovass-4166a9b4351d89.sharepoint.com/es-es/peopleandtalent/Carousel" />
+    <Internal />
   </AppPrincipal>
   <AppPermissionRequests>
     <AppPermissionRequest Scope="http://sharepoint/content/sitecollection" Right="FullControl" />

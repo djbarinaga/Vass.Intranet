@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{D9153A7D-B23F-4EF5-951F-896E77F94E9C}</ProjectGuid>
+    <ProjectGuid>{A6033582-C6F0-4A7B-A393-BCC10C902501}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Carousel</RootNamespace>
@@ -16,11 +16,11 @@
     <MinimumOfficeToolsVersion>12.2</MinimumOfficeToolsVersion>
     <IncludeAssemblyInPackage>False</IncludeAssemblyInPackage>
     <ProjectMode>SharePointApp</ProjectMode>
-    <AppFeaturePartId>{8137cd0d-1795-4fd8-a36b-c60ef29a9396}</AppFeaturePartId>
-    <WspPartId>{8b0c592e-fdf4-4969-9a9e-03d58dfce81d}</WspPartId>
-    <WorkflowPartId>{60788533-dd00-43bf-bf82-8f52d45fc818}</WorkflowPartId>
-    <CspkgPartId>{341368a9-7259-423f-a05f-fdb95916bf85}</CspkgPartId>
-    <SqlPackagePartId>{7353e3fa-49a1-43e8-b455-8a67297eb0ba}</SqlPackagePartId>
+    <AppFeaturePartId>{1d93695a-f92e-46e3-b62a-bb6a70661293}</AppFeaturePartId>
+    <WspPartId>{fd9529eb-2331-44dc-9b12-64f289801d87}</WspPartId>
+    <WorkflowPartId>{dd733c25-6b5b-4365-996b-365c0c1eb986}</WorkflowPartId>
+    <CspkgPartId>{6cc15a2d-1bce-4514-9191-19ec2338f521}</CspkgPartId>
+    <SqlPackagePartId>{68448f14-0da4-480a-9f14-d99fc2ec2aca}</SqlPackagePartId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -42,19 +42,27 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Content\vass-font\fonts\vass.svg" />
+    <None Include="Content\vass-font\style.css" />
+    <None Include="Content\bootstrap.min.css" />
+    <None Include="Content\carousel.css" />
+    <Content Include="Pages\Carousel.aspx" />
     <Content Include="Carousel\Elements.xml">
       <OpcRelationship>feature-elementmanifest</OpcRelationship>
     </Content>
-    <Content Include="Pages\Carousel.aspx" />
+    <None Include="Content\vass-font\fonts\vass.eot" />
+    <None Include="Content\vass-font\fonts\vass.ttf" />
+    <None Include="Content\vass-font\fonts\vass.woff" />
+    <None Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />
-    <None Include="Carousel\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{6aca17b0-c2c4-4aa8-9970-9de590cf6b1c}</SharePointProjectItemId>
-    </None>
     <None Include="packages.config" />
+    <None Include="Carousel\SharePointProjectItem.spdata">
+      <SharePointProjectItemId>{61589c13-6492-4cd7-9953-73eada9e9af4}</SharePointProjectItemId>
+    </None>
     <None Include="Pages\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{7d038f58-9b32-4bd4-938b-4c477be31f16}</SharePointProjectItemId>
+      <SharePointProjectItemId>{90c8da9b-44c8-4860-88c4-bb8dec2a30b9}</SharePointProjectItemId>
     </None>
     <Content Include="Pages\Elements.xml" />
     <Content Include="Pages\Default.aspx" />
@@ -62,14 +70,14 @@
   <ItemGroup>
     <None Include="Scripts\jquery-1.9.1.min.map" />
     <None Include="Scripts\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{7353e3fa-49a1-43e8-b455-8a67297eb0ba}</SharePointProjectItemId>
+      <SharePointProjectItemId>{68448f14-0da4-480a-9f14-d99fc2ec2aca}</SharePointProjectItemId>
     </None>
     <Content Include="Scripts\Elements.xml" />
     <Content Include="Scripts\App.js" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Content\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{e786a293-60ce-4558-aa51-0807b2caad26}</SharePointProjectItemId>
+      <SharePointProjectItemId>{7dfe87c9-6a10-4b13-b507-0a7ec964e250}</SharePointProjectItemId>
     </None>
     <Content Include="Content\Elements.xml" />
     <Content Include="Content\App.css" />
@@ -80,21 +88,22 @@
     </Content>
     <Content Include="Images\Elements.xml" />
     <None Include="Images\SharePointProjectItem.spdata">
-      <SharePointProjectItemId>{df7d0d25-fc9e-4559-a6be-040f5878aa52}</SharePointProjectItemId>
+      <SharePointProjectItemId>{b5648767-aeb5-4310-a6c0-c9b50953d91c}</SharePointProjectItemId>
     </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Package\Package.package">
-      <PackageId>{d2cc0556-db85-420e-993c-e6a7cf5c8042}</PackageId>
+      <PackageId>{ce2c9df7-fbdf-475e-8cf3-5dc561157494}</PackageId>
     </None>
     <None Include="Package\Package.Template.xml">
       <DependentUpon>Package.package</DependentUpon>
     </None>
     <None Include="Features\Feature1\Feature1.feature">
-      <FeatureId>{f5c5253d-227d-49c8-8f5e-5e07be2a03cb}</FeatureId>
+      <FeatureId>{6ef76cfa-9edc-48e8-9afa-e8e543775820}</FeatureId>
     </None>
     <None Include="Features\Feature1\Feature1.Template.xml">
       <DependentUpon>Feature1.feature</DependentUpon>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

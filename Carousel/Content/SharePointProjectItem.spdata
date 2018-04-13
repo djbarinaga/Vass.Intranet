@@ -3,5 +3,12 @@
   <Files>
     <ProjectItemFile Source="Elements.xml" Target="Content\" Type="ElementManifest" />
     <ProjectItemFile Source="App.css" Target="Content\" Type="ElementFile" />
+    <ProjectItemFile Source="vass-font\fonts\vass.eot" Target="Content\vass-font\fonts\" Type="ElementFile" />
+    <ProjectItemFile Source="vass-font\fonts\vass.svg" Target="Content\vass-font\fonts\" Type="ElementFile" />
+    <ProjectItemFile Source="vass-font\fonts\vass.ttf" Target="Content\vass-font\fonts\" Type="ElementFile" />
+    <ProjectItemFile Source="vass-font\fonts\vass.woff" Target="Content\vass-font\fonts\" Type="ElementFile" />
+    <ProjectItemFile Source="vass-font\style.css" Target="Content\vass-font\" Type="ElementFile" />
+    <ProjectItemFile Source="bootstrap.min.css" Target="Content\" Type="ElementFile" />
+    <ProjectItemFile Source="carousel.css" Target="Content\" Type="ElementFile" />
   </Files>
 </ProjectItem>

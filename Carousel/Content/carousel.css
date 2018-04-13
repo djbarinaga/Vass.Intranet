@@ -1,0 +1,96 @@
+﻿* {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px;
+}
+
+.container-fluid{
+    padding-left: 0px;
+    padding-right:0px;
+}
+
+a, a:hover, a:visited{
+    color:#00669C;
+    text-decoration:none;
+}
+
+.o-hidden{
+    overflow: hidden;
+}
+
+/*TAMAÑOS FUENTE*/
+.font-weight-semi-bold{
+    font-weight: 600;
+}
+
+.bold{
+    font-weight: bold;
+}
+
+/*MÁRGENES*/
+.mt-6{
+    margin-top: 65px;
+}
+
+.no-margin{
+    margin: 0px !important;
+}
+
+.mb-0{
+    margin-bottom: 0px;
+}
+
+.no-padding{
+    padding: 0px;
+}
+
+.no-padding-right{
+    padding-right: 0px;
+}
+
+/*ALTURAS*/
+.h-50p{
+    height: 50%;
+}
+
+.h-200{
+    height: 200px;
+}
+
+/*ANCHOS*/
+.w-75{
+    width:75%;
+}
+
+/*BACKGROUND*/
+.bg-dark-blue{
+    background-color: #003354;
+}
+
+/*Carousel*/
+#carouselNews .carousel-image {
+    height: 400px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border-radius: 5px;
+}
+
+#carouselNews .carousel-caption {
+    left: 0;
+    bottom: 0;
+    color: #000;
+    text-align: left;
+    background-color: rgba(235, 235, 235, 0.8);
+    width: 100%;
+    padding: 20px;
+}
+
+    #carouselNews .carousel-caption h3 a {
+        font-size: 1.5em;
+        color: #194865;
+    }
+
+#carouselNews .carousel-control-prev, #carouselNews .carousel-control-next {
+    top: 100px;
+    bottom: 50%;
+}

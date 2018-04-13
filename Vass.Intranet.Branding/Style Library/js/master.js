@@ -195,6 +195,7 @@
 
 
 jQuery(document).ready(function () {
+    setHomePage();
     jQuery('#quickLinks').each(function () {
         $(this).quicklinks();
     });
@@ -211,6 +212,10 @@ jQuery(document).ready(function () {
         $(this).banner();
     });
 });
+
+function setHomePage(){
+    $('.navbar-brand').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
+}
 
 var maxLength = 255;
 function stripHtml(html, length) {

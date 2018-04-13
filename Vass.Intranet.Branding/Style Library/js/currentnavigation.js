@@ -3,7 +3,7 @@
         var $this = this;
         var ul = $('<ul style="display:none"/>');
 
-        function getParentPagesNav() {
+        function getParentPagesNav(welcomepage) {
             var url = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
 
             if(url == '/es-es')
@@ -30,6 +30,10 @@
                         var result = results[i];
                         var title = result.Title;
                         var url = result.FileRef;
+
+                        if(url.toLowerCase().indexOf(welcomepage.toLowerCase()) > -1)
+                            continue;
+
                         var css = '';
 
                         if (currentUrl.toLowerCase().indexOf(url.toLowerCase()) > -1) {
@@ -91,7 +95,28 @@
             });
         }
 
-        getParentPagesNav();
+        //Obtenemos la página de inicio
+        var url = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
+
+        if (url == '/es-es')
+            url = _spPageContextInfo.webServerRelativeUrl;
+
+        url += '/_api/web/rootfolder?$select=welcomepage';
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var welcomepage = data.d.WelcomePage;
+
+            getParentPagesNav(welcomepage);
+        });
     };
 }(jQuery));
 

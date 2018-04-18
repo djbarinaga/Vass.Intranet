@@ -22,21 +22,20 @@
 		<PublishingWebControls:EditModePanel runat="server" CssClass="edit-mode-panel title-edit">
 			<SharePointWebControls:TextField runat="server" FieldName="Title"/>
 		</PublishingWebControls:EditModePanel>
-        <div class="row">
-            <div class="col-4" id="current-menu">
-            </div>
-            <div class="col-2" style="display:none" id="current-submenu"></div>
-            <div class="col-8">
-                <h2>
-                    <SharePointWebControls:FieldValue runat="server" FieldName="Title"/>
-                </h2>
-                <div id="summary-zone">
-                    <div class="row">
-                        <div class="col-4">
-                            <PublishingWebControls:RichImageField FieldName="PublishingRollupImage" AllowHyperLinks="false" runat="server" />
-                        </div>
-                        <div class="col-8" id="summary">
-                            <PublishingWebControls:RichHtmlField FieldName="Summary" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
+        <div>
+            <div class="row">
+                <div class="col-4" id="current-menu">
+                </div>
+                <div class="col-2" style="display:none" id="current-submenu"></div>
+                <div class="col-8">
+                    <h2>
+                        <SharePointWebControls:FieldValue runat="server" FieldName="Title"/>
+                    </h2>
+                    <div id="summary-zone">
+                        <div class="row">
+                            <div class="col" id="summary">
+                                <PublishingWebControls:RichHtmlField FieldName="Summary" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -34,10 +34,10 @@
 		<SharePointWebControls:TextField runat="server" FieldName="Title"/>
 	</PublishingWebControls:EditModePanel>
     <div id="subhome" class="container-fluid">
-        <div class="row">
-            <div class="col-4" id="current-menu"></div>
+        <div class="row" id="top-zone">
+            <div class="col-2" id="current-menu"></div>
             <div class="col-2" style="display:none" id="current-submenu"></div>
-            <div class="col-8">
+            <div class="col-10" id="highlight">
                 <h2 class="page-title">
                     <SharePointWebControls:ProjectProperty Property="Title" runat="server"/>
                 </h2>
@@ -61,7 +61,7 @@
         <div id="sections">
             <div class="module">
                 <h3 class="title">
-                    Sugerencias de formación para ti
+                    Sugerencias para ti
                 </h3>
                 <div class="module-content">
                     <div class="row">
@@ -69,9 +69,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        <a href="#">Card title</a>
+                                        <a href="#">Sugerencia 1</a>
                                     </h4>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
                                 </div>
                             </div>
                         </div>
@@ -79,9 +79,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        <a href="#">Card title</a>
+                                        <a href="#">Sugerencia 2</a>
                                     </h4>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
                                 </div>
                             </div>
                         </div>
@@ -89,9 +89,9 @@
                             <div class="card">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        <a href="#">Card title</a>
+                                        <a href="#">Sugerencia 3</a>
                                     </h4>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
                                 </div>
                             </div>
                         </div>
@@ -114,6 +114,7 @@
                     </div>
                 </div>
             </div>
+            <WebPartPages:WebPartZone runat="server" Title="Módulos" ID="Modules" />
         </div>
     </div>
     <SharePointWebControls:ScriptBlock runat="server">if(typeof(MSOLayout_MakeInvisibleIfEmpty) == "function") {MSOLayout_MakeInvisibleIfEmpty();}</SharePointWebControls:ScriptBlock>

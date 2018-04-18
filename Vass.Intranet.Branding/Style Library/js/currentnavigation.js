@@ -1,107 +1,12 @@
-﻿(function ($) {
+﻿var menu;
+var menuIndex;
+(function ($) {
     $.fn.currentNav = function (options) {
         var $this = this;
-        var ul = $('<ul style="display:none"/>');
 
-        function getParentPagesNav(welcomepage) {
-            var url = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
+        var url = _spPageContextInfo.webServerRelativeUrl;
 
-            if(url == '/es-es')
-                url = _spPageContextInfo.webServerRelativeUrl;
-
-            url += "/_api/lists/getbytitle('Páginas')/items?$select=Title, FileRef";
-
-            var $ajax = $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    Accept: "application/json;odata=verbose"
-                }
-            });
-
-            $ajax.done(function (data, textStatus, jqXHR) {
-                var results = data.d.results;
-
-                if (results != null && results.length > 0) {
-                    var length = results.length;
-                    var currentUrl = window.location.href;
-                    for (var i = 0; i < length; i++) {
-                        var result = results[i];
-                        var title = result.Title;
-                        var url = result.FileRef;
-
-                        if(url.toLowerCase().indexOf(welcomepage.toLowerCase()) > -1)
-                            continue;
-
-                        var css = '';
-
-                        if (currentUrl.toLowerCase().indexOf(url.toLowerCase()) > -1) {
-                            css = 'class="active"';
-                        }
-
-                        var li = $('<li ' + css + '><a href="' + url + '">' + title + '</a></li>');
-                        ul.append(li);
-                    }
-
-                    $($this).append(ul);
-                }
-
-                getParentSitesNav();
-            });
-        }
-
-        function getParentSitesNav() {
-            var url = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
-
-            if (url == '/es-es')
-                url = _spPageContextInfo.webServerRelativeUrl;
-
-            url += '/_api/web/webs';
-
-            var $ajax = $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    Accept: "application/json;odata=verbose"
-                }
-            });
-
-            $ajax.done(function (data, textStatus, jqXHR) {
-                var results = data.d.results;
-
-                if (results != null && results.length > 0) {
-                    var length = results.length;
-                    var currentUrl = window.location.href;
-                    for (var i = 0; i < length; i++) {
-                        var result = results[i];
-                        if (result.WebTemplate != 'APP') {
-                            var title = result.Title;
-                            var url = result.Url;
-                            var css = '';
-
-                            if (currentUrl.toLowerCase().indexOf(url.toLowerCase()) > -1) {
-                                css = 'class="active"';
-                            }
-
-                            var li = $('<li ' + css + '><a href="' + url + '">' + title + '</a></li>');
-                            ul.append(li);
-                        }
-                    }
-                }
-
-                ul.fadeIn();
-            });
-        }
-
-        //Obtenemos la página de inicio
-        var url = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
-
-        if (url == '/es-es')
-            url = _spPageContextInfo.webServerRelativeUrl;
-
-        url += '/_api/web/rootfolder?$select=welcomepage';
+        url += "/_api/navigation/menustate?mapprovidername='CurrentNavigationSwitchableProvider'";
 
         var $ajax = $.ajax({
             url: url,
@@ -113,117 +18,78 @@
         });
 
         $ajax.done(function (data, textStatus, jqXHR) {
-            var welcomepage = data.d.WelcomePage;
+            var activeMenu = -1;
+            var ul = $('<ul style="display:none"/>');
+            menu = data.d.MenuState.Nodes.results;
 
-            getParentPagesNav(welcomepage);
-        });
-    };
-}(jQuery));
+            for (var i = 0; i < menu.length; i++) {
+                if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
+                    $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                    activeMenu = i;
+                }
+                else {
+                    $(ul).append('<li><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                }
+            }
 
-(function ($) {
-    $.fn.currentSubNav = function (options) {
-        var $this = this;
-        var ul = $('<ul/>');
+            $($this).append(ul);
 
-        function getPagesNav() {
+            $(ul).fadeIn('fast');
 
-            var checkUrl = _spPageContextInfo.webServerRelativeUrl.split("/").slice(0, -1).join("/");
+            if (activeMenu > -1) {
+                var submenu = menu[activeMenu].Nodes.results;
 
-            if (checkUrl != '/es-es') {
-                var url = _spPageContextInfo.webServerRelativeUrl;
+                if (submenu.length > 0) {
+                    var ul = $('<ul/>');
 
-                url += "/_api/lists/getbytitle('Páginas')/items?$select=Title, FileRef, PublishingPageLayout";
-
-                var $ajax = $.ajax({
-                    url: url,
-                    type: "GET",
-                    dataType: "json",
-                    headers: {
-                        Accept: "application/json;odata=verbose"
+                    for (var i = 0; i < submenu.length; i++) {
+                        $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                     }
-                });
+                    $('#current-submenu').append(ul);
+                    $('#current-menu').removeClass('col-4').addClass('col-2');
+                    $('#current-submenu').fadeIn('fast');
+                }
+                else {
+                    $('#current-submenu').fadeOut('fast');
+                }
+            }
+            else {
+                $(ul).find('li a').each(function () {
+                    $(this).on('mouseover', function () {
+                        $(this).closest('ul').find('li').removeClass('active');
+                        $(this).parent().addClass('active');
+                        var idx = $(this).data('menu');
+                        if (idx != menuIndex) {
+                            var submenu = menu[idx].Nodes.results;
 
-                $ajax.done(function (data, textStatus, jqXHR) {
-                    var results = data.d.results;
+                            if (submenu.length > 0) {
+                                var ul = $('<ul/>');
 
-                    if (results != null && results.length > 0) {
-                        var length = results.length;
-                        var currentUrl = window.location.href;
-                        for (var i = 0; i < length; i++) {
-                            var result = results[i];
-                            var pageLayout = result.PublishingPageLayout.Description;
-
-                            if (pageLayout.toLowerCase().indexOf('article') > -1) {
-                                var title = result.Title;
-                                var url = result.FileRef;
-                                var css = '';
-
-                                if (currentUrl.toLowerCase().indexOf(url.toLowerCase()) > -1) {
-                                    css = 'class="active"';
+                                for (var i = 0; i < submenu.length; i++) {
+                                    $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                                 }
 
-                                var li = $('<li ' + css + '><a href="' + url + '">' + title + '</a></li>');
-                                ul.append(li);
+                                $('#current-submenu').html('');
+                                $('#current-submenu').append(ul);
+                                $('#current-submenu').css('position', 'absolute');
+                                $('#current-submenu').css('z-index', '1');
+                                $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
+                                $('#current-submenu').css('height', $('#current-menu').height() + 80 + 'px'); // +80 padding
+                                $('#current-submenu').fadeIn('fast');
+                            }
+                            else {
+                                $('#current-submenu').fadeOut('fast');
                             }
                         }
 
-                        $($this).append(ul);
-                    }
-
-                    getSitesNav();
+                        menuIndex = idx;
+                    });
                 });
             }
-        }
-
-        function getSitesNav() {
-            var url = _spPageContextInfo.webServerRelativeUrl;
-
-            url += '/_api/web/webs';
-
-            var $ajax = $.ajax({
-                url: url,
-                type: "GET",
-                dataType: "json",
-                headers: {
-                    Accept: "application/json;odata=verbose"
-                }
-            });
-
-            $ajax.done(function (data, textStatus, jqXHR) {
-                var results = data.d.results;
-                var length = 0;
-                if (results != null && results.length > 0) {
-                    length = results.length;
-                    var currentUrl = window.location.href;
-                    for (var i = 0; i < length; i++) {
-                        var result = results[i];
-                        if (result.WebTemplate != 'APP') {
-                            var title = result.Title;
-                            var url = result.Url;
-                            var css = '';
-
-                            if (currentUrl.toLowerCase().indexOf(url.toLowerCase()) > -1) {
-                                css = 'class="active"';
-                            }
-
-                            var li = $('<li ' + css + '><a href="' + url + '">' + title + '</a></li>');
-                            ul.append(li);
-                        }
-                    }
-                }
-
-                if (length > 0) {
-                    $('#current-menu').removeClass('col-4').addClass('col-2');
-                    $($this).fadeIn();
-                }
-            });
-        }
-
-        getPagesNav();
+        });
     };
 }(jQuery));
 
 $(document).ready(function () {
     $('#current-menu').currentNav();
-    $('#current-submenu').currentSubNav();
 })

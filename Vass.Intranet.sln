@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.27428.2015
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Vass.Intranet.Branding", "Vass.Intranet.Branding\Vass.Intranet.Branding.csproj", "{DE13DCE5-EABE-4144-9AA9-926475638BBA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewTeam", "NewTeam\NewTeam.csproj", "{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,12 @@ Global
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DE13DCE5-EABE-4144-9AA9-926475638BBA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77E3C4D7-A215-4DCE-9942-1B5CD6683EAF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

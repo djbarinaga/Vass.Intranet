@@ -193,9 +193,379 @@
     };
 }(jQuery));
 
+/*GRAPH*/
+(function ($) {
+    $.fn.graph = function (options) {
+        //var folders = ["01-Venta", "02-Inicio", "03-Planificación y gestión", "04-Seguimiento", "04-Seguimiento/04.01-Informes", "04-Seguimiento/04.02-Actas", "04-Seguimiento/04.03-Inventario", "05-Cierre de proyecto"]
+        var folders = [
+            {
+                name: "01-Venta",
+                parent: null
+            },
+            {
+                name: "02-Inicio",
+                parent: null
+            },
+            {
+                name: "03-Planificación y gestión",
+                parent: null
+            },
+            {
+                name: "04-Seguimiento",
+                parent: null
+            },
+            {
+                name: "04.01-Informes",
+                parent: "04-Seguimiento"
+            },
+            {
+                name: "04.02-Actas",
+                parent: "04-Seguimiento"
+            },
+            {
+                name: "04.03-Inventario",
+                parent: "04-Seguimiento"
+            },
+            {
+                name: "05-Cierre de proyecto",
+                parent: null
+            },
+            {
+                name: "06-Desarrollo",
+                parent: null
+            },
+            {
+                name: "06.01-Estrategia de proyecto",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.02-Gestión de requisitos",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.03-Análisis",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.04-Diseño",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.05-Construcción",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.06-Pruebas",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.07-Despliegue",
+                parent: "06-Desarrollo"
+            },
+            {
+                name: "06.08-Otros",
+                parent: "06-Desarrollo"
+            }
+        ]
+
+        var variables = {
+            // TENANT
+            azureAD: "grupovass.onmicrosoft.com",
+            // ClientId de la aplicación
+            clientId: "7b53e22e-fe24-444b-ab4a-cf30fc982da3"
+        }
+
+        // Configuración de AuthenticationContext
+        window.config = {
+            tenant: variables.azureAD,
+            clientId: variables.clientId,
+            postLogoutRedirectUri: window.location.origin,
+            endpoints: {
+                graphApiUri: "https://graph.microsoft.com"
+            },
+            cacheLocation: "localStorage"
+        };
+
+        function setContext() {
+            var authContext = new AuthenticationContext(config);
+
+            if (authContext.isCallback(window.location.hash)) {
+
+                authContext.handleWindowCallback();
+                var err = authContext.getLoginError();
+                if (err) {
+                    console.log(err);
+                }
+            }
+            else {
+
+                var user = authContext.getCachedUser();
+                if (!user) {
+                    authContext.login();
+                }
+            }
+        }
+
+        function execute(options) {
+            var authContext = new AuthenticationContext(config);
+
+            if (authContext.isCallback(window.location.hash)) {
+
+                authContext.handleWindowCallback();
+                var err = authContext.getLoginError();
+                if (err) {
+                    console.log(err);
+                }
+            }
+            else {
+
+                var user = authContext.getCachedUser();
+                if (!user) {
+                    authContext.login();
+                }
+
+                authContext.acquireToken(config.endpoints.graphApiUri, function (error, token) {
+                    if (error || !token) {
+                        console.log("ADAL error occurred: " + error);
+                        return;
+                    }
+                    else {
+                        var url = config.endpoints.graphApiUri + "/" + options.version + "/" + options.endpoint;
+
+                        var ajaxOptions = {
+                            url: url,
+                            type: options.type,
+                            headers: {
+                                "Authorization": "Bearer " + token,
+                                "Content-Type": "application/json"
+                            }
+                        };
+
+                        if (options.type == "POST" || options.type == "PUT") {
+                            ajaxOptions.data = JSON.stringify(options.data);
+                        }
+
+                        $.ajax(ajaxOptions).done(function (response) {
+                            if (options.callback != null)
+                                options.callback(response);
+                        }).fail(function (j, h, d) {
+                            console.log(j);
+                        });
+                    }
+                });
+            }
+        }
+
+        $('#btnCreateTeam').on('click', function () {
+            var groupName = $('#txtGroupName').val();
+            var mailNickName = groupName.toLowerCase().replace(/ /g, '');
+
+            $('#alert').text('Creando grupo...');
+
+            //Creamos el grupo
+            execute({
+                version: "v1.0",
+                endpoint: "groups",
+                type: "POST",
+                data: {
+                    "description": groupName,
+                    "displayName": groupName,
+                    "groupTypes": [
+                        "Unified"
+                    ],
+                    "mailEnabled": true,
+                    "mailNickname": mailNickName,
+                    "securityEnabled": false
+                },
+                callback: function (result) {
+                    var groupId = result.id;
+
+                    $('#alert').text('Añadiendo propietario ' + $('#txtOwner').val() + ' al grupo ' + groupId);
+
+                    //Asignamos el propietario
+                    execute({
+                        version: "v1.0",
+                        endpoint: "/groups/" + groupId + "/owners/$ref",
+                        type: "POST",
+                        data: {
+                            "@odata.id": "https://graph.microsoft.com/v1.0/users/" + $('#txtOwner').val()
+                        },
+                        callback: function (result) {
+                            $('#alert').text('Creando equipo para el grupo ' + groupId);
+
+                            //Creamos el equipo
+                            execute({
+                                version: "beta",
+                                endpoint: "/groups/" + groupId + "/team",
+                                type: "PUT",
+                                data: {
+                                    "memberSettings": {
+                                        "allowCreateUpdateChannels": true
+                                    },
+                                    "messagingSettings": {
+                                        "allowUserEditMessages": true,
+                                        "allowUserDeleteMessages": true
+                                    },
+                                    "funSettings": {
+                                        "allowGiphy": true,
+                                        "giphyContentRating": "strict"
+                                    }
+                                },
+                                callback: function (result) {
+                                    createFolder(0);
+                                }
+                            })
+                        }
+                    })
+                }
+            });
+        });
+
+        function createFolder(index) {
+            var teamName = $('#txtGroupName').val().toLowerCase().replace(/ /g, '');
+            var teamSiteUrl = "https://grupovass.sharepoint.com/teams/" + teamName;
+
+            $.ajax({
+                url: teamSiteUrl + "/_api/contextinfo",
+                method: "POST",
+                headers: { Accept: "application/json;odata=verbose" }
+            }).done(function (data) {
+                $('#alert').text('Esperando la creación del sitio ' + teamSiteUrl);
+
+                checkFolder(teamSiteUrl, data.d.GetContextWebInformation.FormDigestValue, function () {
+
+                    var create = function (index) {
+
+                        if (index < folders.length) {
+                            var folder = folders[index];
+
+                            var folderName = '';
+
+                            if (folder.parent == null)
+                                folderName = folder.name;
+                            else
+                                folderName = folder.parent + "/" + folder.name
+
+                            $('#alert').text('Creando carpeta ' + folderName + ' en ' + teamSiteUrl);
+
+                            var url = teamSiteUrl + "/_api/web/getfolderbyserverrelativeurl('Shared%20Documents/General";
+
+                            if (folder.parent != null)
+                                url += "/" + folder.parent;
+
+                            url += "')/Folders/add(url='" + folder.name + "')";
+
+                            $.ajax({
+                                url: url,
+                                type: "POST",
+                                dataType: "json",
+                                headers: {
+                                    Accept: "application/json;odata=verbose",
+                                    "X-RequestDigest": data.d.GetContextWebInformation.FormDigestValue
+                                }
+                            }).done(function (data) {
+                                index++;
+                                create(index);
+                            }).fail(function (j) {
+                                console.log(j);
+                            });
+                        }
+                        else {
+                            $('#alert').text('Equipo creado');
+                        }
+                    }
+
+                    create(index);
+                });
+            });
+        }
+
+        function checkFolder(teamSiteUrl, formDigest, callback) {
+
+            var url = teamSiteUrl + "/_api/web/getfolderbyserverrelativeurl('Shared%20Documents/General')";
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                headers: {
+                    Accept: "application/json;odata=verbose",
+                    "X-RequestDigest": formDigest
+                }
+            }).done(function (data) {
+                callback(true);
+            }).fail(function (j) {
+                setInterval(checkFolder(teamSiteUrl, formDigest, callback), 1000);
+            }); 
+        }
+
+        setContext();
+
+
+
+        //ClearHtml();
+
+        //var groupName;
+        //var groupType;
+        //var groupOwner;
+
+        //$('#btnCreateTeam').on('click', function () {
+        //    createGroup();
+        //});
+
+        //function createGroup() {
+        //    $('#alert').text('Creando grupo...');
+        //    $('#alert').show();
+
+        //    groupName = $('#txtGroupName').val();
+        //    groupType = $('#selectGroupType').val();
+        //    groupOwner = $('#txtOwner').val();
+
+        //    var data = new Object();
+        //    data.description = groupName;
+        //    data.displayName = groupName;
+        //    data.groupTypes = ["Unified"];
+        //    data.mailEnabled = true;
+        //    data.mailNickname = groupName.toLowerCase().replace(/ /g, '');
+        //    data.securityEnabled = false;
+
+        //    console.log(data);
+
+        //    var url = "https://graph.microsoft.com/v1.0/groups";
+
+        //    var $ajax = $.ajax({
+        //        url: url,
+        //        type: "POST",
+        //        dataType: "json",
+        //        data: JSON.stringify(data),
+        //        headers: {
+        //            "Accept": "application/json;odata=verbose",
+        //            "Content-Type": "application/json",
+        //            "Content-Length": JSON.stringify(data).length
+        //        }
+        //    });
+
+        //    $ajax.done(function (data, textStatus, jqXHR) {
+        //        console.log(data);
+        //    });
+
+        //    $ajax.fail(function (jqXSR, text, err) {
+        //        console.log(jqXSR);
+        //        console.log(text);
+        //        console.log(err);
+        //    });
+        //}
+    };
+}(jQuery));
+
 
 jQuery(document).ready(function () {
     setHomePage();
+
+    jQuery('#graph').each(function () {
+        $(this).graph();
+    });
+
     jQuery('#quickLinks').each(function () {
         $(this).quicklinks();
     });

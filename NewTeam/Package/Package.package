@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package dslVersion="1.0.0.0" 
+        Id="8a1e9212-3616-496e-98db-a835ff6f9f32" 
+        solutionId="8a1e9212-3616-496e-98db-a835ff6f9f32" 
+        xmlns="http://schemas.microsoft.com/VisualStudio/2008/SharePointTools/PackageModel" 
+        name="NewTeam"
+        sharePointProductVersion="16.0">
+  <features>
+        <featureReference itemId="359b064f-8bcb-4933-9389-450d5c30fae4" />
+  </features>
+</package>

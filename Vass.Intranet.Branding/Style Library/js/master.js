@@ -196,75 +196,574 @@
 /*GRAPH*/
 (function ($) {
     $.fn.graph = function (options) {
-        //var folders = ["01-Venta", "02-Inicio", "03-Planificación y gestión", "04-Seguimiento", "04-Seguimiento/04.01-Informes", "04-Seguimiento/04.02-Actas", "04-Seguimiento/04.03-Inventario", "05-Cierre de proyecto"]
+        var fieldKinds = {
+            Text: 2,
+            DateTime: 4,
+            Note: 3,
+            User: 20,
+            Lookup: 7,
+            Choice: 6,
+            Number: 9
+        }
+        var fieldTypes = {
+            Text: 'SP.FieldText',
+            DateTime: 'SP.FieldDateTime',
+            Note: 'SP.FieldMultiLineText',
+            User: 'SP.Field',
+            Lookup: 'SP.FieldLookup',
+            Choice: 'SP.FieldChoice',
+            Number: 'SP.FieldNumber'
+        }
+
         var folders = [
             {
-                name: "01-Venta",
+                name: "05_CIERRE",
                 parent: null
             },
             {
-                name: "02-Inicio",
+                name: "03_POSTMORTEM",
+                parent: "05_CIERRE"
+            },
+            {
+                name: "02_EVALUACIONES",
+                parent: "05_CIERRE"
+            },
+            {
+                name: "01_ENCUESTA_SATISFACCION",
+                parent: "05_CIERRE"
+            },
+            {
+                name: "04_RESEARCH",
                 parent: null
             },
             {
-                name: "03-Planificación y gestión",
+                name: "03_PROYECTO",
                 parent: null
             },
             {
-                name: "04-Seguimiento",
+                name: "07_ENTREGAS",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "06_CALIDAD",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "05_EJECUCION",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "04_DEFINICIONES_REQUERIMIENTOS",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "03_ENTORNOS",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "02_DISEÑOS",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "01_ARQUITECTURA",
+                parent: "03_PROYECTO"
+            },
+            {
+                name: "02_GESTION",
                 parent: null
             },
             {
-                name: "04.01-Informes",
-                parent: "04-Seguimiento"
+                name: "04_ACTAS",
+                parent: "02_GESTION"
             },
             {
-                name: "04.02-Actas",
-                parent: "04-Seguimiento"
+                name: "03_SEGUIMIENTO",
+                parent: "02_GESTION"
             },
             {
-                name: "04.03-Inventario",
-                parent: "04-Seguimiento"
+                name: "02_PLANIFICACION",
+                parent: "02_GESTION"
             },
             {
-                name: "05-Cierre de proyecto",
+                name: "01_ECONOMICS",
+                parent: "02_GESTION"
+            },
+            {
+                name: "01_OFERTA",
                 parent: null
             },
             {
-                name: "06-Desarrollo",
+                name: "00_DOCUMENTACION_CLIENTE",
                 parent: null
+            }
+        ]
+
+        var lists = [
+            {
+                name: 'Requisitos',
+                fields: [
+                    {
+                        name: 'Identificador',
+                        kind: fieldKinds.Text,
+                        type: 'SP.FieldText'
+                    },
+                    {
+                        name: 'Nombre requisito',
+                        kind: fieldKinds.Text,
+                        type: 'SP.FieldText'
+                    },
+                    {
+                        name: 'Tipo requisito',
+                        kind: fieldKinds.Choice,
+                        choices: ['01-Funcionalidad', '02-Usabilidad', '03-Fiabilidad', '04-Rendimiento', '05-Seguridad'],
+                        type: 'SP.FieldChoice'
+                    },
+                    {
+                        name: 'Dependencia requisito',
+                        kind: fieldKinds.Lookup,
+                        type: 'SP.FieldLookup',
+                        lookupFieldName: 'Title',
+                        lookupList: 'Requisitos'
+                    },
+                    {
+                        name: 'Criterios Aceptación',
+                        kind: fieldKinds.Note,
+                        type: 'SP.FieldMultiLineText'
+                    },
+                    {
+                        name: 'Fecha recepción',
+                        kind: fieldKinds.DateTime,
+                        type: 'SP.FieldDateTime'
+                    },
+                    {
+                        name: 'Estado de Aprobacion',
+                        kind: fieldKinds.Choice,
+                        choices: ['Borrador', 'Aprobado'],
+                        type: 'SP.FieldChoice'
+                    }
+                ]
             },
             {
-                name: "06.01-Estrategia de proyecto",
-                parent: "06-Desarrollo"
+                name: 'Cambios de alcance',
+                fields: [
+                    {
+                        name: 'Identificador',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Nombre',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Fecha Recepcion',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Descripción cambio',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Solicitado por',
+                        kind: fieldKinds.User,
+                        type: fieldTypes.User
+                    },
+                    {
+                        name: 'Estado cambio',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['No iniciado', 'Borrador', 'Revisado', 'Programada', 'Publicado', 'Final', 'Caducado']
+                    },
+                    {
+                        name: 'Implicaciones',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Requisitos afectados',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Title',
+                        lookupList: 'Requisitos'
+                    }
+                ]
             },
             {
-                name: "06.02-Gestión de requisitos",
-                parent: "06-Desarrollo"
+                name: 'Casos de uso',
+                fields: [
+                    {
+                        name: 'Identificador',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Nombre del caso de uso',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Prioridad del caso de uso',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['01-Alto', '02-Media', '03-Baja']
+                    },
+                    {
+                        name: 'Estado del caso de uso',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['01-Nuevo', '02-Revisado', '03-Aprobado']
+                    },
+                    {
+                        name: 'Actores',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Resumen',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Pre-condiciones',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Post-condiciones',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Flujo principal',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Flujos alternativos',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Requisito',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Title',
+                        lookupList: 'Requisitos'
+                    },
+                    {
+                        name: 'Dependencia caso de uso',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Nombre del caso de uso',
+                        lookupList: 'Casos de uso'
+                    }
+                ]
             },
             {
-                name: "06.03-Análisis",
-                parent: "06-Desarrollo"
+                name: 'Implicados',
+                fields: [
+                    {
+                        name: 'Nombre',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text,
+                    },
+                    {
+                        name: 'Email',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text,
+                    },
+                    {
+                        name: 'Rol',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['JP', 'AF', 'AP', 'PR', 'TS', 'AR', 'MQ']
+                    },
+                    {
+                        name: 'Tipo de implicado',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Equipo VASS', 'Cliente', 'Otro']
+                    },
+                    {
+                        name: 'Fecha inicio',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Fecha fin',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Disponibilidad',
+                        kind: fieldKinds.Number,
+                        type: fieldTypes.Number
+                    }
+                ]
             },
             {
-                name: "06.04-Diseño",
-                parent: "06-Desarrollo"
+                name: 'Comunicaciones',
+                fields: [
+                    {
+                        name: 'Tipo de comunicación',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Comité', 'Reunión', 'Correo']
+                    },
+                    {
+                        name: 'Periodicidad',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Diaria', 'Semanal', 'Quicenal', 'Mensual', 'Bimensual', 'Trimestral', 'Semestral', 'Anual']
+                    },
+                    {
+                        name: 'Responsable',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Nombre',
+                        lookupList: 'Implicados'
+                    },
+                    {
+                        name: 'Destinatarios',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Nombre',
+                        lookupList: 'Implicados'
+                    },
+                    {
+                        name: 'Documento generado',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    }
+                ]
             },
             {
-                name: "06.05-Construcción",
-                parent: "06-Desarrollo"
+                name: 'Roles',
+                fields: [
+                    {
+                        name: 'Rol',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    }
+                ]
             },
             {
-                name: "06.06-Pruebas",
-                parent: "06-Desarrollo"
+                name: 'Formación',
+                fields: [
+                    {
+                        name: 'Formación',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Cuando',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Rol',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Rol',
+                        lookupList: 'Roles'
+                    }
+                ]
             },
             {
-                name: "06.07-Despliegue",
-                parent: "06-Desarrollo"
+                name: 'KICKOFF',
+                fields: [
+                    {
+                        name: 'Objetivos del proyecto',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Alcance',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Tipo de proyecto',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Llave en mano', 'Mantenimiento', 'MVP']
+                    },
+                    {
+                        name: 'Ciclo de vida',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Cascada', 'Corto', 'Iterativo']
+                    }
+                ]
             },
             {
-                name: "06.08-Otros",
-                parent: "06-Desarrollo"
+                name: 'Tipos responsabilidades',
+                fields: [
+                    {
+                        name: 'Responsabilidades',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    }
+                ]
+            },
+            {
+                name: 'Plan Roles Responsabilidades',
+                fields: [
+                    {
+                        name: 'Rol',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Rol',
+                        lookupList: 'Roles'
+                    },
+                    {
+                        name: 'Responsabilidades',
+                        kind: fieldKinds.Lookup,
+                        type: fieldTypes.Lookup,
+                        lookupFieldName: 'Responsabilidades',
+                        lookupList: 'Tipos responsabilidades'
+                    }
+                ]
+            },
+            {
+                name: 'Riesgos',
+                fields: [
+                    {
+                        name: 'Nombre Riesgo',
+                        kind: fieldKinds.Text,
+                        type: fieldTypes.Text
+                    },
+                    {
+                        name: 'Descripcion Riesgo',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Impacto',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Plan de Accion Definido',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Responsable Accion',
+                        kind: fieldKinds.User,
+                        type: fieldTypes.User
+                    },
+                    {
+                        name: 'Resultado Esperado del Plan de Accion',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Resultados Reales del Plan de Accion',
+                        kind: fieldKinds.Note,
+                        type: fieldTypes.Note
+                    },
+                    {
+                        name: 'Fecha Estimada Inicio Ejecucion',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Fecha Estimada Fin Plan Accion',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Fecha Real de Inicio de Plan',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Fecha Real Fin de Plan',
+                        kind: fieldKinds.DateTime,
+                        type: fieldTypes.DateTime
+                    },
+                    {
+                        name: 'Prioridad Ejecucion Plan de Accion',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Descripcion Impacto',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Umbral Teorico Riesgo',
+                        kind: fieldKinds.Number,
+                        type: fieldTypes.Number
+                    },
+                    {
+                        name: 'Valoracion Impacto',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Probabilidad',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Probabilidad Valoracion',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Probabilidad Valoracion Probabilidad',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Estado Riesgo Nombre',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    },
+                    {
+                        name: 'Estado Riesgo',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Alto', 'Medio', 'Bajo']
+                    }
+                ]
+            },
+            {
+                name: 'Trazabilidad',
+                fields: [
+                    {
+                        name: 'Tipo de traza',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Horizontal','Vertical']
+                    },
+                    {
+                        name: 'Origen',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Rq','Cu','Pr']
+                    },
+                    {
+                        name: 'Destino',
+                        kind: fieldKinds.Choice,
+                        type: fieldTypes.Choice,
+                        choices: ['Rq', 'Cu', 'Pr']
+                    }
+                ]
             }
         ]
 
@@ -425,14 +924,10 @@
             var teamName = $('#txtGroupName').val().toLowerCase().replace(/ /g, '');
             var teamSiteUrl = "https://grupovass.sharepoint.com/teams/" + teamName;
 
-            $.ajax({
-                url: teamSiteUrl + "/_api/contextinfo",
-                method: "POST",
-                headers: { Accept: "application/json;odata=verbose" }
-            }).done(function (data) {
-                $('#alert').text('Esperando la creación del sitio ' + teamSiteUrl);
+            $('#alert').text('Esperando la creación del sitio ' + teamSiteUrl);
 
-                checkFolder(teamSiteUrl, data.d.GetContextWebInformation.FormDigestValue, function () {
+            checkSite(teamSiteUrl, function (formDigest) {
+                checkFolder(teamSiteUrl, formDigest, function () {
 
                     var create = function (index) {
 
@@ -461,7 +956,7 @@
                                 dataType: "json",
                                 headers: {
                                     Accept: "application/json;odata=verbose",
-                                    "X-RequestDigest": data.d.GetContextWebInformation.FormDigestValue
+                                    "X-RequestDigest": formDigest
                                 }
                             }).done(function (data) {
                                 index++;
@@ -471,7 +966,7 @@
                             });
                         }
                         else {
-                            $('#alert').text('Equipo creado');
+                            createLists(teamSiteUrl, 0, formDigest);
                         }
                     }
 
@@ -499,62 +994,216 @@
             }); 
         }
 
+        function checkSite(teamSiteUrl, callback) {
+
+            var url = teamSiteUrl + "/_api/contextinfo";
+
+            $.ajax({
+                url: url,
+                method: "POST",
+                headers: { Accept: "application/json;odata=verbose", "X-RequestDigest": $("#__REQUESTDIGEST").val() }
+            }).done(function (data) {
+                if (data == null || data.d == null || data.d.GetContextWebInformation == null || data.d.GetContextWebInformation.FormDigestValue == null)
+                    setInterval(checkSite(teamSiteUrl, callback), 2000);
+                else
+                    callback(data.d.GetContextWebInformation.FormDigestValue);
+            }).fail(function (j) {
+                setInterval(checkSite(teamSiteUrl, callback), 2000);
+            });
+        }
+
+        function createLists(url, index, formDigest) {
+            var createList = function (url, index) {
+
+                if (index < lists.length) {
+                    var list = lists[index];
+
+                    $('#alert').text('Creando lista ' + list.name);
+
+                    var listBody = {
+                        '__metadata': {
+                            'type': 'SP.List'
+                        },
+                        'BaseTemplate': 100,
+                        'Description': list.name,
+                        'Title': list.name
+                    }
+
+                    var $ajax = $.ajax({
+                        url: url + '/_api/web/lists',
+                        type: "POST",
+                        data: JSON.stringify(listBody),
+                        dataType: "json",
+                        headers: {
+                            Accept: "application/json;odata=verbose",
+                            "content-type": "application/json;odata=verbose",
+                            "X-RequestDigest": formDigest
+                        }
+                    });
+
+                    $ajax.done(function (data) {
+                        list.id = data.d.Id;
+                        index++;
+                        createList(url, index);
+                    });
+
+                    $ajax.fail(function (jqXSR, text, err) {
+                        console.log(jqXSR);
+                        console.log(text);
+                        console.log(err);
+                    });
+                }
+                else {
+                    createFields(url, formDigest, 0);
+                }
+            }
+
+            createList(url, index, formDigest);
+        }
+
+        function createFields(url, formDigest, index) {
+            if (index < lists.length) {
+                var list = lists[index];
+                var listTitle = list.name;
+                var listUrl = url + "/_api/web/lists/getbytitle('" + list.name + "')/fields";
+
+                var createField = function (listUrl, formDigest, list, fieldIndex, listIndex) {
+                    if (fieldIndex < list.fields.length) {
+                        var auxUrl = listUrl;
+                        var field = list.fields[fieldIndex];
+
+                        $('#alert').text('Creando campo ' + field.name + ' en ' + list.name);
+
+                        var fieldBody = {};
+
+                        switch (field.kind) {
+                            case fieldKinds.Lookup:
+                                var listId = getListId(field.lookupList);
+                                var lookupField = field.lookupFieldName;
+                                auxUrl += '/addfield';
+
+                                fieldBody = {
+                                    'parameters': {
+                                        '__metadata': {
+                                            'type': 'SP.FieldCreationInformation'
+                                        },
+                                        'FieldTypeKind': field.kind,
+                                        'Title': field.name,
+                                        'LookupListId': listId,
+                                        'LookupFieldName': lookupField
+                                    }
+                                }
+                                break;
+                            case fieldKinds.User:
+                                fieldBody = {
+                                    '__metadata': {
+                                        'type': 'SP.Field'
+                                    },
+                                    'FieldTypeKind': field.kind,
+                                    'Title': field.name,
+                                    'SchemaXml': '<Field Type=\"UserMulti\" Required=\"FALSE\" UserSelectionMode=\"PeopleAndGroups\" UserSelectionScope=\"0\" Mult=\"TRUE\" DisplayName="' + field.name + '" Title="' + field.name + '" StaticName="' + field.name.replace(/ /g, '') + '"/>'
+                                }
+                                break;
+                            default:
+                                fieldBody = {
+                                    '__metadata': {
+                                        'type': field.type
+                                    },
+                                    'FieldTypeKind': field.kind,
+                                    'Title': field.name
+                                };
+
+                                if (field.kind == fieldKinds.Choice) {
+                                    fieldBody['Choices'] = {
+                                        'results': field.choices
+                                    }
+                                }
+                                break;
+                        }
+
+
+
+                        var $ajax = $.ajax({
+                            url: auxUrl,
+                            type: "POST",
+                            data: JSON.stringify(fieldBody),
+                            dataType: "json",
+                            headers: {
+                                Accept: "application/json;odata=verbose",
+                                "content-type": "application/json;odata=verbose",
+                                "X-RequestDigest": formDigest
+                            }
+                        });
+
+                        $ajax.done(function (data) {
+                            addFieldToDefaultView(url, list, field, formDigest);
+                            fieldIndex++;
+                            createField(listUrl, formDigest, list, fieldIndex, listIndex);
+                        });
+
+                        $ajax.fail(function (jqXSR, text, err) {
+                            console.log(jqXSR);
+                            console.log(text);
+                            console.log(err);
+                        });
+                    }
+                    else {
+                        listIndex++;
+                        createFields(url, formDigest, listIndex);
+                    }
+                };
+
+                createField(listUrl, formDigest, list, 0, index);
+            }
+            else {
+                $('#alert').text('Equipo creado!');
+            }
+        }
+
+        function addFieldToDefaultView(url, list, field, formDigest) {
+            url += "/_api/web/lists/getbytitle('" + list.name + "')/DefaultView/ViewFields/AddViewField";
+
+            var body = {
+                'strField': field.name
+            }
+
+            var $ajax = $.ajax({
+                url: url,
+                type: "POST",
+                data: JSON.stringify(body),
+                dataType: "json",
+                headers: {
+                    Accept: "application/json;odata=verbose",
+                    "content-type": "application/json;odata=verbose",
+                    "X-RequestDigest": formDigest
+                }
+            });
+
+            $ajax.done(function (data) {
+                console.log(data);
+            });
+
+            $ajax.fail(function (jqXSR, text, err) {
+                console.log(jqXSR);
+                console.log(text);
+                console.log(err);
+            });
+        }
+
+        function getListId(title) {
+            var listId;
+            for (var i = 0; i < lists.length; i++) {
+                var list = lists[i];
+                if (list.name == title) {
+                    listId = list.id;
+                    break;
+                }
+            }
+
+            return listId;
+        }
+
         setContext();
-
-
-
-        //ClearHtml();
-
-        //var groupName;
-        //var groupType;
-        //var groupOwner;
-
-        //$('#btnCreateTeam').on('click', function () {
-        //    createGroup();
-        //});
-
-        //function createGroup() {
-        //    $('#alert').text('Creando grupo...');
-        //    $('#alert').show();
-
-        //    groupName = $('#txtGroupName').val();
-        //    groupType = $('#selectGroupType').val();
-        //    groupOwner = $('#txtOwner').val();
-
-        //    var data = new Object();
-        //    data.description = groupName;
-        //    data.displayName = groupName;
-        //    data.groupTypes = ["Unified"];
-        //    data.mailEnabled = true;
-        //    data.mailNickname = groupName.toLowerCase().replace(/ /g, '');
-        //    data.securityEnabled = false;
-
-        //    console.log(data);
-
-        //    var url = "https://graph.microsoft.com/v1.0/groups";
-
-        //    var $ajax = $.ajax({
-        //        url: url,
-        //        type: "POST",
-        //        dataType: "json",
-        //        data: JSON.stringify(data),
-        //        headers: {
-        //            "Accept": "application/json;odata=verbose",
-        //            "Content-Type": "application/json",
-        //            "Content-Length": JSON.stringify(data).length
-        //        }
-        //    });
-
-        //    $ajax.done(function (data, textStatus, jqXHR) {
-        //        console.log(data);
-        //    });
-
-        //    $ajax.fail(function (jqXSR, text, err) {
-        //        console.log(jqXSR);
-        //        console.log(text);
-        //        console.log(err);
-        //    });
-        //}
     };
 }(jQuery));
 

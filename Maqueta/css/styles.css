@@ -1,0 +1,24 @@
+﻿.circle {
+    height: 40px;
+    border-radius: 50%;
+    width: 40px;
+    text-align: center;
+    background: #000;
+    color: #fff;
+    padding-top: 5px;
+    margin: 0 auto;
+}
+
+.circle.disabled {
+    background: #ccc;
+}
+
+#wizard-steps{
+    margin-top: 100px;
+    height:200px;
+    clear:both;
+}
+
+#wizard-buttons button{
+    margin-right:20px;
+}

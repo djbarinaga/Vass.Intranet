@@ -3,22 +3,22 @@
     border-radius: 50%;
     width: 40px;
     text-align: center;
-    background: #000;
     color: #fff;
-    padding-top: 5px;
-    margin: 0 auto;
+    font-weight: bold;
+    padding-top: 10px;
+    margin: 0 auto !important;
 }
 
-.circle.disabled {
-    background: #ccc;
-}
+    .circle.disabled {
+        background: #ccc;
+    }
 
-#wizard-steps{
+#wizard-steps {
     margin-top: 100px;
-    height:200px;
-    clear:both;
+    height: 150px;
+    clear: both;
 }
 
-#wizard-buttons button{
-    margin-right:20px;
+#wizard-buttons button {
+    margin-right: 20px;
 }

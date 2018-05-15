@@ -685,7 +685,7 @@ footer p{
     color: #777;
 }
 
-#calendar .days li .active {
+#calendar .days li.active {
     padding: 5px;
     background: #629e4d;
     color: white !important
@@ -785,4 +785,30 @@ footer p{
 .ms-surveyHBar{
     background-color: #2b96ea;
     border-color: #2b96ea;
+}
+
+/*WIZARD TEAMS*/
+.circle {
+    height: 40px;
+    border-radius: 50%;
+    width: 40px;
+    text-align: center;
+    color: #fff;
+    font-weight:bold;
+    padding-top: 10px;
+    margin: 0 auto !important;
+}
+
+.circle.disabled {
+    background: #ccc;
+}
+
+#wizard-steps {
+    margin-top: 100px;
+    height: 150px;
+    clear: both;
+}
+
+#wizard-buttons button {
+    margin-right: 20px;
 }

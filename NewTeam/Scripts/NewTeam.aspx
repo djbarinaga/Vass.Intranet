@@ -10,8 +10,9 @@
     <title></title>
 
     <link rel="stylesheet" href="../Content/bootstrap.min.css" />
-    <link rel="stylesheet" href="../Content/intranet.css" />
+    <link rel="stylesheet" href="../Content/app.css" />
 
+    <script type="text/javascript" src="/_layouts/15/init.js"></script>
     <script type="text/javascript" src="../Scripts/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="/_layouts/15/MicrosoftAjax.js"></script>
     <script type="text/javascript" src="/_layouts/15/sp.runtime.js"></script>
@@ -46,26 +47,52 @@
     </script>
 </head>
 <body>
-    <div class="form">
-        <div class="form-group">
-            <label>Nombre del equipo</label>
-            <input type="text" id="txtGroupName" class="form-control"/>
+    <div id="wizard" class="container">
+        <div class="row" id="wizard-indicators">
+            <div class="col text-center">
+                <p class="circle bg-primary">1</p>
+            </div>
+            <div class="col text-center">
+                <p class="circle bg-info">2</p>
+            </div>
+            <div class="col text-center">
+                <p class="circle bg-info">3</p>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Propietario</label>
-            <input type="text" id="txtOwner" class="form-control"/>
+        <div id="wizard-steps">
+            <div class="row">
+                <div class="col">
+                    <div class="form">
+                        <div class="form-group">
+                            <label for="txtGroupName">Nombre del equipo</label>
+                            <input type="text" class="form-control" id="txtGroupName" placeholder="Nombre del equipo">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-none">
+                <div class="col">
+                    <div class="form">
+                        <div class="form-group">
+                            <label for="txtOwner">Propietario</label>
+                            <input type="text" class="form-control" id="txtOwner" placeholder="Email del propietario">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-none">
+                <div class="col">
+                    <p id="alert">Procesando...</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 25%"></div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-            <label>Tipo de equipo</label>
-            <select id="selectGroupType" class="form-control">
-                <option value="0">Llave en mano</option>
-                <option value="1">Mantenimiento</option>
-                <option value="2">MVP</option>
-                <option value="3">T&M</option>
-            </select>
+        <div id="wizard-buttons" class="row">
+            <button type="button" class="btn btn-default" id="prevStep">Anterior</button>
+            <button type="button" class="btn btn-primary" id="nextStep">Siguiente</button>
         </div>
-        <button type="button" class="btn btn-primary" id="btnCreateTeam">Crear equipo</button>
     </div>
-    <div class="alert alert-info" role="alert" id="alert" style="display:none;"></div>
 </body>
 </html>

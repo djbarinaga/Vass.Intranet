@@ -47,7 +47,7 @@
     <Content Include="NewTeam\Elements.xml">
       <OpcRelationship>feature-elementmanifest</OpcRelationship>
     </Content>
-    <Content Include="Pages\NewTeam.aspx" />
+    <Content Include="Scripts\NewTeam.aspx" />
     <Content Include="Scripts\jquery-1.9.1.intellisense.js" />
     <Content Include="Scripts\jquery-1.9.1.js" />
     <Content Include="Scripts\jquery-1.9.1.min.js" />

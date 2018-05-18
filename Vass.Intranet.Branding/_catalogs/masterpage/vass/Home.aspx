@@ -42,13 +42,13 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row no-gutters" style="height: 200px;">
+                    <div class="row no-gutters">
                         <div class="col-8">
                             <div id="calendar">
                                         <div class="month">      
                                           <ul>
-                                            <li class="prev">&#10094;</li>
-                                            <li class="next">&#10095;</li>
+                                            <li class="prev"><a href="#">&#10094;</a></li>
+                                            <li class="next"><a href="#">&#10095;</a></li>
                                             <li class="current-month">
                                               Marzo <span>2018</span>
                                             </li>
@@ -100,7 +100,7 @@
                                         </ul>
                                     </div>
                         </div>
-                        <div class="col-4 o-hidden h-200">
+                        <div class="col-4 o-hidden" style="height:230px">
                             <div class="event-today">
                                 <div class="event-date">
                                     <span class="event-day">Viernes</span>
@@ -175,7 +175,7 @@
                         <div class="panel">
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Próximos</span> eventos</p>
-                            <ul>
+                            <ul id="vass-calendar">
                                 <li>
                                     <h4>Showroom mobile app</h4>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elit purus, volutpat eget ipsum in, vestibulum porta metus.</p>

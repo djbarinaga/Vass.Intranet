@@ -88,7 +88,7 @@ a, a:hover, a:visited{
 }
 
 .h-200{
-    height: 200px;
+    height: 228px;
 }
 
 /*ANCHOS*/
@@ -619,6 +619,11 @@ footer p{
 }
 
 /*CALENDAR*/
+#calendar {
+    background: #ededed;
+    height:230px;
+}
+
 #calendar ul {list-style-type: none;}
 
 #calendar .month {
@@ -673,6 +678,7 @@ footer p{
     padding: 10px 0;
     background: #ededed;
     margin: 0;
+    width:105%;
 }
 
 #calendar .days li {
@@ -688,7 +694,12 @@ footer p{
 #calendar .days li.active {
     padding: 5px;
     background: #629e4d;
-    color: white !important
+    color: #fff !important;
+    cursor: pointer;
+}
+
+#calendar .days li span {
+    padding: 5px;
 }
 
 .event-today{
@@ -707,7 +718,14 @@ footer p{
     display: block;
 }
 
-.event-day-number{
+.event-date a{
+    color:#fff;
+    position:absolute;
+    left:70%;
+    bottom: 10px;
+}
+
+.event-day-number {
     font-size: 2rem;
 }
 
@@ -724,6 +742,7 @@ footer p{
 .events li span{
     display: inline;
     font-size: 11px;
+    margin-left: 2px;
 }
 
 /*CÍRCULOS*/

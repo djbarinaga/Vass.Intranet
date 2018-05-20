@@ -217,7 +217,7 @@ Date.prototype.addMonths = function (value) {
 
 (function ($) {
     $.fn.wizard = function (options) {
-        setContext(variables.clientId.Teams);
+        setContext(variables.clientId.Graph);
 
         var $this = this;
         var currentStep = -1;
@@ -867,7 +867,7 @@ Date.prototype.addMonths = function (value) {
 
             //Creamos el grupo
             execute({
-                clientId: variables.clientId.Teams,
+                clientId: variables.clientId.Graph,
                 version: "v1.0",
                 endpoint: "/groups",
                 type: "POST",
@@ -893,7 +893,7 @@ Date.prototype.addMonths = function (value) {
 
                     //Asignamos el propietario
                     execute({
-                        clientId: variables.clientId.Teams,
+                        clientId: variables.clientId.Graph,
                         version: "v1.0",
                         endpoint: "/groups/" + groupId + "/owners/$ref",
                         type: "POST",
@@ -911,7 +911,7 @@ Date.prototype.addMonths = function (value) {
 
                             //Creamos el equipo
                             execute({
-                                clientId: variables.clientId.Teams,
+                                clientId: variables.clientId.Graph,
                                 version: "beta",
                                 endpoint: "/groups/" + groupId + "/team",
                                 type: "PUT",
@@ -1021,7 +1021,7 @@ Date.prototype.addMonths = function (value) {
             }).done(function (data) {
                 callback(true);
             }).fail(function (j) {
-                setInterval(checkFolder(teamSiteUrl, formDigest, callback), 1000);
+                setInterval(checkFolder(teamSiteUrl, formDigest, callback), 3000);
             });
         }
 
@@ -1035,11 +1035,11 @@ Date.prototype.addMonths = function (value) {
                 headers: { Accept: "application/json;odata=verbose", "X-RequestDigest": $("#__REQUESTDIGEST").val() }
             }).done(function (data) {
                 if (data == null || data.d == null || data.d.GetContextWebInformation == null || data.d.GetContextWebInformation.FormDigestValue == null)
-                    setInterval(checkSite(teamSiteUrl, callback), 2000);
+                    setInterval(checkSite(teamSiteUrl, callback), 3000);
                 else
                     callback(data.d.GetContextWebInformation.FormDigestValue);
             }).fail(function (j) {
-                setInterval(checkSite(teamSiteUrl, callback), 2000);
+                setInterval(checkSite(teamSiteUrl, callback), 3000);
             });
         }
 
@@ -1212,8 +1212,8 @@ Date.prototype.addMonths = function (value) {
             $('#alert').text('Agregando equipo a la lista de equipos');
 
             var item = {
-                "__metadata": { "type": itemType },
-                "Title": 'SP.Data.TeamsListItem',
+                "__metadata": { "type": 'SP.Data.TeamsListItem' },
+                "Title": $('#txtGroupName').val(),
                 "Tipo": 'Proyecto'
             };
 
@@ -1303,7 +1303,7 @@ Date.prototype.addMonths = function (value) {
 /*MI CALENDARIO PLUGIN*/
 (function ($) {
     $.fn.mycalendar = function (options) {
-        setContext(variables.clientId.Events);
+        setContext(variables.clientId.Graph);
         var events;
         var today = new Date();
         var months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -1331,7 +1331,7 @@ Date.prototype.addMonths = function (value) {
             var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and end/dateTime le '" + endDate + "'";
 
             execute({
-                clientId: variables.clientId.Events,
+                clientId: variables.clientId.Graph,
                 version: "v1.0",
                 endpoint: endpoint,
                 type: "GET",

@@ -10,16 +10,19 @@
     <script src="/js/script.js"></script>
 </head>
 <body>
-    <div id="wizard" class="container">
+    <div id="graph-wizard" class="container">
         <div class="row" id="wizard-indicators">
             <div class="col text-center">
                 <p class="circle bg-primary">1</p>
             </div>
             <div class="col text-center">
-                <p class="circle bg-info">2</p>
+                <p class="circle bg-secondary">2</p>
             </div>
             <div class="col text-center">
-                <p class="circle bg-info">3</p>
+                <p class="circle bg-secondary">3<br /></p>
+            </div>
+            <div class="col text-center">
+                <p class="circle bg-secondary">4<br /></p>
             </div>
         </div>
         <div id="wizard-steps">
@@ -27,8 +30,7 @@
                 <div class="col">
                     <div class="form">
                         <div class="form-group">
-                            <label for="txtGroupName">Nombre del equipo</label>
-                            <input type="text" class="form-control" id="txtGroupName" placeholder="Nombre del equipo">
+                            <label for="txtGroupName">Nombre del equipo</label><input type="text" class="form-control" id="txtGroupName" placeholder="Nombre del equipo" />
                         </div>
                     </div>
                 </div>
@@ -37,8 +39,25 @@
                 <div class="col">
                     <div class="form">
                         <div class="form-group">
-                            <label for="txtOwner">Propietario</label>
-                            <input type="text" class="form-control" id="txtOwner" placeholder="Email del propietario">
+                            <label for="txtOwner">Propietario</label><input type="text" class="form-control" id="txtOwner" placeholder="Email del propietario" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row d-none">
+                <div class="col">
+                    <div class="form">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="teamType" id="projectTeam" value="Proyecto">
+                            <label class="form-check-label" for="exampleRadios1">
+                                Proyecto
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="teamType" id="gremioTeam" value="Gremio">
+                            <label class="form-check-label" for="exampleRadios2">
+                                Gremio
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -47,14 +66,15 @@
                 <div class="col">
                     <p id="alert">Procesando...</p>
                     <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%"></div>
+                        <div class="progress-bar" role="progressbar" style="width: 25%;">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="wizard-buttons" class="row">
-            <button type="button" class="btn btn-default" id="prevStep">Anterior</button>
-            <button type="button" class="btn btn-primary" id="nextStep">Siguiente</button>
+        <div id="wizard-buttons">
+            <button type="button" class="btn btn-primary float-right" id="nextStep">Siguiente</button>
+            <button type="button" class="btn btn-default float-right" id="prevStep">Anterior</button>​<br />​​<br />​​<br />
         </div>
     </div>
 </body>

@@ -127,7 +127,7 @@
                     </div>
                 </div>
                 <div class="col">
-                    <div class="row" style="height: 350px;">
+                    <div class="row">
                         <div class="col">
                             <div id="carouselNews" class="carousel slide" data-ride="carousel" style="overflow:hidden;">
                               <ol class="carousel-indicators">

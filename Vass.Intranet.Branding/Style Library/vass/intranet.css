@@ -196,8 +196,25 @@ ul.root > li ul li.selected {
     overflow:hidden;
 }
 
-/*FIN HOME*/
+#home #carouselNews .carousel-item{
+    height: 350px;
+}
 
+#home #carouselNews .carousel-item .carousel-caption {
+    left: 0%;
+    right: 0%;
+    bottom: 0px;
+    padding: 15px;
+    background-color: rgba(245, 245,245, 0.9);
+    text-align:left;
+    color:#000;
+}
+
+#home #carouselNews .carousel-item .carousel-caption h5 a
+{
+    font-size: 2em;
+}
+/*FIN HOME*/
 /*SUBHOME*/
 #current-menu {
     background-color: #D9F3FC;
@@ -314,8 +331,23 @@ ul.root > li ul li.selected {
 }
 /*FIN SUBHOME*/
 
+/*WP-PAGE*/
+#wp-page h2 {
+    margin: 40px 0px;
+    font-size: 2em;
+    color: #003354;
+}
+
+/*SEARCH*/
+.ms-srch-people-item #UserInfoContainer{
+    width: 370px;
+}
+
+.ms-srch-hover-outerContainer{
+    margin-left: -50px;
+}
 /*ARTICLE*/
-#article img{
+#article img {
     max-width: 100%;
     height: auto;
 }

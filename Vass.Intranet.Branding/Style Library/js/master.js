@@ -107,18 +107,31 @@ Date.prototype.addMonths = function (value) {
 /*SEARCHBOX PLUGIN*/
 (function ($) {
     $.fn.searchbox = function (options) {
-        var url = "https://grupovass.sharepoint.com/desarrollo/Pages/busqueda.aspx";
         var location = window.location.href;
         if (location.indexOf('k=') > -1) {
             var locationSplit = location.split('k=');
-            $(this).val(locationSplit[1]);
+            $(this).val(decodeURIComponent(locationSplit[1]));
         }
 
-
         $(this).on('keydown', function (ev) {
+            var resultPages = ['paginas.aspx', 'documentos.aspx', 'personas.aspx'];
+            var language = _spPageContextInfo.currentCultureName;
+            var searchUrl = '/' + language;
+            if (language == 'es-ES') {
+                searchUrl += '/Paginas/';
+            }
+
+            var currentPage = location.substring(0, location.indexOf('?'));
+            currentPage = currentPage.substring(currentPage.lastIndexOf('/') + 1);
+
+            if (resultPages.indexOf(currentPage) > -1)
+                searchUrl += currentPage;
+            else
+                searchUrl += 'paginas.aspx';
+
             if (ev.keyCode == 13) {
                 ev.preventDefault();
-                window.location.href = url + '?k=' + $(this).val();
+                window.location.href = searchUrl + '?k=' + decodeURIComponent($(this).val());
                 return false;
             }
         });
@@ -215,6 +228,7 @@ Date.prototype.addMonths = function (value) {
     };
 }(jQuery));
 
+/*WIZARD*/
 (function ($) {
     $.fn.wizard = function (options) {
         setContext(variables.clientId.Graph);
@@ -1504,6 +1518,71 @@ Date.prototype.addMonths = function (value) {
     };
 }(jQuery));
 
+/*CAROUSEL PLUGIN*/
+(function ($) {
+    $.fn.carousel = function (options) {
+        var $this = this;
+        var url = "https://grupovass.sharepoint.com/_api/search/query?querytext='HomeHighlight:true'&trimduplicates=false&selectproperties='Title%2cPath%2cPublishingImage%2cHitHighlightedSummary'";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var totalRows = data.d.query.PrimaryQueryResult.RelevantResults.TotalRows;
+            var results = data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results;
+
+            if (totalRows > 0) {
+                var carouselInner = $($this).find('.carousel-inner');
+                carouselInner.empty();
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    var fields = result.Cells.results;
+                    var title = getValue(fields, 'Title');
+                    var description = getValue(fields, 'HitHighlightedSummary');
+                    var image = getValue(fields, 'PublishingImage');
+                    var url = getValue(fields, 'Path');
+                    var img = $(image);
+
+                    img.addClass('d-block w-100');
+                    
+
+                    var css = "carousel-item";
+                    if (i == 0)
+                        css += " active";
+
+                    var carouselItem = $('<div class="' + css + '"/>');
+                    carouselItem.append(img);
+
+                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><h5><a href="' + url + '">' + title + '</a></h5><p>' + description + '</p></div>');
+                    carouselItem.append(carouselCaption);
+
+                    carouselInner.append(carouselItem);
+
+                }
+            }
+        });
+
+        function getValue(fields, fieldName) {
+            var value;
+            for (var i = 0; i < fields.length; i++) {
+                if (fields[i].Key == fieldName) {
+                    value = fields[i].Value;
+                    break;
+                }
+            }
+
+            return value;
+        }
+    };
+}(jQuery));
+
 
 jQuery(document).ready(function () {
     //localStorage.clear();
@@ -1536,6 +1615,10 @@ jQuery(document).ready(function () {
 
     jQuery('#vass-calendar').each(function () {
         $(this).events();
+    });
+
+    jQuery('#carouselNews').each(function () {
+        $(this).carousel();
     });
 });
 

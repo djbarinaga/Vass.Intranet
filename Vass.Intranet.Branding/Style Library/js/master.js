@@ -1588,6 +1588,7 @@ jQuery(document).ready(function () {
     //localStorage.clear();
 
     setHomePage();
+    hideRibbon();
 
     jQuery('#graph-wizard').each(function () {
         $(this).wizard();
@@ -1624,6 +1625,13 @@ jQuery(document).ready(function () {
 
 function setHomePage() {
     $('.navbar-brand').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
+}
+
+function hideRibbon() {
+    //if (window.isInEditMode)
+    //    $('#s4-ribbonrow').show();
+    //else
+    //    $('#s4-ribbonrow').hide();
 }
 
 var maxLength = 255;

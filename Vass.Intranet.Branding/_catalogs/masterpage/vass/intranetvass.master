@@ -10,6 +10,7 @@ To build the master page directly from this HTML file, simply edit the page as y
 
 <%@ Register TagPrefix="SharePoint" Namespace="Microsoft.SharePoint.WebControls" Assembly="Microsoft.SharePoint, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register TagPrefix="WebPartPages" Namespace="Microsoft.SharePoint.WebPartPages" Assembly="Microsoft.SharePoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
+<%@ Register TagPrefix="PublishingWebControls" Namespace="Microsoft.SharePoint.Publishing.WebControls" Assembly="Microsoft.SharePoint.Publishing, Version=16.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c" %>
 <%@ Register TagPrefix="wssucmui" TagName="MUISelector" Src="~/_controltemplates/15/MUISelector.ascx" %>
 <%@ Register TagPrefix="wssucw" TagName="Welcome" Src="~/_controltemplates/15/Welcome.ascx" %>
 <%@ Register TagPrefix="PublishingRibbon" TagName="PublishingRibbon" Src="~/_controltemplates/15/Ribbon.ascx" %>
@@ -20,6 +21,14 @@ To build the master page directly from this HTML file, simply edit the page as y
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <script type="text/javascript">
+            window.isInEditMode = false;
+		</script>
+        <PublishingWebControls:EditModePanel runat="server" CssClass="edit-mode-panel title-edit">
+		    <script type="text/javascript">
+                window.isInEditMode = true;
+		    </script>
+	    </PublishingWebControls:EditModePanel>
         <meta http-equiv="Expires" content="0" />
         <SharePoint:RobotsMetaTag runat="server" />
         <SharePoint:PageTitle runat="server">
@@ -97,7 +106,7 @@ To build the master page directly from this HTML file, simply edit the page as y
                         <header>
                             <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
                                 <div class="logo">
-                                    <a class="navbar-brand" href="/desarrollo">
+                                    <a class="navbar-brand" href="#">
                                         <img src="/style library/images/logo.png" />
                                     </a>
                                 </div>

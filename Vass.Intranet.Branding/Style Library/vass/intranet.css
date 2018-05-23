@@ -106,6 +106,10 @@ a, a:hover, a:visited{
     height:120px;
 }
 
+.logo{
+    width: 15%;
+}
+
 .s4-tn{
     margin-top: 65px;
 }
@@ -141,8 +145,13 @@ a, a:hover, a:visited{
     margin-bottom: 1px;
 }
 
-.menu-item.dynamic-children span{
-    background:none !important;
+.search-box:focus{
+    border: none !important;
+    outline: none;
+}
+
+.menu-item.dynamic-children span {
+    background: none !important;
 }
 
 .s4-tn li.static {
@@ -346,6 +355,36 @@ ul.root > li ul li.selected {
 .ms-srch-hover-outerContainer{
     margin-left: -50px;
 }
+
+.ms-srchnav {
+    border-bottom: solid 1px #ccc;
+}
+
+.ms-srchnav-item {
+    border: solid 1px #fff;
+}
+
+.ms-srchnav-item a{
+    padding: 10px 20px 5px 20px;
+}
+
+.ms-srchnav-link-selected {
+    border-top: solid 1px #ccc;
+    border-left: solid 1px #ccc;
+    border-right: solid 1px #ccc;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.ms-ref-refiner a.ms-displayBlock {
+    display:inline-block;
+}
+
+.ms-ref-refinername {
+    font-size: 14px;
+    font-weight: 500;
+}
+
 /*ARTICLE*/
 #article img {
     max-width: 100%;

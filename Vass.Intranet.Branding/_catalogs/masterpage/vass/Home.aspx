@@ -35,15 +35,15 @@
         <div id="top-zone" class="container-fluid">
             <div class="row mb-0">
                 <div class="col">
-                    <div class="row" style="height: 250px;">
-                        <div class="col">
+                    <div class="row pl-15" style="height: 250px;">
+                        <div class="col br-10">
                             <div data-target="Banner 1" class="panel banner">
                                 <div class="panel-body"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="row no-gutters">
-                        <div class="col-8">
+                    <div class="row">
+                        <div class="col-8 pr-0">
                             <div id="calendar">
                                         <div class="month">      
                                           <ul>
@@ -100,7 +100,7 @@
                                         </ul>
                                     </div>
                         </div>
-                        <div class="col-4 o-hidden" style="height:230px">
+                        <div class="col-4 o-hidden pr-0" style="height:230px">
                             <div class="event-today">
                                 <div class="event-date">
                                     <span class="event-day">Viernes</span>
@@ -175,18 +175,7 @@
                         <div class="panel">
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Próximos</span> eventos</p>
-                            <ul id="vass-calendar">
-                                <li>
-                                    <h4>Showroom mobile app</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elit purus, volutpat eget ipsum in, vestibulum porta metus.</p>
-                                    <span class="date">16/03/2018</span>
-                                </li>
-                                <li>
-                                    <h4>Tech Forum Madrid 2018</h4>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce elit purus, volutpat eget ipsum in, vestibulum porta metus.</p>
-                                    <span class="date">01/06/2018</span>
-                                </li>
-                            </ul>
+                            <ul id="vass-calendar"></ul>
                           </div>
                         </div>
                         <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone4" />

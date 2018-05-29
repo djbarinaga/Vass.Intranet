@@ -499,7 +499,8 @@ namespace Migracion
                                             break;
                                         case "Lookup":
                                             FieldLookupValue lv = GetLookupValue(field.LookupList, field.LookupField, field.Value);
-                                            listItem[targetField.InternalName] = lv;
+                                            if (lv != null)
+                                                listItem[targetField.InternalName] = lv;
                                             break;
                                         default:
                                             listItem[targetField.InternalName] = field.Value;
@@ -547,12 +548,19 @@ namespace Migracion
             ListItemCollection listItems = list.GetItems(camlQueryForItem);
             clientContext.Load(listItems);
             clientContext.ExecuteQuery();
-            ListItem item = listItems[0];
+            
+            if(listItems.Count > 0)
+            {
+                ListItem item = listItems[0];
 
-            FieldLookupValue lv = new FieldLookupValue();
-            lv.LookupId = Convert.ToInt32(item["ID"]);
+                FieldLookupValue lv = new FieldLookupValue();
+                lv.LookupId = Convert.ToInt32(item["ID"]);
 
-            return lv;
+                return lv;
+            }
+
+
+            return null;
         }
 
         private static ArrayList CreateFields(ClientContext context, List list, List<Field> fields)

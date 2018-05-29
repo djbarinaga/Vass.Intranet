@@ -143,7 +143,7 @@ Date.prototype.addMonths = function (value) {
     $.fn.banner = function (options) {
         var $this = this;
         var bannerZone = $(this).data('target');
-        var url = "https://grupovass.sharepoint.com/desarrollo/_api/web/lists('f618ff1b-b6ea-4bab-a787-0d56eb4fba30')/items?$filter=Banner eq '" + bannerZone + "'";
+        var url = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/getbytitle('Banners')/items?$filter=Banner eq '" + bannerZone + "'";
 
         var $ajax = $.ajax({
             url: url,
@@ -183,7 +183,7 @@ Date.prototype.addMonths = function (value) {
                     case 'Verde':
                         bgColor = '#629e4d';
                         break;
-                    case 'Aceituna':
+                    case 'Caqui':
                         bgColor = '#d3d612';
                         break;
                 }
@@ -1318,6 +1318,7 @@ Date.prototype.addMonths = function (value) {
 (function ($) {
     $.fn.mycalendar = function (options) {
         setContext(variables.clientId.Graph);
+        var $this = $(this);
         var events;
         var today = new Date();
         var months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
@@ -1588,15 +1589,14 @@ jQuery(document).ready(function () {
     //localStorage.clear();
 
     setHomePage();
-    hideRibbon();
 
     jQuery('#graph-wizard').each(function () {
         $(this).wizard();
     });
 
-    jQuery('#quickLinks').each(function () {
-        $(this).quicklinks();
-    });
+    //jQuery('#quickLinks').each(function () {
+    //    $(this).quicklinks();
+    //});
 
     jQuery('#socialLinks').each(function () {
         $(this).sociallinks();

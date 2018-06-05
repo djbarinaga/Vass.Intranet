@@ -35,15 +35,13 @@
         <div id="top-zone" class="container-fluid">
             <div class="row mb-0">
                 <div class="col">
-                    <div class="row pl-15" style="height: 250px;">
-                        <div class="col br-10">
-                            <div data-target="Banner 1" class="panel banner">
-                                <div class="panel-body"></div>
-                            </div>
+                    <div class="row" style="height: 250px;">
+                        <div class="col br-10 pr-0">
+                            <WebPartPages:WebPartZone runat="server" Title="Banner 1" ID="Banner1" />
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-8 pr-0">
+                    <div class="row mt-30">
+                        <div class="col-6 pr-0">
                             <div id="calendar">
                                         <div class="month">      
                                           <ul>
@@ -100,27 +98,14 @@
                                         </ul>
                                     </div>
                         </div>
-                        <div class="col-4 o-hidden pr-0" style="height:230px">
+                        <div class="col-6 o-hidden pr-0" style="height:230px;background: url('/style library/images/calendar.png') no-repeat 55%;">
                             <div class="event-today">
                                 <div class="event-date">
                                     <span class="event-day">Viernes</span>
                                     <span class="event-day-number">23</span>
                                     <span class="event-month">Marzo</span>
                                     <hr />
-                                    <ul class="events">
-                                        <li>
-                                            <span class="clock">12:00</span>
-                                            <span>Reunión de seguimiento</span>
-                                        </li>
-                                        <li>
-                                            <span class="clock">13:00</span>
-                                            <span>Reunión de seguimiento</span>
-                                        </li>
-                                        <li>
-                                            <span class="clock">16:00</span>
-                                            <span>Reunión de seguimiento</span>
-                                        </li>
-                                    </ul>
+                                    <ul class="events"></ul>
                                 </div>
                             </div>
                         </div>
@@ -149,20 +134,17 @@
                     </div>
                     <div class="row" style="height: 100px;">
                         <div class="col">
-                            <div data-target="Banner 3" class="panel banner">
-                                <div class="panel-body"></div>
-                            </div>
+                            <WebPartPages:WebPartZone runat="server" Title="Banner 2" ID="WebPartZone2" />
                         </div>
                         <div class="col">
-                            <div data-target="Banner 4" class="panel banner">
-                                <div class="panel-body"></div>
+                            <WebPartPages:WebPartZone runat="server" Title="Banner 3" ID="WebPartZone3" />
+                                
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <WebPartPages:WebPartZone runat="server" Title="Header" ID="Header" />
         <div class="content">
             <div class="row">
             <div class="col-4">
@@ -178,7 +160,6 @@
                             <ul id="vass-calendar"></ul>
                           </div>
                         </div>
-                        <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone4" />
                     </div>
                     <div class="col">
                         <div class="panel">
@@ -202,7 +183,6 @@
                             </ul>
                           </div>
                         </div>
-                        <WebPartPages:WebPartZone runat="server" Title="Zona 2" ID="WebPartZone5" />
                     </div>
                 </div>
                 <div class="row">
@@ -249,20 +229,54 @@
                               </div>
                           </div>
                         </div>
-                        <WebPartPages:WebPartZone runat="server" Title="Zona 3" ID="WebPartZone6" />
                     </div>
                     <div class="col">
-                        <div data-target="Banner 5" class="panel banner">
-                          <div class="panel-body"></div>
+                        <div class="panel icon-left">
+                          <div class="panel-body">
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
+                            <ul>
+                                <li>
+                                    <div class="row">
+                                        <div class="col--3 text-center">
+                                            <span class="icon-agile"></span>
+                                        </div>
+                                        <div class="col">
+                                            <h4>Aplicación para iOS</h4>
+                                            <span>BBVA</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col--3 text-center">
+                                            <span class="icon-waterfall"></span>
+                                        </div>
+                                        <div class="col">
+                                            <h4>Aplicación para el comercio exterior</h4>
+                                            <span>Bancamarch</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="row">
+                                        <div class="col--3 text-center">
+                                            <span class="icon-guild"></span>
+                                        </div>
+                                        <div class="col">
+                                            <h4>Angular</h4>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                              <div class="toolbar">
+                                  <a href="https://teams.microsoft.com/" target="_blank" class="add">AÑADIR EQUIPO</a>
+                              </div>
+                          </div>
                         </div>
-                        <WebPartPages:WebPartZone runat="server" Title="Zona 4" ID="WebPartZone2" />
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <div data-target="Banner 6" class="panel banner">
-                            <div class="panel-body"></div>
-                        </div>
                         <WebPartPages:WebPartZone runat="server" Title="Zona 6" ID="WebPartZone7" />
                     </div>
                 </div>

@@ -11,9 +11,8 @@
 		<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/editmode15.css %>"
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
-    <script type="text/javascript" src="/style library/js/tests/sitemainhighlight.js"></script>
-    <script type="text/javascript" src="/style library/js/tests/sitehighlights.js"></script>
     <script type="text/javascript" src="/style library/js/currentnavigation.js"></script>
+    <script type="text/javascript" src="/style library/js/subhome.js"></script>
 </asp:Content>
 <asp:Content contentplaceholderid="PlaceHolderPageTitle" runat="server">
 	<SharePointWebControls:FieldValue FieldName="Title" runat="server"/>
@@ -37,84 +36,16 @@
         <div class="row" id="top-zone">
             <div class="col-2" id="current-menu"></div>
             <div class="col-2" style="display:none" id="current-submenu"></div>
-            <div class="col-10" id="highlight">
+            <div class="col" id="highlight">
                 <h2 class="page-title">
                     <SharePointWebControls:ProjectProperty Property="Title" runat="server"/>
                 </h2>
                 <WebPartPages:WebPartZone runat="server" Title="Destacado principal" ID="MainHighlight" />
-                <div id="main-highlight">
-                    <div id="carouselNews" class="carousel slide" data-ride="carousel" style="overflow:hidden;">
-                        <div class="carousel-inner">
-                            
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
-        <div id="secondary-highlight">
-            <div class="content">
-                <div class="row">
-                    
-                </div>
-            </div>
-        </div>
+        <WebPartPages:WebPartZone runat="server" Title="Destacados secundarios" ID="WebPartZone1" />
         <div id="sections">
-            <div class="module">
-                <h3 class="title">
-                    Sugerencias para ti
-                </h3>
-                <div class="module-content">
-                    <div class="row">
-                        <div class="col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                        <a href="#">Sugerencia 1</a>
-                                    </h4>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                        <a href="#">Sugerencia 2</a>
-                                    </h4>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                        <a href="#">Sugerencia 3</a>
-                                    </h4>
-                                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras condimentum erat orci, in tempus ligula lobortis pulvinar. Ut cursus posuere est, id sagittis felis rutrum suscipit.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="module">
-                <div class="module-content">
-                    <div class="row">
-                        <div class="col-4">
-                            <div data-target="Banner 3" class="panel banner">
-                                <div class="panel-body"></div>
-                            </div>
-                        </div>
-                        <div class="col-8">
-                            <div data-target="Banner 4" class="panel banner">
-                                <div class="panel-body"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <WebPartPages:WebPartZone runat="server" Title="Módulos" ID="Modules" />
+            <WebPartPages:WebPartZone runat="server" Title="Secciones" ID="WebPartZone2" />
         </div>
     </div>
     <SharePointWebControls:ScriptBlock runat="server">if(typeof(MSOLayout_MakeInvisibleIfEmpty) == "function") {MSOLayout_MakeInvisibleIfEmpty();}</SharePointWebControls:ScriptBlock>

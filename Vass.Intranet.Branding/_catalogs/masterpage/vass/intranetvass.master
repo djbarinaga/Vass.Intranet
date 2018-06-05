@@ -21,14 +21,6 @@ To build the master page directly from this HTML file, simply edit the page as y
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <script type="text/javascript">
-            window.isInEditMode = false;
-		</script>
-        <PublishingWebControls:EditModePanel runat="server" CssClass="edit-mode-panel title-edit">
-		    <script type="text/javascript">
-                window.isInEditMode = true;
-		    </script>
-	    </PublishingWebControls:EditModePanel>
         <meta http-equiv="Expires" content="0" />
         <SharePoint:RobotsMetaTag runat="server" />
         <SharePoint:PageTitle runat="server">
@@ -61,6 +53,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <script src="/style library/js/bootbox.min.js"></script>
         <script type="text/javascript" src="/style library/js/graph.js"></script>
         <script type="text/javascript" src="/style library/js/master.js"></script>
+        <script type="text/javascript" src="/_catalogs/masterpage/vass/Display%20Templates/ListView/jsobjects.js"></script>
 
         <SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">
             <asp:ContentPlaceHolder ID="PlaceHolderAdditionalPageHead" runat="server">
@@ -74,6 +67,14 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:AjaxDelta id="DeltaSPWebPartManager" runat="server">
             <WebPartPages:SPWebPartManager runat="server" />
         </SharePoint:AjaxDelta>
+
+        <PublishingWebControls:EditModePanel runat="server">
+		    <style>
+                #s4-workspace{
+                    overflow-x: auto;
+                }
+		    </style>
+	    </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">
         <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent" />

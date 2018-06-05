@@ -22,6 +22,11 @@
             <SharePointWebControls:TextField runat="server" FieldName="Title"/>
         </h2>
         <div class="row">
+            <div class="col">
+                <PublishingWebControls:RichHtmlField FieldName="PublishingPageContent" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
+            </div>
+        </div>
+        <div class="row">
             <div class="col-4">
                 <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone2" />
             </div>

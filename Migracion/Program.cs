@@ -124,24 +124,60 @@ namespace Migracion
 
             foreach (List list in web.Lists)
             {
-                //if (list.BaseType == BaseType.DocumentLibrary)
-                //{
-                //    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
-                //    GetFiles(list.RootFolder, context, list.Title, @"C:\Proyectos\Avantgarde\VASS\Vass.Intranet\Migracion\bin\Debug\xml\docs");
-                //}
-
-                if (list.BaseType != BaseType.DocumentLibrary)
+                if (list.BaseType == BaseType.DocumentLibrary)
                 {
-                    itemCounter = 0;
-                    Console.WriteLine();
-                    GetItems(context, list.Title);
+                    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
+                    GetFiles(list.RootFolder, context, Path.Combine(@"C:\Proyectos\Avantgarde\VASS\Vass.Intranet\Migracion\bin\Debug\xml\docs", list.Title));
                 }
+
+                itemCounter = 0;
+                Console.WriteLine();
+                GetItems(context, list.Title);
 
             }
 
             Console.WriteLine();
             Console.WriteLine("Fin");
             Console.Read();
+        }
+
+        private static void GetFiles(Folder mainFolder, ClientContext clientContext, string pathString)
+        {
+            clientContext.Load(mainFolder, k => k.Files, k => k.Folders);
+            clientContext.ExecuteQuery();
+
+            foreach (var folder in mainFolder.Folders)
+            {
+                string folderPath = string.Format(@"{0}\{1}\", pathString, folder.Name);
+                System.IO.Directory.CreateDirectory(folderPath);
+
+                GetFiles(folder, clientContext, folderPath);
+            }
+
+            int counter = 0;
+            int itemCount = mainFolder.Files.Count;
+
+            Console.Write("Obteniendo ficheros de {0}...\r", mainFolder.ServerRelativeUrl);
+
+            foreach (var file in mainFolder.Files)
+            {
+                var fileRef = file.ServerRelativeUrl;
+                var fileInfo = Microsoft.SharePoint.Client.File.OpenBinaryDirect(clientContext, fileRef);
+                var fileName = Path.Combine(pathString, file.Name);
+                using (var fileStream = System.IO.File.Create(fileName))
+                {
+
+                    fileInfo.Stream.CopyTo(fileStream);
+                }
+                counter++;
+
+                int percentage = (counter * 100) / itemCount;
+
+                if (counter < itemCount)
+                    Console.Write("Obteniendo ficheros de {0}... {1}%\r", mainFolder.ServerRelativeUrl, percentage);
+                else
+                    Console.WriteLine("Obteniendo ficheros de {0}... {1}%\r", mainFolder.ServerRelativeUrl, percentage);
+            }
         }
 
         private static void GetItems(ClientContext context, string listTitle)

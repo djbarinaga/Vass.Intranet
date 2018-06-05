@@ -43,7 +43,13 @@ var menuIndex;
                     var ul = $('<ul/>');
 
                     for (var i = 0; i < submenu.length; i++) {
-                        $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
+                        if (window.location.href.toLowerCase().indexOf(submenu[i].SimpleUrl.toLowerCase()) > -1) {
+                            $(ul).append('<li class="active"><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
+                        }
+                        else {
+                            $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
+                        }
+                        
                     }
                     $('#current-submenu').append(ul);
                     $('#current-menu').removeClass('col-4').addClass('col-2');

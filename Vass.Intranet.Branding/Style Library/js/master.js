@@ -142,6 +142,7 @@ Date.prototype.addMonths = function (value) {
 (function ($) {
     $.fn.banner = function (options) {
         var $this = this;
+
         var bannerZone = $(this).data('target');
         var url = _spPageContextInfo.webServerRelativeUrl + "/_api/web/lists/getbytitle('Banners')/items?$filter=Banner eq '" + bannerZone + "'";
 
@@ -159,32 +160,28 @@ Date.prototype.addMonths = function (value) {
 
             if (results != null && results.length > 0) {
                 var result = results[0];
-                var link = jQuery('<a href="' + result.URL.Url + '">' + result.Title + '</a>');
-
-                jQuery($this).find('.panel-body').append(link);
-
-
+                
                 var bgColor;
                 var bgImagen = '/Style library/images/';
 
                 switch (result.Color) {
                     case 'Azul':
-                        bgColor = '#50bbeb';
+                        bgColor = 'bg-blue';
                         break;
                     case 'Morado':
-                        bgColor = '#6d6ba6';
+                        bgColor = 'bg-purple';
                         break;
                     case 'Violeta':
-                        bgColor = '#9b549e';
+                        bgColor = 'bg-violet';
                         break;
                     case 'Naranja':
-                        bgColor = '#f39a4a';
+                        bgColor = 'bg-orange';
                         break;
                     case 'Verde':
-                        bgColor = '#629e4d';
+                        bgColor = 'bg-green';
                         break;
                     case 'Caqui':
-                        bgColor = '#d3d612';
+                        bgColor = 'bg-khaki';
                         break;
                 }
 
@@ -205,24 +202,33 @@ Date.prototype.addMonths = function (value) {
                     }
                 }
 
+                var imageDiv = $('<div/>');
+                jQuery($this).append(imageDiv);
+
+                var panelBody = $('<div class="panel-body"/>');
+                $(imageDiv).append(panelBody);
+
+                var link = jQuery('<a href="' + result.URL.Url + '">' + result.Title + '</a>');
+
+                jQuery(panelBody).empty();
+                jQuery(panelBody).append(link);
+
                 if (result.Image != null) {
-                    jQuery($this).addClass('image');
-                    jQuery($this).parent().css('background', 'url("' + bgImagen + '") no-repeat');
-                    jQuery($this).parent().css('background-size', 'cover');
-                }
-                else if (bgImagen == '') {
-                    jQuery($this).css('background-color', bgColor);
+                    jQuery(imageDiv).addClass('image');
+                    jQuery(imageDiv).css('background', 'url("' + bgImagen + '") no-repeat');
+                    jQuery(imageDiv).css('background-size', 'cover');
                 }
                 else if (result.Icon != null) {
-                    jQuery($this).css('background', 'url("' + bgImagen + '") ' + bgColor + ' no-repeat 90% 90%');
+                    jQuery(imageDiv).css('background', 'url("' + bgImagen + '") no-repeat 90% 90%');
                 }
 
-
+                if (bgColor != null)
+                    jQuery(imageDiv).addClass(bgColor);
 
                 if (result.Description == null)
                     $(link).addClass('w-75');
                 else
-                    jQuery($this).find('.panel-body').append('<p class="w-75">' + result.Description + '</p>');
+                    jQuery(panelBody).append('<p class="w-75">' + result.Description + '</p>');
             }
         });
     };
@@ -1407,13 +1413,18 @@ Date.prototype.addMonths = function (value) {
             if (currentDate == null)
                 currentDate = getFirstDate();
 
+            if (currentDate == null)
+                currentDate = new Date();
+
+
+            $('.event-day').text(daysOfWeek[currentDate.getDay()]);
+            $('.event-day-number').text(currentDate.getDate());
+            $('.event-month').text(currentMonthName);
+            $('.events').empty();
+
+
             if (events.length > 0) {
                 var length = events.length;
-
-                $('.event-day').text(daysOfWeek[currentDate.getDay()]);
-                $('.event-day-number').text(currentDate.getDate());
-                $('.event-month').text(currentMonthName);
-                $('.events').empty();
 
                 var today = currentDate.getDate();
                 var addedEvents = new Array();
@@ -1490,7 +1501,14 @@ Date.prototype.addMonths = function (value) {
 (function ($) {
     $.fn.events = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/GetByTitle('Calendario VASS')/items?$top=2&$orderby=EventDate";
+        var parent = $(this).prev();
+
+        $(parent).css('cursor', 'pointer');
+        $(parent).on('click', function () {
+            window.location.href = 'https://grupovass.sharepoint.com/es-es/businessvalue/marketing/Paginas/eventos.aspx';
+        })
+
+        var url = "https://grupovass.sharepoint.com/es-es/businessvalue/marketing/_api/web/lists/GetByTitle('Eventos')/items?$top=2&$orderby=EventDate";
 
         var $ajax = $.ajax({
             url: url,
@@ -1534,9 +1552,13 @@ Date.prototype.addMonths = function (value) {
             }
         });
 
-        $ajax.done(function (data, textStatus, jqXHR) {
+        $ajax.fail(function (data, textStatus, jqXHR) {
+            console.log(data);
+        });
+
+        $ajax.done(function (data) {
             var totalRows = data.d.query.PrimaryQueryResult.RelevantResults.TotalRows;
-            var results = data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results;
+            var results = data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results; 
 
             if (totalRows > 0) {
                 var carouselInner = $($this).find('.carousel-inner');
@@ -1544,12 +1566,19 @@ Date.prototype.addMonths = function (value) {
 
                 for (var i = 0; i < results.length; i++) {
                     var result = results[i];
-                    var fields = result.Cells.results;
-                    var title = getValue(fields, 'Title');
-                    var description = getValue(fields, 'HitHighlightedSummary');
-                    var image = getValue(fields, 'PublishingImage');
-                    var url = getValue(fields, 'Path');
-                    var img = $(image);
+                    var fields;
+                    var title;
+                    var description;
+                    var image;
+                    var url;
+                    var img;
+
+                    fields = result.Cells.results;
+                    title = getValue(fields, 'Title');
+                    description = getValue(fields, 'HitHighlightedSummary');
+                    image = getValue(fields, 'PublishingImage');
+                    url = getValue(fields, 'Path');
+                    img = $(image);
 
                     img.addClass('d-block w-100');
                     
@@ -1559,7 +1588,7 @@ Date.prototype.addMonths = function (value) {
                         css += " active";
 
                     var carouselItem = $('<div class="' + css + '"/>');
-                    carouselItem.append(img);
+                    $(carouselItem).append(img);
 
                     var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><h5><a href="' + url + '">' + title + '</a></h5><p>' + description + '</p></div>');
                     carouselItem.append(carouselCaption);
@@ -1598,9 +1627,9 @@ jQuery(document).ready(function () {
     //    $(this).quicklinks();
     //});
 
-    jQuery('#socialLinks').each(function () {
-        $(this).sociallinks();
-    });
+    //jQuery('#socialLinks').each(function () {
+    //    $(this).sociallinks();
+    //});
 
     jQuery('.search-box').each(function () {
         $(this).searchbox();
@@ -1688,4 +1717,56 @@ function toDate(text) {
 
 function dateDiff(first, second) {
     return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
+
+function getIcon(icon) {
+
+    if (icon == null)
+        return null;
+
+    var iconClass;
+
+    switch (icon.toLowerCase()) {
+        case 'aleatorio':
+            iconClass = 'icon-aleatorio';
+            break;
+        case 'artículo':
+            iconClass = 'icon-articulo';
+            break;
+        case 'baja':
+            iconClass = 'icon-baja';
+            break;
+        case 'bandera':
+            iconClass = 'icon-bandera';
+            break;
+        case 'basura':
+            iconClass = 'icon-basura';
+            break;
+        case 'buscar':
+            iconClass = 'icon-buscar';
+            break;
+        case 'foto 1':
+            iconClass = 'icon-foto_01';
+            break;
+        case 'foto 2':
+            iconClass = 'icon-foto_02';
+            break;
+        case 'chat':
+            iconClass = 'icon-chat';
+            break;
+        case 'corazón':
+            iconClass = 'icon-corazon';
+            break;
+        case 'presentación':
+            iconClass = 'icon-presentacion';
+            break;
+        case 'texto - lápiz':
+            iconClass = 'icon-texto_lapiz';
+            break;
+    }
+
+    if (iconClass != null)
+        return '<span class="' + iconClass + '"></span>';
+    else
+        return null;
 }

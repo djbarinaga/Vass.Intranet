@@ -20,14 +20,14 @@
 <asp:Content ContentPlaceholderID="PlaceHolderMain" runat="server">
 	<div id="wp-page" class="container-fluid">        
         <div class="row">
-            <div class="col-4" id="current-menu">
-            </div>
-            <div class="col-2" style="display:none" id="current-submenu"></div>
+            <a id="menu-button"><span class="icon-menu_cierra"></span></a>
+            <div class="float-left" id="current-menu"></div>
+            <div class="float-left" style="display:none" id="current-submenu"></div>
             <div class="col" id="highlight-zone">
-                <h2>
+                <h2 id="page-title">
                     <SharePointWebControls:TextField runat="server" FieldName="Title"/>
                 </h2>
-                <div>
+                <div class="summary">
                     <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone1" />
                 </div>
             </div>

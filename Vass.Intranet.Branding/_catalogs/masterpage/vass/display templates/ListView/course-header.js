@@ -17,71 +17,69 @@ function courseTemplate(ctx) {
     var courseId = getUrlParam('curso');
     var id = ctx.CurrentItem["ID"];
 
-    if (id == Number(courseId)) {
-        var title = ctx.CurrentItem["Title"];
-        var hours = ctx.CurrentItem["CourseHours"];
-        var startDate = ctx.CurrentItem["StartDate"];
-        var endDate = ctx.CurrentItem["EndDate"];
-        var trainer = ctx.CurrentItem["Trainer"][0].lookupValue;
-        var profile = ctx.CurrentItem["Profile"];
-        
+    var title = ctx.CurrentItem["Nombre_x0020_Curso"];
+    var hours = ctx.CurrentItem["Horas_x0020_curso"];
+    var startDate = ctx.CurrentItem["Fecha_x0020_Inicio"];
+    var endDate = ctx.CurrentItem["Fecha_x0020_Fin"];
+    var trainer = '';//ctx.CurrentItem["Trainer"][0].lookupValue;
+    var profile = ctx.CurrentItem["Perfil"];
 
-        html = '<h2>' + title + '</h2>';
 
-        html += '<div class="content"><table class="table">';
+    html = '<h2 id="page-title">' + title + '</h2>';
 
+    html += '<div class="content"><table class="table">';
+
+    html += '<tr>';
+    html += '<th>Horas</th>';
+    html += '<td>' + hours + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Fecha de inicio</th>';
+    html += '<td>' + startDate + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Fecha de fin</th>';
+    html += '<td>' + endDate + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Formador</th>';
+    html += '<td>' + trainer + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Perfil</th>';
+    html += '<td>' + profile + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Area</th>';
+    html += '<td>' + ctx.CurrentItem["Area_x0020_Afectada"] + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Ubcación</th>';
+    html += '<td>' + ctx.CurrentItem["Ubicacion"] + '</td>';
+    html += '</tr>';
+
+    html += '<tr>';
+    html += '<th>Modalidad</th>';
+    html += '<td>' + ctx.CurrentItem["Modalidad_x0020_Curso"] + '</td>';
+    html += '</tr>';
+
+    if (ctx.CurrentItem["Remarks"] != '') {
         html += '<tr>';
-        html += '<th>Horas</th>';
-        html += '<td>' + hours + '</td>';
+        html += '<th>Observaciones</th>';
+        html += '<td>' + ctx.CurrentItem["Comentarios_x002f_observaciones"] + '</td>';
         html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Fecha de inicio</th>';
-        html += '<td>' + startDate + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Fecha de fin</th>';
-        html += '<td>' + endDate + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Formador</th>';
-        html += '<td>' + trainer + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Perfil</th>';
-        html += '<td>' + profile + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Area</th>';
-        html += '<td>' + ctx.CurrentItem["Area"] + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Ubcación</th>';
-        html += '<td>' + ctx.CurrentItem["Location"] + '</td>';
-        html += '</tr>';
-
-        html += '<tr>';
-        html += '<th>Modalidad</th>';
-        html += '<td>' + ctx.CurrentItem["CourseType"] + '</td>';
-        html += '</tr>';
-
-        if (ctx.CurrentItem["Remarks"] != '') {
-            html += '<tr>';
-            html += '<th>Observaciones</th>';
-            html += '<td>' + ctx.CurrentItem["Remarks"] + '</td>';
-            html += '</tr>';
-        }
-
-        html += '</table>';
-
-        html += '<button type="button" id="btnInscripcion" data-argument="' + id + '" data-message="¿Desea inscribirse en el curso ' + title + '?" class="btn btn-primary float-right">Inscribirme</button>';
-        html += '</div>';
     }
+
+    html += '</table>';
+
+    html += '<button type="button" id="btnInscripcion" data-argument="' + id + '" data-message="¿Desea inscribirse en el curso ' + title + '?" class="btn btn-primary float-right">Inscribirme</button>';
+    html += '</div>';
 
     return html;
 }
@@ -159,10 +157,10 @@ function courseOnPostRender() {
 }
 
 function checkInscription(courseId, callback) {
-    var listName = 'Solicitudes cursos';
+    var listName = 'Solicitud Cursos-empleados';
     var currentUser = _spPageContextInfo.userId;
 
-    var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items?$filter=Author eq " + currentUser + " and CourseId eq " + courseId;
+    var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items?$top=1&$filter=Author eq " + currentUser + " and Nombre_x0020_curso eq " + courseId;
 
     $.ajax({
         url: url,

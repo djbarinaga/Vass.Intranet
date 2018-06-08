@@ -1,81 +1,68 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-    <link rel="stylesheet" type="text/css" href="css/styles.css" />
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/script.js"></script>
-</head>
-<body>
-    <div id="graph-wizard" class="container">
-        <div class="row" id="wizard-indicators">
-            <div class="col text-center">
-                <p class="circle bg-primary">1</p>
-            </div>
-            <div class="col text-center">
-                <p class="circle bg-secondary">2</p>
-            </div>
-            <div class="col text-center">
-                <p class="circle bg-secondary">3<br /></p>
-            </div>
-            <div class="col text-center">
-                <p class="circle bg-secondary">4<br /></p>
-            </div>
+﻿<div id="graph-wizard" class="container">
+    <div class="row" id="wizard-indicators">
+        <div class="col text-center active">
+            <p class="circle">1</p>
+            <p>Nombre</p>
         </div>
-        <div id="wizard-steps">
-            <div class="row">
-                <div class="col">
-                    <div class="form">
-                        <div class="form-group">
-                            <label for="txtGroupName">Nombre del equipo</label><input type="text" class="form-control" id="txtGroupName" placeholder="Nombre del equipo" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row d-none">
-                <div class="col">
-                    <div class="form">
-                        <div class="form-group">
-                            <label for="txtOwner">Propietario</label><input type="text" class="form-control" id="txtOwner" placeholder="Email del propietario" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row d-none">
-                <div class="col">
-                    <div class="form">
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="teamType" id="projectTeam" value="Proyecto">
-                            <label class="form-check-label" for="exampleRadios1">
-                                Proyecto
-                            </label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="radio" name="teamType" id="gremioTeam" value="Gremio">
-                            <label class="form-check-label" for="exampleRadios2">
-                                Gremio
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row d-none">
-                <div class="col">
-                    <p id="alert">Procesando...</p>
-                    <div class="progress">
-                        <div class="progress-bar" role="progressbar" style="width: 25%;">
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div class="col text-center">
+            <p class="circle">2</p>
+            <p>Propietario</p>
         </div>
-        <div id="wizard-buttons">
-            <button type="button" class="btn btn-primary float-right" id="nextStep">Siguiente</button>
-            <button type="button" class="btn btn-default float-right" id="prevStep">Anterior</button>​<br />​​<br />​​<br />
+        <div class="col text-center">
+            <p class="circle">3<br /></p>
+            <p>Tipo</p>
+        </div>
+        <div class="col text-center">
+            <p class="circle">4<br /></p>
+            <p>Fin</p>
         </div>
     </div>
-</body>
-</html>
+    <div id="wizard-steps">
+        <div class="row">
+            <div class="col">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="txtGroupName">Nombre del equipo</label><input type="text" class="form-control" id="txtGroupName" placeholder="Nombre del equipo" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="txtOwner">Propietario</label><input type="text" class="form-control" id="txtOwner" placeholder="Email del propietario" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <div class="form">
+                    <p>Tipo de equipo</p>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="teamType" id="projectTeam" value="Proyecto" />
+                        <label class="form-check-label" for="exampleRadios1"> Proyecto </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="teamType" id="gremioTeam" value="Gremio" />
+                        <label class="form-check-label" for="exampleRadios2"> Gremio </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <p id="alert">Procesando...</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="wizard-buttons">
+        <button type="button" class="bg-grey" id="prevStep">Anterior</button>
+        <button type="button" class="bg-orange" id="nextStep">Siguiente</button>
+    </div>
+</div>

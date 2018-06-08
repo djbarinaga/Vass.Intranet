@@ -22,6 +22,46 @@ Date.prototype.addMonths = function (value) {
     return this;
 };
 
+/*MENU PLUGIN*/
+(function ($) {
+    $.fn.menu = function (options) {
+        var $this = this;
+        $(this).on('click', function () {
+            var span = $(this).find('span');
+            $('#current-submenu').animate(
+                {
+                    width: 'toggle'
+                },
+                {
+                    complete: function () {
+                        $('#current-menu').animate(
+                            {
+                                width: 'toggle'
+                            },
+                            {
+                                complete: function () {
+                                    if ($(span).hasClass('icon-menu_cierra')) {
+                                        $(span).removeClass('icon-menu_cierra').addClass('icon-menu');
+                                        $('#page-title').animate({
+                                            'padding-left': '32px'
+                                        });
+                                    }
+                                    else {
+                                        $(span).removeClass('icon-menu').addClass('icon-menu_cierra');
+                                        $('#page-title').animate({
+                                            'padding-left': '0px'
+                                        });
+                                    }
+                                }
+                            }
+                        );
+                    }
+                }
+            );
+        });
+    };
+}(jQuery));
+
 /*QUICKLINKS PLUGIN*/
 (function ($) {
     $.fn.quicklinks = function (options) {
@@ -246,7 +286,6 @@ Date.prototype.addMonths = function (value) {
         var currentAction = 0;
 
         $('#nextStep').on('click', function () {
-
             $('#wizard-steps .row').each(function (index) {
                 if (!$(this).hasClass('d-none'))
                     currentStep = index;
@@ -263,18 +302,22 @@ Date.prototype.addMonths = function (value) {
                     return;
                 }
 
+                if (currentStep == 2 && $('input[name=teamType]:checked').val() == null) {
+                    alert('Seleccione el tipo de proyecto');
+                    return;
+                }
+
+                $('#wizard-indicators div').removeClass('active');
                 $('#wizard-steps .row:eq(' + currentStep + ')').addClass('d-none');
                 $('#wizard-steps .row:eq(' + (currentStep + 1) + ')').removeClass('d-none');
-                $('#wizard-indicators p').each(function (index) {
+                $('#wizard-indicators div').each(function (index) {
                     if (index == currentStep + 1) {
-                        $(this).removeClass('bg-secondary').addClass('bg-primary');
-                    }
-                    else {
-                        $(this).removeClass('bg-primary').addClass('bg-secondary');
+                        $(this).addClass('active');
+                        $(this).prev().addClass('completed');
                     }
                 });
 
-                if (currentStep == 1)
+                if (currentStep == 2)
                     createTeam();
             }
 
@@ -290,13 +333,12 @@ Date.prototype.addMonths = function (value) {
             if (currentStep > 0) {
                 $('#wizard-steps .row:eq(' + currentStep + ')').addClass('d-none');
                 $('#wizard-steps .row:eq(' + (currentStep - 1) + ')').removeClass('d-none');
+                $('#wizard-indicators div').removeClass('active');
 
-                $('#wizard-indicators p').each(function (index) {
+                $('#wizard-indicators div').each(function (index) {
                     if (index == currentStep - 1) {
-                        $(this).removeClass('bg-secondary').addClass('bg-primary');
-                    }
-                    else {
-                        $(this).removeClass('bg-primary').addClass('bg-secondary');
+                        $(this).removeClass('completed');
+                        $(this).addClass('active');
                     }
                 });
             }
@@ -1223,7 +1265,7 @@ Date.prototype.addMonths = function (value) {
                 $('.progress-bar').css('width', '100%');
                 addTeamToList(function () {
                     $('#alert').text('Equipo creado');
-                    window.location.href = 'https://grupovass.sharepoint.com/desarrollo/mitrabajo/Lists/Teams/AllItems.aspx';
+                    window.location.href = 'https://grupovass.sharepoint.com/es-es/mitrabajo/Lists/Teams/AllItems.aspx';
                 });
             }
         }
@@ -1234,11 +1276,11 @@ Date.prototype.addMonths = function (value) {
             var item = {
                 "__metadata": { "type": 'SP.Data.TeamsListItem' },
                 "Title": $('#txtGroupName').val(),
-                "Tipo": 'Proyecto'
+                "TeamType": $('input[name=teamType]:checked').val()
             };
 
             $.ajax({
-                url: "https://grupovass.sharepoint.com/desarrollo/mitrabajo/_api/web/lists/getbytitle('Teams')/items",
+                url: "https://grupovass.sharepoint.com/es-es/mitrabajo/_api/web/lists/getbytitle('Teams')/items",
                 type: "POST",
                 contentType: "application/json;odata=verbose",
                 data: JSON.stringify(item),
@@ -1521,7 +1563,6 @@ Date.prototype.addMonths = function (value) {
 
         $ajax.done(function (data, textStatus, jqXHR) {
             var results = data.d.results;
-            console.log(results);
             if (results != null && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
                     var result = results[i];
@@ -1613,11 +1654,207 @@ Date.prototype.addMonths = function (value) {
     };
 }(jQuery));
 
+/*MIS EQUIPOS PLUGIN*/
+(function ($) {
+    $.fn.myjoinedteams = function (options) {
+        setContext(variables.clientId.Graph);
+        var $this = $(this);
+
+        var endpoint = "/me/joinedteams";
+
+        execute({
+            clientId: variables.clientId.Graph,
+            version: "beta",
+            endpoint: endpoint,
+            type: "GET",
+            callback: render
+        });
+
+        function render(data) {
+            if (data.value.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            var teams = data.value;
+
+            for (var i = 0; i < teams.length; i++) {
+                var team = teams[i];
+
+                var bgColor = getIconColor();
+
+                var html = '';
+
+                html += '<li>';
+                html += '   <div class="row">';
+                html += '       <div class="col-3 text-center">';
+                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                html += '       </div>';
+                html += '       <div class="col">';
+                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                html += '           <span>' + team.description + '</span>';
+                html += '       </div>';
+                html += '   </div>';
+                html += '</li>';
+
+                $($this).append(html);
+            }
+        }
+
+        function getIconColor() {
+            var bgColors = ['bg-blue', 'bg-purple', 'bg-violet', 'bg-orange', 'bg-green', 'bg-khaki'];
+
+            return bgColors[Math.floor(Math.random() * bgColors.length)];
+        }
+
+        function getTeamIcon(teamName) {
+            var words = teamName.split(' ');
+            var icon = '';
+
+            for (var i = 0; i < 1; i++) {
+                var firstLetter = words[i].substring(0, 1).toUpperCase();
+                icon += firstLetter;
+            }
+
+            return icon;
+        }
+    };
+}(jQuery));
+
+/*MIS COMPAÑEROS PLUGIN*/
+(function ($) {
+    $.fn.peoplearoundme = function (options) {
+        setContext(variables.clientId.Graph);
+        var $this = $(this);
+
+        var endpoint = "/me/people";
+
+        execute({
+            clientId: variables.clientId.Graph,
+            version: "v1.0",
+            endpoint: endpoint,
+            type: "GET",
+            callback: render
+        });
+
+        function render(data) {
+            if (data.value.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            var people = data.value;
+
+            for (var i = 0; i < 4; i++) {
+                var user = people[i];
+
+                var jobTitle = '';
+
+                if (user.jobTitle != null)
+                    jobTitle = user.jobTitle;
+
+                var url = 'https://eur.delve.office.com/?u=' + user.id + '&v=work';
+
+                var html = '';
+
+                html += '<li>';
+                html += '   <div class="row">';
+                html += '       <div class="col-3 text-center">';
+                html += '           <span class="icon-usuario"></span>';
+                html += '       </div>';
+                html += '       <div class="col">';
+                html += '           <h4><a href="' + url + '" target="_blank">' + user.displayName + '</a></h4>';
+                html += '           <span>' + jobTitle + '</span>';
+                html += '       </div>';
+                html += '   </div>';
+                html += '</li>';
+
+                $($this).append(html);
+            }
+        }
+    };
+}(jQuery));
+
+/*MY TASKS PLUGIN*/
+(function ($) {
+    $.fn.mytasks = function (options) {
+        setContext(variables.clientId.Graph);
+
+        var $this = $(this);
+
+        var endpoint = "/me/planner/tasks";
+
+        execute({
+            clientId: variables.clientId.Graph,
+            version: "v1.0",
+            endpoint: endpoint,
+            type: "GET",
+            callback: render
+        });
+
+        function render(data) {
+            if (data.value.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            var allTasks = data.value;
+
+            var tasks = getPendingTasks(allTasks);
+            if (tasks.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            for (var i = 0; i < 4; i++) {
+                var task = tasks[i];
+
+                var taskDate = task.startDateTime;
+
+                if (taskDate == null)
+                    taskDate = task.createdDateTime;
+
+                taskDate = taskDate.split('T');
+                taskDate = taskDate[0];
+
+                taskDate = new Date(taskDate);
+
+                var taskDateString = taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear();
+
+                var html = '';
+
+                html += '<li>';
+                html += '   <h4>' + task.title + '</h4>';
+                html += '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>';
+                html += '</li>';
+
+                $($this).append(html);
+            }
+        }
+
+        function getPendingTasks(allTasks) {
+            var tasks = new Array();
+
+            for (var i = 0; i < allTasks.length; i++) {
+                var task = allTasks[i];
+
+                if (task.percentComplete < 100) {
+                    tasks.push(task);
+                }
+            }
+
+            return tasks;
+        }
+    };
+}(jQuery));
+
 
 jQuery(document).ready(function () {
     //localStorage.clear();
 
     setHomePage();
+
+    jQuery('#menu-button').menu();
 
     jQuery('#graph-wizard').each(function () {
         $(this).wizard();
@@ -1650,10 +1887,22 @@ jQuery(document).ready(function () {
     jQuery('#carouselNews').each(function () {
         $(this).carousel();
     });
+
+    $('#my-teams').each(function () {
+        $(this).myjoinedteams();
+    });
+
+    $('#my-people').each(function () {
+        $(this).peoplearoundme();
+    });
+
+    $('#my-tasks').each(function () {
+        $(this).mytasks();
+    });
 });
 
 function setHomePage() {
-    $('.navbar-brand').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
+    $('.logo a').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
 }
 
 function hideRibbon() {
@@ -1745,23 +1994,245 @@ function getIcon(icon) {
         case 'buscar':
             iconClass = 'icon-buscar';
             break;
+        case 'café':
+            iconClass = 'icon-cafe';
+            break;
+        case 'calendario':
+            iconClass = 'icon-calendario';
+            break;
+        case 'cámara de fotos':
+            iconClass = 'icon-camara_fotos';
+            break;
+        case 'candado cerrado':
+            iconClass = 'icon-candado_01';
+            break;
+        case 'candado abierto':
+            iconClass = 'icon-candado_02';
+            break;
+        case 'carpeta':
+            iconClass = 'icon-carpeta_01';
+            break;
+        case 'charla':
+            iconClass = 'icon-charla';
+            break;
+        case 'chat':
+            iconClass = 'icon-chat';
+            break;
+        case 'chat - eliminar':
+            iconClass = 'icon-chat_04';
+            break;
+        case 'chat - cara alegre':
+            iconClass = 'icon-chat_02';
+            break;
+        case 'chat - cara triste':
+            iconClass = 'icon-chat_01';
+            break;
+        case 'chat - puntos suspensivos':
+            iconClass = 'icon-chat_06';
+            break;
+        case 'chat - lineas':
+            iconClass = 'icon-chat_05';
+            break;
+        case 'cierra':
+            iconClass = 'icon-cierra';
+            break;
+        case 'cierra - círculo':
+            iconClass = 'icon-cierra_02';
+            break;
+        case 'cloud - baja':
+            iconClass = 'icon-cloud_baja';
+            break;
+        case 'cloud - cierra':
+            iconClass = 'icon-cloud_cierra';
+            break;
+        case 'cloud - ok':
+            iconClass = 'icon-cloud_ok';
+            break;
+        case 'cloud - sube':
+            iconClass = 'icon-cloud_sube';
+            break;
+        case 'compartir':
+            iconClass = 'icon-compartir';
+            break;
+        case 'corazón':
+            iconClass = 'icon-corazon';
+            break;
+        case 'cronómetro':
+            iconClass = 'icon-cronometro';
+            break;
+        case 'datos':
+            iconClass = 'icon-datos_01';
+            break;
+        case 'datos - sube':
+            iconClass = 'icon-datos_02';
+            break;
+        case 'datos - baja':
+            iconClass = 'icon-datos_03';
+            break;
+        case 'derecha':
+            iconClass = 'icon-derecha';
+            break;
+        case 'desktop':
+            iconClass = 'icon-desktop';
+            break;
+        case 'eliminar carpeta':
+            iconClass = 'icon-carpeta_03';
+            break;
+        case 'escritorio 1':
+            iconClass = 'icon-escritorio';
+            break;
+        case 'escritorio 2':
+            iconClass = 'icon-escritorio_02';
+            break;
+        case 'etiqueta':
+            iconClass = 'icon-etiqueta';
+            break;
+        case 'expande':
+            iconClass = 'icon-expande';
+            break;
+        case 'favorito':
+            iconClass = 'icon-favorito';
+            break;
         case 'foto 1':
             iconClass = 'icon-foto_01';
             break;
         case 'foto 2':
             iconClass = 'icon-foto_02';
             break;
-        case 'chat':
-            iconClass = 'icon-chat';
+        case 'imprimir':
+            iconClass = 'icon-imprimir';
             break;
-        case 'corazón':
-            iconClass = 'icon-corazon';
+        case 'información':
+            iconClass = 'icon-info';
+            break;
+        case 'izquierda':
+            iconClass = 'icon-izquierda';
+            break;
+        case 'lápiz':
+            iconClass = 'icon-lapiz_editar';
+            break;
+        case 'libreta':
+            iconClass = 'icon-libreta';
+            break;
+        case 'listado 1':
+            iconClass = 'icon-listado';
+            break;
+        case 'listado 2':
+            iconClass = 'icon-listado_02';
+            break;
+        case 'mail':
+            iconClass = 'icon-mail';
+            break;
+        case 'mail abierto':
+            iconClass = 'icon-mail_abierto';
+            break;
+        case 'maletín':
+            iconClass = 'icon-maletin';
+            break;
+        case 'mano':
+            iconClass = 'icon-mano';
+            break;
+        case 'más':
+            iconClass = 'icon-mas';
+            break;
+        case 'menos':
+            iconClass = 'icon-menos';
+            break;
+        case 'menú':
+            iconClass = 'icon-menu';
+            break;
+        case 'menú cierra':
+            iconClass = 'icon-menu_cierra';
+            break;
+        case 'móvil':
+            iconClass = 'icon-movil';
+            break;
+        case 'navegar':
+            iconClass = 'icon-navegar';
+            break;
+        case 'notas más':
+            iconClass = 'icon-notas_mas';
+            break;
+        case 'notas ok':
+            iconClass = 'icon-notas_ok';
+            break;
+        case 'nueva carpeta':
+            iconClass = 'icon-carpeta_02';
+            break;
+        case 'ok 1':
+            iconClass = 'icon-ok';
+            break;
+        case 'ok 2':
+            iconClass = 'icon-ok_2';
+            break;
+        case 'pausa':
+            iconClass = 'icon-pause';
+            break;
+        case 'pdf':
+            iconClass = 'icon-pdf';
+            break;
+        case 'play':
+            iconClass = 'icon-play';
+            break;
+        case 'portátil':
+            iconClass = 'icon-portatil';
+            break;
+        case 'pregunta':
+            iconClass = 'icon-pregunta';
+            break;
+        case 'pregunta':
+            iconClass = 'icon-pregunta';
             break;
         case 'presentación':
             iconClass = 'icon-presentacion';
             break;
+        case 'recargar':
+            iconClass = 'icon-recargar';
+            break;
+        case 'reload':
+            iconClass = 'icon-reload';
+            break;
+        case 'reloj':
+            iconClass = 'icon-reloj';
+            break;
+        case 'repliega':
+            iconClass = 'icon-repliega';
+            break;
+        case 'reunión de grupo':
+            iconClass = 'icon-reunion_grupo';
+            break;
+        case 'seguro':
+            iconClass = 'icon-seguro';
+            break;
+        case 'settings':
+            iconClass = 'icon-settings';
+            break;
+        case 'sonido 1':
+            iconClass = 'icon-sonido_01';
+            break;
+        case 'sonido 2':
+            iconClass = 'icon-sonido_02';
+            break;
+        case 'sonido 3':
+            iconClass = 'icon-sonido_03';
+            break;
+        case 'sube':
+            iconClass = 'icon-sube';
+            break;
+        case 'tablet':
+            iconClass = 'icon-tablet';
+            break;
+        case 'texto':
+            iconClass = 'icon-texto';
+            break
         case 'texto - lápiz':
             iconClass = 'icon-texto_lapiz';
+            break;
+        case 'usuario':
+            iconClass = 'icon-usuario';
+            break;
+        case 'ventanas':
+            iconClass = 'icon-ventanas';
             break;
     }
 

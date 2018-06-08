@@ -18,26 +18,35 @@
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderTitleBreadcrumb" runat="server"> <SharePointWebControls:ListSiteMapPath runat="server" SiteMapProviders="CurrentNavigationSwitchableProvider" RenderCurrentNodeAsLink="false" PathSeparator="" CssClass="s4-breadcrumb" NodeStyle-CssClass="s4-breadcrumbNode" CurrentNodeStyle-CssClass="s4-breadcrumbCurrentNode" RootNodeStyle-CssClass="s4-breadcrumbRootNode" NodeImageOffsetX=0 NodeImageOffsetY=289 NodeImageWidth=16 NodeImageHeight=16 NodeImageUrl="/_layouts/15/images/fgimg.png?rev=44" HideInteriorRootNodes="true" SkipLinkText="" /> </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderMain" runat="server">
-	<div id="article" class="container-fluid">
-		<PublishingWebControls:EditModePanel runat="server" CssClass="edit-mode-panel title-edit">
-			<SharePointWebControls:TextField runat="server" FieldName="Title"/>
-		</PublishingWebControls:EditModePanel>
-        <div>
-            <div class="row">
-                <a id="menu-button"><span class="icon-menu_cierra"></span></a>
-                <div class="float-left" id="current-menu"></div>
-                <div class="float-left" style="display:none" id="current-submenu"></div>
-                <div class="col">
-                    <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone1" />
+	<div id="wp-page" class="container-fluid">        
+        <div class="row">
+            <a id="menu-button"><span class="icon-menu_cierra"></span></a>
+            <div class="float-left" id="current-menu"></div>
+            <div class="float-left" style="display:none" id="current-submenu"></div>
+            <div class="col" id="highlight-zone">
+                <h2 id="page-title">
+                    <SharePointWebControls:TextField runat="server" FieldName="Title"/>
+                </h2>
+                <div class="summary">
+                    <div class="row">
+                        <div class="col-4">
+                            <PublishingWebControls:RichImageField FieldName="PublishingRollupImage" AllowHyperLinks="false" runat="server" />
+                        </div>
+                        <div class="col-8" id="summary">
+                            <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone1" />
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="content-zone">
+        <div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col">
+                    <PublishingWebControls:RichHtmlField FieldName="PublishingPageContent" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
                     <WebPartPages:WebPartZone runat="server" Title="Zona 2" ID="WebPartZone2" />
                 </div>
             </div>
         </div>
+        
 	</div>
 </asp:Content>

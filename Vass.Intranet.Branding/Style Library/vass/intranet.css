@@ -1,4 +1,13 @@
-﻿#s4-workspace{
+﻿/*OFFICE 365*/
+#O365_NavHeader, #O365_TopMenu{
+    background-color: #000 !important;
+}
+
+#O365_MainLink_TenantLogo{
+    display:none;
+}
+
+#s4-workspace{
     overflow-x: hidden;
 }
 
@@ -47,8 +56,13 @@ a, a:hover, a:visited{
 .mt-30{
     margin-top: 30px;
 }
+
 .mt-6{
     margin-top: 65px;
+}
+
+.mb-20{
+    margin-bottom: 20px;
 }
 
 .no-margin{
@@ -97,6 +111,10 @@ a, a:hover, a:visited{
 /*BACKGROUND*/
 .bg-dark-blue{
     background-color: #003354;
+}
+
+.bg-grey{
+    background-color: #666666;
 }
 
 .bg-blue{
@@ -154,20 +172,54 @@ a, a:hover, a:visited{
 }
 
 /*HEADER*/
-.navbar{
-    height:120px;
+header{
+    height:90px;
+}
+
+header > .row{
+    height: 100% !important;
+    margin-bottom: 0px;
 }
 
 .logo{
-    width: 15%;
+    padding-top:20px;
+    padding-bottom: 10px;
+    height: 100%;
+}
+
+.logo a{
+    display: inline-block;
+    border-right: solid 1px #194865;
+    float: left;
+    width: 112px;
+    height: 100%;
+    padding-left: 10px;
+    padding-top: 12px;
+}
+
+.logo img{
+    width: 100%;
+}
+
+.logo span{
+    font-weight: 400;
+    color: #194865;
+    display: inline-block;
+    margin-top: 26px;
+    margin-left: 5px;
+    font-size: 20px;
 }
 
 .s4-tn{
-    margin-top: 65px;
+    padding-top:27px;
 }
 
-.s4-tn li.static{
-    margin-left:40px;
+.ms-core-listMenu-horizontalBox ul, .ms-core-listMenu-horizontalBox li, .ms-core-listMenu-horizontalBox .ms-core-listMenu-item, .ms-core-listMenu-horizontalBox > ul > li > table{
+    padding: 5px;
+}
+
+.ms-core-listMenu-horizontalBox li.static > .ms-core-listMenu-item{
+    font-weight: 400;
 }
 
 .s4-tn li.static > a {
@@ -186,14 +238,13 @@ a, a:hover, a:visited{
 }
 
 .search-box{
-    background: url('/style library/images/search.png') #194865 no-repeat 97% center !important;
+    background: url('/style library/images/search.png') #194865 no-repeat 95% 90% !important;
     border:none !important;
     width:100% !important;
-    padding:15px 15px 15px 80px !important;
-    height: 60px !important;
+    padding: 45px 0px 0px 10px !important;
+    height: 100% !important;
     color:#fff !important;
     border-radius:0px !important;
-    font-size:1.2rem !important;
     margin-bottom: 1px;
 }
 
@@ -204,12 +255,6 @@ a, a:hover, a:visited{
 
 .menu-item.dynamic-children span {
     background: none !important;
-}
-
-.s4-tn li.static {
-    padding: 10px;
-    margin-left: 20px;
-    margin-right: 20px;
 }
 
 .ms-core-listMenu-horizontalBox .dynamic-children.additional-background{
@@ -243,10 +288,30 @@ ul.root > li ul li.selected {
 }
 
 /*CONTENT*/
+#page-title{
+    color: #194865;
+    border-bottom: solid 1px #333;
+    margin: 20px 10px;
+    font-size: 2em;
+}
 .content {
     min-height: 400px;
     margin-top: 20px;
     padding: 0px 20px;
+}
+
+.summary{
+    line-height: 28px;
+    margin-left: 20px;
+}
+
+#summary p{
+    line-height: 28px;
+}
+
+.summary img {
+    max-width: 100%;
+    height: auto;
 }
 
 /*HOME*/
@@ -283,12 +348,32 @@ ul.root > li ul li.selected {
 {
     font-size: 2em;
 }
+
 /*FIN HOME*/
 /*SUBHOME*/
+#menu-button{
+    left: 0px;
+    position: absolute;
+    z-index: 999;
+    background-color: #D9F3FC;
+    cursor: pointer;
+    top: 96px;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+}
+
+#menu-button span{
+    font-size: 24px;
+    position:relative;
+    top:7px;
+}
+
 #current-menu {
     background-color: #D9F3FC;
     min-height: 300px;
-    padding: 40px 0px;
+    padding: 66px 0px;
+    width:250px;
 }
 
 #current-menu ul{
@@ -318,7 +403,8 @@ ul.root > li ul li.selected {
 #current-submenu {
     background-color: #c2ecfa;
     min-height: 300px;
-    padding: 40px 0px;
+    padding: 66px 0px;
+    width:250px;
 }
 
 #current-submenu ul {
@@ -343,14 +429,6 @@ ul.root > li ul li.selected {
 #current-submenu ul li.active {
     background-color: #fff;
     font-weight: normal;
-}
-
-
-#subhome h2, #article h2 {
-    color: #194865;
-    border-bottom: solid 1px;
-    margin-top: 20px;
-    font-size: 2em;
 }
 
 #subhome .carousel .carousel-image {
@@ -400,13 +478,6 @@ ul.root > li ul li.selected {
 }
 /*FIN SUBHOME*/
 
-/*WP-PAGE*/
-#wp-page h2 {
-    margin: 40px 0px;
-    font-size: 2em;
-    color: #003354;
-}
-
 /*SEARCH*/
 .ms-srch-people-item #UserInfoContainer{
     width: 370px;
@@ -449,6 +520,10 @@ ul.root > li ul li.selected {
 #article img {
     max-width: 100%;
     height: auto;
+}
+
+#article #summary-zone{
+    line-height: 28px;
 }
 
 #article #summary-zone #summary {
@@ -592,11 +667,6 @@ footer p{
 }
 
 /*COMPONENTES*/
-.table tbody tr td a, .table tbody tr td span {
-    display: block;
-    border-right: solid 1px #ccc;
-    line-height: 2rem;
-}
 
 .table tbody tr td:last-child a, .table tbody tr td:last-child span {
     border-right: none;
@@ -623,6 +693,8 @@ footer p{
 
 .card .card-text{
     clear:both;
+    padding-left: 20px;
+    line-height: 28px;
 }
 
 .panel{
@@ -1002,27 +1074,50 @@ footer p{
 }
 
 /*LISTADO EVENTOS*/
-.events .row{
-    margin-bottom:20px;
+
+.events{
+    margin: 0px 40px;
 }
 
-.events .event {
-    padding: 10px;
+.events .event-detail{
+    background-color: #FAFAFA;
+    padding: 30px;
 }
 
-.events .event-date {
-    background-color: #50bbeb;
-    color:#fff;
+.events .event-title{
+    color: #00669C;
+    font-size: 1.3em;
+
 }
 
-.events .event-date .day {
-    font-size: 2em !important;
-    font-weight: 500;
+.events .event-date{
+    padding: 0px;
+    border-right: solid 2px #ccc;
 }
 
-.events .event .clock::before{
-    margin-left:0px;
+.events .event{
+    border-right: solid 2px #CCCCCC;
 }
+
+.events .event-date span, .events .event-hour span, .events .event-location span{
+    display: inline;
+    position: relative;
+    top: -13px;
+    color: #00669C;
+}
+
+.events .event-date [class^="icon-"], 
+.events .event-date [class*=" icon-"], 
+.events .event-hour [class^="icon-"], 
+.events .event-hour [class*=" icon-"],
+.events .event-location [class^="icon-"], 
+.events .event-location [class*=" icon-"]{
+    display:inline;
+    font-size: 42px;
+    top:0px;
+    color: #333;
+}
+
 
 /*CÍRCULOS*/
 #my-stock .big-circle {
@@ -1086,19 +1181,60 @@ footer p{
 }
 
 /*WIZARD TEAMS*/
-.circle {
-    height: 40px;
-    border-radius: 50%;
-    width: 40px;
-    text-align: center;
-    color: #fff;
-    font-weight:bold;
-    padding-top: 10px;
-    margin: 0 auto !important;
+
+#wizard-indicators div{
+    height: 120px;
+    background-color: #FAFAFA;
+    margin-right: 20px;
 }
 
-.circle.disabled {
-    background: #ccc;
+#wizard-indicators div .circle{
+    background-color: #50bbeb;
+}
+
+#wizard-indicators div.active{
+    background: #50bbeb;
+}
+
+#wizard-indicators div.active .circle{
+    background-color: #003454;
+}
+
+#wizard-indicators div p {
+    color: #003454;
+    font-weight: 500;
+    font-size: 20px !important;
+    margin-top: 44px;
+    float:left;
+    margin-left: 20px;
+}
+
+#wizard-indicators div.active p {
+    color: #fff;
+}
+
+#wizard-indicators .circle {
+    float:left;
+    height: 73px;
+    border-radius: 50%;
+    width: 73px;
+    font-size: 46px !important;
+    margin-top: 20px;
+    margin-left: 0px;
+    color: #fff;
+}
+
+#wizard-indicators div.completed{
+    background-color: #666;
+}
+
+#wizard-indicators div.completed p{
+    color:#fff;
+}
+
+#wizard-indicators div.completed .circle{
+    background-color: #fff;
+    color:#50BBEB
 }
 
 #wizard-steps {
@@ -1107,6 +1243,168 @@ footer p{
     clear: both;
 }
 
-#wizard-buttons button {
+#wizard-steps input[type="text"]{
+    height: 60px;
+    border-radius: 0;
+}
+
+#wizard-steps input[type="text"]:focus{
+    border-color: #ababab;
+    box-shadow:none;
+}
+
+#wizard-buttons{
+    text-align: center;
+}
+
+#wizard-buttons button{
     margin-right: 20px;
+    padding: 10px 40px;
+    color:#fff;
+    border:none;
+    text-transform: lowercase;
+    font-weight: 500;
+}
+
+#wizard-buttons button.btn-grey:hover, #wizard-buttons button.btn-grey:focus{
+    background-color: #666;
+}
+
+#wizard-buttons button.btn-orange:hover, #wizard-buttons button.btn-orange:focus{
+    background-color: #f39a4a;
+}
+
+/*PAGINACIÓN*/
+
+.paging{
+    text-align: center;
+}
+
+.paging a{
+    color:#333;
+}
+
+.paging a span{
+    font-size: 1.5em;
+}
+
+.paging .ms-paging{
+    top: -3px;
+    position: relative;
+}
+
+/*THUMBNAILS*/
+.thumbnail-container{
+    background-color: #ededed;
+    padding: 30px 15px;
+    margin-bottom: 20px;
+    min-height: 155px;
+    overflow: auto;
+}
+
+.thumbnail-container img{
+    background-color: #ededed;
+}
+
+.thumbnail-container a{
+    font-weight: 500;
+}
+
+/*DOCUMENT LIST*/
+
+.doc-list .table tbody tr td{
+    border:none;
+}
+
+.doc-list span{
+    font-size: 2.5em;
+}
+
+.doc-list a{
+    display: inline-block;
+    top: -10px;
+    position: relative;
+    margin-left: 10px;
+}
+
+.img-gallery .card{
+    height: 320px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.img-gallery .card img{
+    position: absolute;
+}
+
+.img-gallery .card .card-body{
+    position: relative;
+    top: 200px;
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.img-gallery .card .card-body .card-title{
+    background:none;
+}
+
+.img-gallery .card .card-body span{
+    font-size: 24px !important;
+    position: relative;
+    top: 5px;
+}
+
+.article-list .article-card{
+    background-color: #FAFAFA;
+    padding: 30px 30px 20px 20px;
+    margin-left: 10px;
+    margin-right: 20px;
+}
+
+.article-list .article-card .row{
+    margin-bottom: 0px;
+}
+
+.article-list .article-image{
+    height: 130px;
+    width: 130px;
+}
+
+.article-list .article-date{
+    color: #50bbeb;
+    font-weight: 600;
+}
+
+.article-list .article-data{
+    font-weight: 500;
+}
+
+.article-list .article-data p{
+    font-weight: 400;
+    font-size: 13px !important;
+}
+
+/*MY TEAMS*/
+#my-teams .team-icon{
+    height: 45px;
+    width: 45px;
+    padding-top: 15px;
+    color: #fff;
+}
+
+#my-teams h4 a{
+    color: #333;
+}
+
+/*MY PEOPLE*/
+#my-people .icon-usuario{
+    font-size: 42px;
+}
+
+#my-people h4 a{
+    color: #333;
+}
+
+/*TABLA*/
+.table-list tr{
+    border-bottom: solid 1px #333;
 }

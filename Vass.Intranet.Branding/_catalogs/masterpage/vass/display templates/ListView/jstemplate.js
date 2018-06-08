@@ -25,6 +25,19 @@ function headerTemplate(ctx) {
         case "páginas":
             return PagesList.headerTemplate(ctx);
             break;
+        case "logos grupo vass":
+        case "logos fabricantes":
+            return ThumbnailList.headerTemplate(ctx);
+            break;
+        case "plantillas corporativas":
+        case "ppts corporativas":
+        case "creatividades":
+        case "diseños":
+            return DocumentsList.headerTemplate(ctx);
+            break;
+        case "imágenes":
+            return ImageGallery.headerTemplate(ctx);
+            break;
     }
 }
 
@@ -40,6 +53,19 @@ function itemTemplate(ctx) {
             break;
         case "páginas":
             return PagesList.itemTemplate(ctx);
+            break;
+        case "logos grupo vass":
+        case "logos fabricantes":
+            return ThumbnailList.itemTemplate(ctx);
+            break;
+        case "plantillas corporativas":
+        case "ppts corporativas":
+        case "creatividades":
+        case "diseños":
+            return DocumentsList.itemTemplate(ctx);
+            break;
+        case "imágenes":
+            return ImageGallery.itemTemplate(ctx);
             break;
     }
 }
@@ -57,6 +83,19 @@ function footerTemplate(ctx) {
         case "páginas":
             return PagesList.footerTemplate(ctx);
             break;
+        case "logos grupo vass":
+        case "logos fabricantes":
+            return ThumbnailList.footerTemplate(ctx);
+            break;
+        case "plantillas corporativas":
+        case "ppts corporativas":
+        case "creatividades":
+        case "diseños":
+            return DocumentsList.footerTemplate(ctx);
+            break;
+        case "imágenes":
+            return ImageGallery.footerTemplate(ctx);
+            break;
     }
 }
 
@@ -72,6 +111,19 @@ function postRender(ctx) {
             break;
         case "páginas":
             return PagesList.onpostrender(ctx);
+            break;
+        case "logos grupo vass":
+        case "logos fabricantes":
+            return ThumbnailList.onpostrender(ctx);
+            break;
+        case "plantillas corporativas":
+        case "ppts corporativas":
+        case "creatividades":
+        case "diseños":
+            return DocumentsList.onpostrender(ctx);
+            break;
+        case "imágenes":
+            return ImageGallery.onpostrender(ctx);
             break;
     }
 }

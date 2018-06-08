@@ -23,11 +23,11 @@
 			<SharePointWebControls:TextField runat="server" FieldName="Title"/>
 		</PublishingWebControls:EditModePanel>
         <div class="row">
-            <div class="col-4" id="current-menu">
-            </div>
-            <div class="col-2" style="display:none" id="current-submenu"></div>
+            <a id="menu-button"><span class="icon-menu_cierra"></span></a>
+            <div class="float-left" id="current-menu"></div>
+            <div class="float-left" style="display:none" id="current-submenu"></div>
             <div class="col">
-                <h2>
+                <h2 id="page-title">
                     <SharePointWebControls:FieldValue runat="server" FieldName="Title"/>
                 </h2>
                 <div id="summary-zone">

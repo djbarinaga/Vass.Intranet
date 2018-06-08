@@ -34,10 +34,11 @@
 	</PublishingWebControls:EditModePanel>
     <div id="subhome" class="container-fluid">
         <div class="row" id="top-zone">
-            <div class="col-2" id="current-menu"></div>
-            <div class="col-2" style="display:none" id="current-submenu"></div>
+            <a id="menu-button"><span class="icon-menu_cierra"></span></a>
+            <div class="float-left" id="current-menu"></div>
+            <div class="float-left" style="display:none" id="current-submenu"></div>
             <div class="col" id="highlight">
-                <h2 class="page-title">
+                <h2 id="page-title">
                     <SharePointWebControls:ProjectProperty Property="Title" runat="server"/>
                 </h2>
                 <WebPartPages:WebPartZone runat="server" Title="Destacado principal" ID="MainHighlight" />

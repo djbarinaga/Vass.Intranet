@@ -165,22 +165,7 @@
                         <div class="panel">
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Tareas</span> pendientes</p>
-                            <ul>
-                                <li>
-                                    <h4>Aprobación de noticia para la Home</h4>
-                                    <span class="date">16/03/2018</span>
-                                </li>
-                                <li>
-                                    <h4>Kick off proyecto Bancamarch</h4>
-                                    <span class="date">01/06/2018</span>
-                                    <span class="clock">12:00</span>
-                                </li>
-                                <li>
-                                    <h4>Entrega documentación proyecto</h4>
-                                    <span class="date">01/06/2018</span>
-                                    <span class="clock">16:00</span>
-                                </li>
-                            </ul>
+                            <ul id="my-tasks"></ul>
                           </div>
                         </div>
                     </div>
@@ -190,87 +175,15 @@
                         <div class="panel icon-left">
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
-                            <ul>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-agile"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Aplicación para iOS</h4>
-                                            <span>BBVA</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-waterfall"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Aplicación para el comercio exterior</h4>
-                                            <span>Bancamarch</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-guild"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Angular</h4>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                              <div class="toolbar">
-                                  <a href="https://teams.microsoft.com/" target="_blank" class="add">AÑADIR EQUIPO</a>
-                              </div>
+                            <ul id="my-teams"></ul>
                           </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="panel icon-left">
                           <div class="panel-body">
-                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
-                            <ul>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-agile"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Aplicación para iOS</h4>
-                                            <span>BBVA</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-waterfall"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Aplicación para el comercio exterior</h4>
-                                            <span>Bancamarch</span>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li>
-                                    <div class="row">
-                                        <div class="col--3 text-center">
-                                            <span class="icon-guild"></span>
-                                        </div>
-                                        <div class="col">
-                                            <h4>Angular</h4>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                              <div class="toolbar">
-                                  <a href="https://teams.microsoft.com/" target="_blank" class="add">AÑADIR EQUIPO</a>
-                              </div>
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> compañeros</p>
+                            <ul id="my-people"></ul>
                           </div>
                         </div>
                     </div>

@@ -616,7 +616,7 @@ namespace Migracion
 
                 ListCreationInformation creationInfo = new ListCreationInformation();
                 creationInfo.Title = listTitle;
-                creationInfo.TemplateType = (int)ListTemplateType.GenericList;
+                creationInfo.TemplateType = (int)ListTemplateType.DocumentLibrary;
                 List list = web.Lists.Add(creationInfo);
 
                 list.Update();
@@ -628,18 +628,18 @@ namespace Migracion
             }
             catch(Exception ex)
             {
-
+                Console.WriteLine(ex.ToString());
             }
         }
 
         private static void CheckFiles(ClientContext context, List list, DirectoryInfo directory)
         {
-            FileInfo[] files = directory.GetFiles();
+            FileInfo[] files = directory.GetFiles(string.Format("{0}*.xml", list.Title));
 
             while (files.Length == 0)
             {
                 directory = directory.GetDirectories()[0];
-                files = directory.GetFiles();
+                files = directory.GetFiles(string.Format("{0}*.xml", list.Title));
             }
 
             FileInfo file = files[0];
@@ -651,11 +651,12 @@ namespace Migracion
                 items = serializer.Deserialize(sr) as List<Item>;
             }
 
-            CreateFields(context, list, items[1].Fields);
+            CreateFields(context, list, items[0].Fields);
         }
 
         private static void CreateItems(DirectoryInfo directory, string listTitle)
         {
+            string currentDirectory = directory.Name;
 
             DirectoryInfo[] directories = directory.GetDirectories();
 
@@ -665,7 +666,7 @@ namespace Migracion
             }
 
 
-            FileInfo[] files = directory.GetFiles();
+            FileInfo[] files = directory.GetFiles(string.Format("{0}*.xml", listTitle));
             List<Item> items = new List<Item>();
 
             //Obtenemos todos los elementos
@@ -695,10 +696,10 @@ namespace Migracion
             context.ExecuteQuery();
 
             string folderUrl = rootFolder.ServerRelativeUrl;
+            ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
 
-            if (!directory.Name.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
+            if (!currentDirectory.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
             {
-                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
 
                 itemCreateInfo.UnderlyingObjectType = FileSystemObjectType.Folder;
                 itemCreateInfo.LeafName = directory.Name;
@@ -718,12 +719,36 @@ namespace Migracion
 
             foreach (Item item in items)
             {
-                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+                Console.WriteLine();
 
-                if (!directory.Name.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
+                if(list.BaseType == BaseType.DocumentLibrary)
+                {
+                    context = new ClientContext(importSite);
+                    context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+                }
+
+                itemCreateInfo = new ListItemCreationInformation();
+
+                if (!currentDirectory.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
                     itemCreateInfo.FolderUrl = folderUrl;
+                else if (item.Folder != null && list.BaseType == BaseType.DocumentLibrary)
+                    itemCreateInfo.FolderUrl = item.Folder;
 
-                ListItem listItem = list.AddItem(itemCreateInfo);
+                ListItem listItem;
+
+                if(list.BaseType == BaseType.DocumentLibrary)
+                {
+                    string filePath = Path.Combine(directory.FullName, item.Fields[0].Value);
+
+                    Console.Write("Subiendo fichero {0}...\r", filePath);
+                    Microsoft.SharePoint.Client.File file = UploadFileSlicePerSlice(context, list, directory, item);
+
+                    listItem = file.ListItemAllFields;
+                }
+                else
+                {
+                    listItem = list.AddItem(itemCreateInfo);
+                }
 
                 foreach (Field field in item.Fields)
                 {
@@ -762,11 +787,16 @@ namespace Migracion
                 }
 
                 listItem.Update();
-                context.ExecuteQuery();
 
-                counter++;
-                percentage = (counter * 100) / length;
-                Console.Write("Creando elementos en {0}...{1}%\r", folderUrl, percentage);
+                if (list.BaseType != BaseType.DocumentLibrary)
+                    context.ExecuteQuery();
+                
+                if(list.BaseType != BaseType.DocumentLibrary)
+                {
+                    counter++;
+                    percentage = (counter * 100) / length;
+                    Console.Write("Creando elementos en {0}...{1}%\r", folderUrl, percentage);
+                }
             }
         }
 
@@ -994,6 +1024,210 @@ namespace Migracion
             }
 
             return value;
+        }
+
+        public static Microsoft.SharePoint.Client.File UploadFileSlicePerSlice(ClientContext ctx, List list, DirectoryInfo directory, Item item, int fileChunkSizeInMB = 3)
+        {
+            // Each sliced upload requires a unique ID.
+            Guid uploadId = Guid.NewGuid();
+            string file = GetItemValue(item, "FileLeafRef");
+            string fileName = Path.Combine(directory.FullName, file);
+            string folder = item.Folder.Replace("/OFVASS", "/es-es/businessvalue/offering");
+            string folderName = folder.Replace(list.RootFolder.ServerRelativeUrl + "/", "");
+
+            // Get the name of the file.
+            string uniqueFileName = Path.GetFileName(fileName);
+
+            // Get the folder to upload into. 
+            Folder rootFolder = ctx.Web.GetFolderByServerRelativeUrl(list.RootFolder.ServerRelativeUrl);
+
+            Console.WriteLine();
+            Console.WriteLine("Creando carpeta {0}...", folder);
+
+            CreateFolder(ctx, rootFolder, folderName);
+
+            Folder docs = ctx.Web.GetFolderByServerRelativeUrl(folder);
+
+            // Get the information about the folder that will hold the file.
+            ctx.Load(docs);
+            ctx.ExecuteQuery();
+
+            // File object.
+            Microsoft.SharePoint.Client.File uploadFile;
+
+            // Calculate block size in bytes.
+            int blockSize = fileChunkSizeInMB * 1024 * 1024;
+
+            // Get the size of the file.
+            long fileSize = new FileInfo(fileName).Length;
+
+            if (fileSize <= blockSize)
+            {
+                // Use regular approach.
+                using (FileStream fs = new FileStream(fileName, FileMode.Open))
+                {
+                    FileCreationInformation fileInfo = new FileCreationInformation();
+                    fileInfo.ContentStream = fs;
+                    fileInfo.Url = uniqueFileName;
+                    fileInfo.Overwrite = true;
+                    uploadFile = docs.Files.Add(fileInfo);
+                    ctx.Load(uploadFile);
+                    ctx.ExecuteQuery();
+                    // Return the file object for the uploaded file.
+                    return uploadFile;
+                }
+            }
+            else
+            {
+                // Use large file upload approach.
+                ClientResult<long> bytesUploaded = null;
+
+                FileStream fs = null;
+                try
+                {
+                    fs = System.IO.File.Open(fileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                    using (BinaryReader br = new BinaryReader(fs))
+                    {
+                        byte[] buffer = new byte[blockSize];
+                        Byte[] lastBuffer = null;
+                        long fileoffset = 0;
+                        long totalBytesRead = 0;
+                        int bytesRead;
+                        bool first = true;
+                        bool last = false;
+
+                        // Read data from file system in blocks. 
+                        while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0)
+                        {
+                            long percentage = (totalBytesRead * 100) / fileSize;
+
+                            Console.Write("Subiendo fichero {0} a {1}: {2} de {3}\r", file, docs.Name, BytesToSize(totalBytesRead), BytesToSize(fileSize));
+
+                            totalBytesRead = totalBytesRead + bytesRead;
+
+                            // You've reached the end of the file.
+                            if (totalBytesRead == fileSize)
+                            {
+                                last = true;
+                                // Copy to a new buffer that has the correct size.
+                                lastBuffer = new byte[bytesRead];
+                                Array.Copy(buffer, 0, lastBuffer, 0, bytesRead);
+                            }
+
+                            if (first)
+                            {
+                                using (MemoryStream contentStream = new MemoryStream())
+                                {
+                                    // Add an empty file.
+                                    FileCreationInformation fileInfo = new FileCreationInformation();
+                                    fileInfo.ContentStream = contentStream;
+                                    fileInfo.Url = uniqueFileName;
+                                    fileInfo.Overwrite = true;
+                                    uploadFile = docs.Files.Add(fileInfo);
+
+                                    // Start upload by uploading the first slice. 
+                                    using (MemoryStream s = new MemoryStream(buffer))
+                                    {
+                                        // Call the start upload method on the first slice.
+                                        bytesUploaded = uploadFile.StartUpload(uploadId, s);
+                                        ctx.ExecuteQuery();
+                                        // fileoffset is the pointer where the next slice will be added.
+                                        fileoffset = bytesUploaded.Value;
+                                    }
+
+                                    // You can only start the upload once.
+                                    first = false;
+                                }
+                            }
+                            else
+                            {
+                                // Get a reference to your file.
+                                uploadFile = ctx.Web.GetFileByServerRelativeUrl(docs.ServerRelativeUrl + System.IO.Path.AltDirectorySeparatorChar + uniqueFileName);
+
+                                if (last)
+                                {
+                                    // Is this the last slice of data?
+                                    using (MemoryStream s = new MemoryStream(lastBuffer))
+                                    {
+                                        // End sliced upload by calling FinishUpload.
+                                        uploadFile = uploadFile.FinishUpload(uploadId, fileoffset, s);
+                                        ctx.ExecuteQuery();
+
+                                        // Return the file object for the uploaded file.
+                                        return uploadFile;
+                                    }
+                                }
+                                else
+                                {
+                                    using (MemoryStream s = new MemoryStream(buffer))
+                                    {
+                                        // Continue sliced upload.
+                                        bytesUploaded = uploadFile.ContinueUpload(uploadId, fileoffset, s);
+                                        ctx.ExecuteQuery();
+                                        // Update fileoffset for the next slice.
+                                        fileoffset = bytesUploaded.Value;
+                                    }
+                                }
+                            }
+
+                        } // while ((bytesRead = br.Read(buffer, 0, buffer.Length)) > 0)
+                    }
+                }
+                finally
+                {
+                    Console.Write("Subiendo fichero {0} a {1}: {2} de {2}\r", file, docs.Name, BytesToSize(fileSize));
+                    if (fs != null)
+                    {
+                        fs.Dispose();
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static string GetItemValue(Item item, string field)
+        {
+            string value = string.Empty;
+            foreach(Field f in item.Fields)
+            {
+                if(f.InternalName == field)
+                {
+                    value = f.Value;
+                    break;
+                }
+            }
+
+            return value;
+        }
+
+        private static string BytesToSize(double bytes)
+        {
+            string[] sizes = new string[] { "Bytes", "KB", "MB", "GB", "TB" };
+
+            if (bytes == 0)
+                return "0 Byte";
+
+            int i = Convert.ToInt32(Math.Floor(Math.Log(bytes) / Math.Log(1024)));
+
+            return Math.Round(bytes / Math.Pow(1024, i), 2) + " " + sizes[i];
+        }
+
+        private static void CreateFolder(ClientContext ctx, Folder folder, string folderUrl)
+        {
+            if (!string.IsNullOrEmpty(folderUrl))
+            {
+                string[] folders = folderUrl.Split('/');
+
+                if (folders.Length > 0)
+                {
+                    Folder f = folder.Folders.Add(folders[0]);
+                    ctx.ExecuteQuery();
+
+                    CreateFolder(ctx, f, string.Join("/", folders.Skip(1)));
+                }
+            }
+            
         }
     }
 }

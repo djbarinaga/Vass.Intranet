@@ -226,7 +226,7 @@ header > .row{
 
 .logo a{
     display: inline-block;
-    border-right: solid 1px #194865;
+    border-right: solid 1px #50bbeb;
     float: left;
     width: 112px;
     height: 100%;
@@ -240,7 +240,7 @@ header > .row{
 
 .logo span{
     font-weight: 400;
-    color: #194865;
+    color: #50bbeb;
     display: inline-block;
     margin-top: 26px;
     margin-left: 5px;
@@ -249,14 +249,18 @@ header > .row{
 
 .s4-tn{
     padding-top:27px;
+    width: 100%;
+    text-align: center;
 }
 
 .ms-core-listMenu-horizontalBox ul, .ms-core-listMenu-horizontalBox li, .ms-core-listMenu-horizontalBox .ms-core-listMenu-item, .ms-core-listMenu-horizontalBox > ul > li > table{
     padding: 5px;
+    display: inline-block;
 }
 
 .ms-core-listMenu-horizontalBox li.static > .ms-core-listMenu-item{
     font-weight: 400;
+    display: inline-block;
 }
 
 .s4-tn li.static > a {
@@ -312,8 +316,7 @@ ul.root > li ul li.static.dynamic-children ul {
 }
 
 ul.root > li ul li.selected {
-    background-color: #C2ECFA;
-    border-radius: 5px;
+    background-color: #fff;
 }
 
 .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:link, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:visited, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected:hover, .ms-core-listMenu-horizontalBox .ms-core-listMenu-selected, .ms-tv-selected:link {
@@ -972,8 +975,8 @@ footer p{
 
 /*CALENDAR*/
 #calendar {
-    background: #D9F3FC;
-    height: 230px;
+    background: #fff;
+    height: 241px;
     border-radius: 5px;
     overflow: hidden;
 }
@@ -982,7 +985,7 @@ footer p{
 
 #calendar .month {
     width: 100%;
-    background: #D9F3FC;
+    background: #fff;
     text-align: center;
 }
 
@@ -1029,7 +1032,7 @@ footer p{
 #calendar .weekdays {
     margin: 0;
     padding: 5px 0;
-    background-color: #D9F3FC;
+    background-color: #fff;
 }
 
 #calendar .weekdays li {
@@ -1042,7 +1045,7 @@ footer p{
 
 #calendar .days {
     padding: 10px 0;
-    background: #D9F3FC;
+    background: #fff;
     margin-left: 2px;
     margin-right: -24px;
 }
@@ -1477,4 +1480,17 @@ footer p{
 
 .bootbox-prompt .modal-title{
     margin:0px;
+}
+
+/*TILE*/
+.tile{
+    height: 120px;
+    width: 120px;
+    margin: 0px 15px;
+    text-align: center;
+    padding: 20px 0px;
+}
+
+.tile p{
+    color: #fff;
 }

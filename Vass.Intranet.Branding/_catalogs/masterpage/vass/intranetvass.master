@@ -31,7 +31,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:StartScript runat="server" />
         <SharePoint:CssLink runat="server" Version="15"></SharePoint:CssLink>
         <SharePoint:CacheManifestLink runat="server" />
-        <SharePoint:CssRegistration runat="server" ID="CssRegistration1" Name="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration1" Name="https://fonts.googleapis.com/css?family=Montserrat:500,600,700,800" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration2" Name="/style library/vass/bootstrap.min.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration3" Name="/style library/vass/vass-font/style.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration4" Name="/style library/vass/intranet.css" After="corev15.css" />

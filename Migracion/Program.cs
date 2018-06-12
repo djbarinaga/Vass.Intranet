@@ -138,23 +138,28 @@ namespace Migracion
 
 
                 //}
-                Console.WriteLine("Obteniendo elementos de {0}", list.Title);
-                GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
 
-                if (files.Count > 0)
+                if (list.BaseType != BaseType.DocumentLibrary)
                 {
-                    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<File>));
+                    Console.WriteLine("Obteniendo elementos de {0}", list.Title);
+                    GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
 
-                    using (StreamWriter sw = new StreamWriter(Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title, "files.xml"), true))
-                    {
-                        using (XmlWriter writer = XmlWriter.Create(sw))
-                        {
-                            serializer.Serialize(writer, files);
-                        }
+                    //if (files.Count > 0)
+                    //{
+                    //    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<File>));
 
-                        sw.Flush();
-                    }
+                    //    using (StreamWriter sw = new StreamWriter(Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title, "files.xml"), true))
+                    //    {
+                    //        using (XmlWriter writer = XmlWriter.Create(sw))
+                    //        {
+                    //            serializer.Serialize(writer, files);
+                    //        }
+
+                    //        sw.Flush();
+                    //    }
+                    //}
                 }
+                
             }
 
             Console.WriteLine();

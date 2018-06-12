@@ -23,9 +23,21 @@ function courseTemplate(ctx) {
     var endDate = ctx.CurrentItem["Fecha_x0020_Fin"];
     var trainer = '';//ctx.CurrentItem["Trainer"][0].lookupValue;
     var profile = ctx.CurrentItem["Perfil"];
-
+    var descripcion = ctx.CurrentItem["Descripcion"];
+    var imagen = ctx.CurrentItem["Imagen"];
 
     html = '<h2 id="page-title">' + title + '</h2>';
+
+    html += '<div id="summary-zone">' +
+        '<div class="row">' +
+        '<div class="col-4">' +
+        imagen +
+        '</div>' +
+        '<div class="col-8" id="summary">' +
+        descripcion +
+        '</div>' +
+        '</div>' +
+        '</div>';
 
     html += '<div class="content"><table class="table">';
 

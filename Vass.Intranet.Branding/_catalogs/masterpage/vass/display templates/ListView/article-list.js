@@ -16,19 +16,23 @@
 function pagesTemplate(ctx) {
     var title = ctx.CurrentItem["Title"];
     var description = ctx.CurrentItem["Summary"];
-    var link = ctx.CurrentItem["URL"];
+    var link = ctx.CurrentItem["FileRef"];
     var image = ctx.CurrentItem["PublishingRollupImage"];
     var created = ctx.CurrentItem["Created"];
+    var date;
 
-    var dateParts = created.split(' ');
-    var date = dateParts[0];
+    if (created != null) {
+        var dateParts = created.split(' ');
+        date = dateParts[0];
+    }
+
 
     var div = $(image);
     var src = div.find('img').attr('src');
 
     var html = '';
 
-    html += '<div class="col article-card">';
+    html += '<div class="col-5 article-card">';
 
     html += '   <div class="row">';
     html += '       <div class="col">';
@@ -36,10 +40,14 @@ function pagesTemplate(ctx) {
     html += '           </div>';
     html += '       </div>';
     html += '       <div class="col-8 article-data">';
-    html += '           <p class="article-date">' + date+ '</p>';
+    if (date != null)
+        html += '           <p class="article-date">' + date + '</p>';
+
     html += '           <a href="' + link + '">' + title + '</a>';
+
     if (description != null)
-        html += '           <p>' + stripHtml(description, 155) + '</p>';
+        html += '           <p>' + stripHtml(description) + '</p>';
+
     html += '       </div>';
     html += '   </div>';
 

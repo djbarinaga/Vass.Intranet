@@ -3,13 +3,24 @@
     var courseContext = {};
     courseContext.Templates = {};
 
-    courseContext.Templates.Header = '<table class="table table-striped">';
+    courseContext.Templates.Header = courseHeader;
     courseContext.Templates.Footer = pagingControl;
     courseContext.Templates.Item = courseTemplate;
 
     SPClientTemplates.TemplateManager.RegisterTemplateOverrides(courseContext);
 
 })();
+
+function courseHeader(ctx) {
+    var html = '<table class="table table-striped">';
+    html += '<thead>';
+    html += '<tr>';
+    html += '<th>Curso</th>';
+    html += '<th>Duración</th>';
+    html += '</tr>';
+    html += '</thead>';
+    return html;
+}
 
 function courseTemplate(ctx) {
     var title = ctx.CurrentItem["Nombre_x0020_Curso"];

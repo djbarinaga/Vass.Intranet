@@ -104,7 +104,7 @@ function courseOnPostRender() {
 
             if (result) {
                 //Obtenemos las propiedades del usuario
-                var url = _spPageContextInfo.webAbsoluteUrl + "/_api/SP.UserProfiles.PeopleManager/GetMyProperties";
+                var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/GetByTitle('Empleados')/items?$filter=Email eq '" + _spPageContextInfo.userEmail + "'";
 
                 var $ajax = $.ajax({
                     url: url,
@@ -116,19 +116,18 @@ function courseOnPostRender() {
                 });
 
                 $ajax.done(function (data, textStatus, jqXHR) {
-                    var userProperties = data.d.UserProfileProperties.results;
+                    var results = data.d.results;
+                    var currentUser;
+                    if (results != null)
+                        currentUser = results[0];
 
-                    var listName = 'Solicitudes cursos';
+                    var listName = 'Solicitud Cursos-empleados';
                     var item = {
                         "__metadata": {
-                            "type": "SP.Data.Solicitudes_x0020_cursosListItem"
+                            "type": "SP.Data.Solicitud_x0020_CursosempleadosListItem"
                         },
-                        "CourseId": courseId,
-                        "Email": getPropertyValue(userProperties, "WorkEmail"),
-                        "FirstName": getPropertyValue(userProperties, "FirstName"),
-                        "Surname": getPropertyValue(userProperties, "LastName"),
-                        "Area": getPropertyValue(userProperties, "Department"),
-                        "Position": getPropertyValue(userProperties, "Title")
+                        "Nombre_x0020_cursoId": courseId,
+                        "Email_x0020_empleadoId": currentUser["ID"]
                     };
 
                     $.ajax({

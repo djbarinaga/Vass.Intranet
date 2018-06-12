@@ -3,74 +3,57 @@
     var stockContext = {};
     stockContext.Templates = {};
 
-    stockContext.Templates.Header = '<div id="my-stock">';
-    stockContext.Templates.Footer = '</div>';
+    stockContext.Templates.Header = headerTemplate;
+    stockContext.Templates.Footer = '</table>';
     stockContext.Templates.Item = stockTemplate;
-    stockContext.OnPostRender = stockOnPostRender; 
+    stockContext.Templates.Group = CustomGroup;
 
     SPClientTemplates.TemplateManager.RegisterTemplateOverrides(stockContext);
 
 })();
 
-function stockTemplate(ctx) {
-    var html = '<div class="row">';
-    
-    html += '<div class="col-4"><div class="text-center"><p class="big-circle bg-dark-blue">' + ctx.CurrentItem["Initial_x0020_Budget"] + '</p><p class="big">Presupuesto inicial</p></div></div>';
-    html += '<div class="col-4"><div class="text-center"><p class="big-circle bg-dark-blue">' + ctx.CurrentItem["Consumed_x0020_Bag"] + '</p><p class="big">Consumido</p></div></div>';
-    html += '<div class="col-4"><div class="text-center"><p class="big-circle bg-dark-blue">' + ctx.CurrentItem["Hours"] + '</p><p class="big">Horas de formación recibidas</p></div></div>';
+function headerTemplate(ctx) {
+    var html = '<table class="table table-striped" id="my-stock"><thead><tr>';
 
-    html += '</div>';
-    
+    html += '<th>Presupuesto inicial</th>';
+    html += '<th>Consumido bolsa</th>';
+    html += '<th>Consumido tripartira</th>';
+    html += '<th>Fecha</th>';
+    html += '<th>Horas</th>';
+    html += '<th>Comentarios</th>';
+
+    html += '</tr></thead>';
+
     return html;
 }
 
-function stockOnPostRender() {
-    if ($('#my-stocks button').length > 0) {
-        $('#my-stocks thead tr').append('<th/>');
+function stockTemplate(ctx) {
+    var presupuestoInicial = ctx.CurrentItem["Presupuesto_x0020_Inicial"];
+    var consumidoBolsa = ctx.CurrentItem["Consumido_x0020_Bolsa"];
+    var consumidoTripartita = ctx.CurrentItem["Consumido_x0020_Tripartita"];
+    var fecha = ctx.CurrentItem["Fecha"];
+    var horas = ctx.CurrentItem["Horas"];
+    var comentarios = ctx.CurrentItem["Comentario"];
 
-        $('#my-stocks button').each(function () {
-            $(this).on('click', function () {
-                var button = $(this);
-                var itemId = $(this).data('argument');
-                var message = $(this).data('message');
+    var html = '<tr>';
 
-                bootbox.setDefaults({
-                    closeButton: false
-                });
+    html += '<td>' + presupuestoInicial + '</td>';
+    html += '<td>' + consumidoBolsa + '</td>';
+    html += '<td>' + consumidoTripartita + '</td>';
+    html += '<td>' + fecha + '</td>';
+    html += '<td>' + horas + '</td>';
+    html += '<td>' + comentarios + '</td>';
+    
+    html += '</tr>';
 
-                bootbox.confirm(message, function (result) {
-                    if (result) {
-                        var listName = 'Solicitudes cursos';
-                        var item = {
-                            "__metadata": {
-                                "type": "SP.Data.Solicitudes_x0020_cursosListItem"
-                            },
-                            "AttendanceConfirmed": true
-                        };
+    return html;
+}
 
-                        $.ajax({
-                            url: _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items(" + itemId + ")",
-                            type: "POST",
-                            contentType: "application/json;odata=verbose",
-                            data: JSON.stringify(item),
-                            headers: {
-                                "Accept": "application/json;odata=verbose",
-                                "X-RequestDigest": $("#__REQUESTDIGEST").val(),
-                                "X-HTTP-Method": "MERGE",
-                                "If-Match": "*"
-                            },
-                            success: function (data) {
-                                bootbox.alert('La confirmación de asistencia al curso se ha realizado correctamente.', function () {
-                                    button.fadeOut();
-                                });
-                            },
-                            error: function (data) {
-                                console.log(data);
-                            }
-                        });
-                    }
-                });
-            })
-        })
+function CustomGroup(ctx, group, groupId, listItem, listSchema, level, expand) {
+    if (listItem[group] != '') {
+        var html = '<tr><td colspan="6"><h2>Año ' + listItem[group] + ' : </h2></td></tr>';
+        return html;
     }
+
+    return '';
 }

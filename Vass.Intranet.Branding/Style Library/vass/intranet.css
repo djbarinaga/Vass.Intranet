@@ -108,13 +108,50 @@ a, a:hover, a:visited{
     width:75%;
 }
 
+/*COLORES DE FUENTE*/
+.fg-dark-blue{
+    color: #003354;
+}
+
+.fg-red{
+    color:#ff0000;
+}
+
+.fg-grey{
+    color: #666666;
+}
+
+.fg-blue{
+    color: #50bbeb;
+}
+
+.fg-purple{
+    color: #6d6ba6;
+}
+
+.fg-violet{
+    color: #9b549e;
+}
+
+.fg-orange{
+    color: #f39a4a;
+}
+
+.fg-green{
+    color: #629e4d;
+}
+
+.fg-khaki{
+    color: #d3d612;
+}
+
 /*BACKGROUND*/
 .bg-dark-blue{
     background-color: #003354;
 }
 
 .bg-grey{
-    background-color: #666666;
+    background-color: #666666 !important;
 }
 
 .bg-blue{
@@ -142,7 +179,7 @@ a, a:hover, a:visited{
 }
 
 .bg-orange{
-    background-color: #f39a4a;
+    background-color: #f39a4a !important;
 }
 
 .bg-orange a, .bg-orange a:hover, .bg-orange a:visited{
@@ -294,6 +331,7 @@ ul.root > li ul li.selected {
     margin: 20px 10px;
     font-size: 2em;
 }
+
 .content {
     min-height: 400px;
     margin-top: 20px;
@@ -524,6 +562,7 @@ ul.root > li ul li.selected {
 
 #article #summary-zone{
     line-height: 28px;
+    padding-left: 15px;
 }
 
 #article #summary-zone #summary {
@@ -1120,29 +1159,10 @@ footer p{
 
 
 /*CÍRCULOS*/
-#my-stock .big-circle {
-    color: #fff;
-    border-radius: 50%;
-    line-height: 240px;
-    font-size: 2em !important;
-    width: 240px;
-    height: 240px;
-    margin: 0 auto;
-}
-
-#my-stock .big-circle {
-    color: #fff;
-    border-radius: 50%;
-    line-height: 240px;
-    font-size: 2em !important;
-    width: 240px;
-    height: 240px;
-    margin: 0 auto;
-}
-
-#my-stock .big {
-    font-size: 2em !important;
-    margin: 20px 0px;
+#my-stock h2{
+    color:#50bbeb;
+    font-size: 1.5em;
+    margin-top: 40px;
 }
 
 
@@ -1358,6 +1378,7 @@ footer p{
     padding: 30px 30px 20px 20px;
     margin-left: 10px;
     margin-right: 20px;
+    margin-bottom: 20px;
 }
 
 .article-list .article-card .row{
@@ -1407,4 +1428,53 @@ footer p{
 /*TABLA*/
 .table-list tr{
     border-bottom: solid 1px #333;
+}
+
+/*THRONES*/
+#thrones{
+    margin: 0px 40px;
+}
+#thrones .throne{
+    padding: 15px 30px;
+    background: #fafafa;
+}
+
+#thrones .throne img{
+    background-color: #fff;
+}
+
+/*RSS*/
+#xltTable{
+    width: 100% !important;
+}
+
+#header{
+    background-color:none !important;
+}
+
+#xltTable tr:not([id]) a{
+    font-size: 14px !important;
+}
+
+/*APROBACIÓN DE CURSOS*/
+#approve-buttons{
+    text-align: center;
+}
+
+#approve-buttons button{
+    margin-right: 20px;
+    padding: 10px 40px;
+    color:#fff;
+    border:none;
+    text-transform: lowercase;
+    font-weight: 500;
+}
+
+/*BOOTBOX*/
+.bootbox-prompt .bootbox-close-button{
+    display:none;
+}
+
+.bootbox-prompt .modal-title{
+    margin:0px;
 }

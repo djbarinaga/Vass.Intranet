@@ -28,36 +28,48 @@ Date.prototype.addMonths = function (value) {
         var $this = this;
         $(this).on('click', function () {
             var span = $(this).find('span');
-            $('#current-submenu').animate(
-                {
-                    width: 'toggle'
-                },
-                {
-                    complete: function () {
-                        $('#current-menu').animate(
-                            {
-                                width: 'toggle'
-                            },
-                            {
-                                complete: function () {
-                                    if ($(span).hasClass('icon-menu_cierra')) {
-                                        $(span).removeClass('icon-menu_cierra').addClass('icon-menu');
-                                        $('#page-title').animate({
-                                            'padding-left': '32px'
-                                        });
-                                    }
-                                    else {
-                                        $(span).removeClass('icon-menu').addClass('icon-menu_cierra');
-                                        $('#page-title').animate({
-                                            'padding-left': '0px'
-                                        });
-                                    }
-                                }
+
+            var toggleCurrentMenu = function () {
+                $('#current-menu').animate(
+                    {
+                        width: 'toggle'
+                    },
+                    {
+                        complete: function () {
+                            if ($(span).hasClass('icon-menu_cierra')) {
+                                $(span).removeClass('icon-menu_cierra').addClass('icon-menu');
+                                $('#page-title').animate({
+                                    'padding-left': '32px'
+                                });
                             }
-                        );
+                            else {
+                                $(span).removeClass('icon-menu').addClass('icon-menu_cierra');
+                                $('#page-title').animate({
+                                    'padding-left': '0px'
+                                });
+                            }
+                        }
                     }
-                }
-            );
+                );
+            }
+
+            if (!$('#current-submenu').data('hidden')) {
+                $('#current-submenu').animate(
+                    {
+                        width: 'toggle'
+                    },
+                    {
+                        complete: function () {
+                            toggleCurrentMenu();
+                        }
+                    }
+                );
+            }
+            else {
+                $('#current-submenu').hide();
+                toggleCurrentMenu();
+            }
+            
         });
     };
 }(jQuery));
@@ -1571,7 +1583,7 @@ Date.prototype.addMonths = function (value) {
                     var date = new Date(result.EventDate);
                     var dateAsString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
-                    $($this).append('<li><h4>' + title + '</h4>' + description + '<span class="date">' + dateAsString + '</span></li>');
+                    $($this).append('<li><h4>' + title + '</h4>' + description + '<span class="icon-calendario"></span>' + dateAsString + '</li>');
                 }
             }
         });
@@ -1744,32 +1756,39 @@ Date.prototype.addMonths = function (value) {
             }
 
             var people = data.value;
+            var counter = 0;
 
-            for (var i = 0; i < 4; i++) {
+            for (var i = 0; i < people.length; i++) {
+                if (counter == 4)
+                    break;
                 var user = people[i];
 
-                var jobTitle = '';
+                if (user.personType.subclass == "OrganizationUser") {
+                    var jobTitle = '';
 
-                if (user.jobTitle != null)
-                    jobTitle = user.jobTitle;
+                    if (user.jobTitle != null)
+                        jobTitle = user.jobTitle;
 
-                var url = 'https://eur.delve.office.com/?u=' + user.id + '&v=work';
+                    var url = 'https://eur.delve.office.com/?u=' + user.id + '&v=work';
 
-                var html = '';
+                    var html = '';
 
-                html += '<li>';
-                html += '   <div class="row">';
-                html += '       <div class="col-3 text-center">';
-                html += '           <span class="icon-usuario"></span>';
-                html += '       </div>';
-                html += '       <div class="col">';
-                html += '           <h4><a href="' + url + '" target="_blank">' + user.displayName + '</a></h4>';
-                html += '           <span>' + jobTitle + '</span>';
-                html += '       </div>';
-                html += '   </div>';
-                html += '</li>';
+                    html += '<li>';
+                    html += '   <div class="row">';
+                    html += '       <div class="col-3 text-center">';
+                    html += '           <span class="icon-usuario"></span>';
+                    html += '       </div>';
+                    html += '       <div class="col">';
+                    html += '           <h4><a href="' + url + '" target="_blank">' + user.displayName + '</a></h4>';
+                    html += '           <span>' + jobTitle + '</span>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</li>';
 
-                $($this).append(html);
+                    $($this).append(html);
+
+                    counter++;
+                }
             }
         }
     };
@@ -1848,6 +1867,125 @@ Date.prototype.addMonths = function (value) {
     };
 }(jQuery));
 
+/*THRONW PLUGIN*/
+(function ($) {
+    $.fn.thrones = function (options) {
+        var $this = this;
+        var url = "https://grupovass.sharepoint.com/es-es/businessvalue/_api/web/lists/getbytitle('Thrones')/items";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var results = data.d.results;
+
+            if (results != null && results.length > 0) {
+                var targaryen = new Array();
+                var stark = new Array();
+
+                for (var i = 0; i < results.length; i++){
+                    if (targaryen.length == 5)
+                        break;
+
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] > 10) {
+                        targaryen.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    if (stark.length == 5)
+                        break;
+
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] > 7 && result["Puntos_x0020_Total"] < 10) {
+                        stark.push(result);
+                    }
+                }
+
+                //TARGARYEN
+                var html = '<div class="row"><div class="col throne"><h2>Targaryen</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/targaryen.jpg"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="targaryenChart"></canvas></div></div>'
+                $($this).append(html);
+
+                var targaryenLabels = new Array();
+                var targaryenPoints = new Array();
+
+                for (var i = 0; i < targaryen.length; i++) {
+                    targaryenLabels.push(targaryen[i]["Nombre_x0020_Usuario"]);
+                    targaryenPoints.push(targaryen[i]["Puntos_x0020_Total"]);
+                }
+
+                var ctx = document.getElementById("targaryenChart").getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: targaryenLabels,
+                        datasets: [{
+                            label: 'Puntos',
+                            data: targaryenPoints,
+                            backgroundColor: 'rgba(255, 0, 0, 0.1)',
+                            borderColor: 'rgba(255, 0, 0, 0.3)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+
+                //STARK
+                html = '<div class="row"><div class="col throne"><h2>Stark</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/stark.png"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="starkChart"></canvas></div></div>'
+                $($this).append(html);
+
+                var starkLabels = new Array();
+                var starkPoints = new Array();
+
+                for (var i = 0; i < stark.length; i++) {
+                    starkLabels.push(stark[i]["Nombre_x0020_Usuario"]);
+                    starkPoints.push(stark[i]["Puntos_x0020_Total"]);
+                }
+
+                ctx = document.getElementById("starkChart").getContext('2d');
+                var myChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: starkLabels,
+                        datasets: [{
+                            label: 'Puntos',
+                            data: starkPoints,
+                            backgroundColor: 'rgba(170, 170, 170, 0.1)',
+                            borderColor: 'rgba(170, 170, 170, 0.3)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }]
+                        }
+                    }
+                });
+            }
+        });
+    };
+}(jQuery));
+
+
 
 jQuery(document).ready(function () {
     //localStorage.clear();
@@ -1898,6 +2036,10 @@ jQuery(document).ready(function () {
 
     $('#my-tasks').each(function () {
         $(this).mytasks();
+    });
+
+    $('#thrones').each(function () {
+        $(this).thrones();
     });
 });
 

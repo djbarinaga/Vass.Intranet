@@ -51,7 +51,7 @@
                     var col = $('<div class="col-4"/>');
                     highlightsRow.append(col);
 
-                    var title = $('<h3>' + title.trim() + '</h3>');
+                    var title = $('<h3><a href="' + fileRef + '">' + title.trim() + '</a></h3>');
                     col.append(title);
 
                     var row = $('<div class="row"/>');

@@ -18,8 +18,7 @@ function headerTemplate(ctx) {
 
     html += '<th>Curso</th>';
     html += '<th>Fecha de inicio</th>';
-    html += '<th>Duración</th>';
-    html += '<th>Tipo</th>';
+    html += '<th>Estado de aprobación</th>';
 
     html += '</tr></thead>';
 
@@ -27,22 +26,33 @@ function headerTemplate(ctx) {
 }
 
 function courseTemplate(ctx) {
-    var course = ctx.CurrentItem["Course"][0].lookupValue;
-    var courseId = ctx.CurrentItem["Course"][0].lookupId;
-    var startDate = ctx.CurrentItem["Curso_x003a_Fecha_x0020_de_x0020"].split(' ')[0];
-    var courseDate = toDate(startDate);
-    var itemId = ctx.CurrentItem["ID"];
+    var course = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupValue;
+    var startDate = ctx.CurrentItem.Fecha;
+    var courseId = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupId;
+    var status = ctx.CurrentItem._ModerationStatus;
+    var statusNumber = ctx.CurrentItem["_ModerationStatus."];
+    var itemId = ctx.CurrentItem.ID;
+    var courseDate = '';
+
+    if (startDate != '')
+        courseDate = toDate(startDate.split(' ')[0]);
 
     var html = '<tr>';
 
+    var statusClass = "fg-orange";
+
+    if (Number(statusNumber) == 0)
+        statusClass = "fg-green";
+    else if (Number(statusNumber) == 1)
+        statusClass = "fg-red";
+
     html += '<td><a href="curso.aspx?curso=' + courseId + '">' + course + '</a></td>';
-    html += '<td><span>' + startDate + '</span></td>';
-    html += '<td><span>' + ctx.CurrentItem["Curso_x003a_Horas_x0020_curso"] + ' hrs.</span></td>';
-    html += '<td><span>' + ctx.CurrentItem["Curso_x003a_Modalidad_x0020_del_"] + '</span></td>';
+    html += '<td><span>' + courseDate + '</span></td>';
+    html += '<td><span class="bold ' + statusClass + '">' + status + '</span></td>';
 
     var daysDiff = dateDiff(new Date(), courseDate);
 
-    if (daysDiff <= 5 && ctx.CurrentItem["AttendanceConfirmed.value"] == 0)
+    if (daysDiff <= 5 && ctx.CurrentItem["Confirmacion_x0020_Asistencia"] == "" && (Number(statusNumber) != 2 && Number(statusNumber) != 1))
         html += '<td class="text-center"><button type="button" class="btn btn-primary" data-argument="' + itemId + '" data-message="¿Desea confirmar la asistencia al curso ' + course + '?">Confirmar asistencia</button></td>';
 
     html += '</tr>';
@@ -66,12 +76,12 @@ function courseOnPostRender() {
 
                 bootbox.confirm(message, function (result) {
                     if (result) {
-                        var listName = 'Solicitudes cursos';
+                        var listName = 'Solicitud Cursos-empleados';
                         var item = {
                             "__metadata": {
-                                "type": "SP.Data.Solicitudes_x0020_cursosListItem"
+                                "type": "SP.Data.Solicitud_x0020_CursosempleadosListItem"
                             },
-                            "AttendanceConfirmed": true
+                            "Confirmacion_x0020_Asistencia": 1
                         };
 
                         $.ajax({

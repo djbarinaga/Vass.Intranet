@@ -41,7 +41,19 @@ namespace Migracion
 
     public struct Item
     {
+        [XmlAttribute]
+        public string Folder;
+
         public List<Field> Fields;
+    }
+
+    public struct File
+    {
+        [XmlAttribute]
+        public string Name;
+
+        [XmlAttribute]
+        public string Path;
     }
 
     class Program
@@ -53,6 +65,7 @@ namespace Migracion
         static Microsoft.SharePoint.Client.ListItemCollectionPosition itemPosition;
         static System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<Item>));
         static string importSite = "";
+        static List<File> files = new List<File>();
 
         static bool createLookupLists = true;
 
@@ -96,10 +109,6 @@ namespace Migracion
         {
             ClientContext context = new ClientContext(siteUrl);
             context.Credentials = new System.Net.NetworkCredential("vassdesk\\intranet1", "Lunes.123");
-            context.ExecutingWebRequest += delegate (object sender, WebRequestEventArgs e)
-            {
-                e.WebRequestExecutor.WebRequest.UserAgent = "NONISV|Contoso|GovernanceCheck/1.0";
-            };
 
             GetItems(context, listTitle);
             Console.Read();
@@ -111,10 +120,6 @@ namespace Migracion
 
             ClientContext context = new ClientContext(siteUrl);
             context.Credentials = new System.Net.NetworkCredential("vassdesk\\intranet1", "Lunes.123");
-            context.ExecutingWebRequest += delegate (object sender, WebRequestEventArgs e)
-            {
-                e.WebRequestExecutor.WebRequest.UserAgent = "NONISV|Contoso|GovernanceCheck/1.0";
-            };
 
             Web web = context.Web;
 
@@ -124,16 +129,32 @@ namespace Migracion
 
             foreach (List list in web.Lists)
             {
-                if (list.BaseType == BaseType.DocumentLibrary)
+                files = new List<File>();
+
+                //if (list.BaseType == BaseType.DocumentLibrary)
+                //{
+                //    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
+                //    GetFiles(list.RootFolder, context, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+
+
+                //}
+                Console.WriteLine("Obteniendo elementos de {0}", list.Title);
+                GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+
+                if (files.Count > 0)
                 {
-                    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
-                    GetFiles(list.RootFolder, context, Path.Combine(@"C:\Proyectos\Avantgarde\VASS\Vass.Intranet\Migracion\bin\Debug\xml\docs", list.Title));
+                    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<File>));
+
+                    using (StreamWriter sw = new StreamWriter(Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title, "files.xml"), true))
+                    {
+                        using (XmlWriter writer = XmlWriter.Create(sw))
+                        {
+                            serializer.Serialize(writer, files);
+                        }
+
+                        sw.Flush();
+                    }
                 }
-
-                itemCounter = 0;
-                Console.WriteLine();
-                GetItems(context, list.Title);
-
             }
 
             Console.WriteLine();
@@ -148,27 +169,34 @@ namespace Migracion
 
             foreach (var folder in mainFolder.Folders)
             {
-                string folderPath = string.Format(@"{0}\{1}\", pathString, folder.Name);
-                System.IO.Directory.CreateDirectory(folderPath);
-
-                GetFiles(folder, clientContext, folderPath);
+                GetFiles(folder, clientContext, pathString);
             }
 
             int counter = 0;
             int itemCount = mainFolder.Files.Count;
 
-            Console.Write("Obteniendo ficheros de {0}...\r", mainFolder.ServerRelativeUrl);
+            if (itemCount == 0)
+                Console.WriteLine("No hay ficheros en {0}", mainFolder.ServerRelativeUrl);
+            else
+            {
+                System.IO.Directory.CreateDirectory(pathString);
+                Console.Write("Obteniendo ficheros de {0}...\r", mainFolder.ServerRelativeUrl);
+            }
 
             foreach (var file in mainFolder.Files)
             {
                 var fileRef = file.ServerRelativeUrl;
                 var fileInfo = Microsoft.SharePoint.Client.File.OpenBinaryDirect(clientContext, fileRef);
                 var fileName = Path.Combine(pathString, file.Name);
+
+                files.Add(new File() { Name = file.Name, Path = mainFolder.ServerRelativeUrl });
+
                 using (var fileStream = System.IO.File.Create(fileName))
                 {
-
                     fileInfo.Stream.CopyTo(fileStream);
+                    fileStream.Close();
                 }
+
                 counter++;
 
                 int percentage = (counter * 100) / itemCount;
@@ -178,6 +206,7 @@ namespace Migracion
                 else
                     Console.WriteLine("Obteniendo ficheros de {0}... {1}%\r", mainFolder.ServerRelativeUrl, percentage);
             }
+
         }
 
         private static void GetItems(ClientContext context, string listTitle)
@@ -302,6 +331,180 @@ namespace Migracion
             }
         }
 
+        private static void GetItems(ClientContext context, Folder mainFolder, List list, string pathString)
+        {
+            string listTitle = list.Title;
+            try
+            {
+                context.Load(mainFolder, k => k.Folders);
+                context.ExecuteQuery();
+
+                foreach (var folder in mainFolder.Folders)
+                {
+                    string folderPath = Path.Combine(pathString, folder.Name);
+                    if (list.BaseType == BaseType.DocumentLibrary)
+                        folderPath = pathString;
+
+                    GetItems(context, folder, list, folderPath);
+                }
+
+                CamlQuery query = new CamlQuery();
+                //query = CamlQuery.CreateAllItemsQuery();
+                query.ViewXml = "<View><Query><Neq><FieldRef Name='ContentType'/><Value Type='Text'>Folder</Value></Neq></Query></View>";
+                query.FolderServerRelativeUrl = mainFolder.ServerRelativeUrl;
+                query.ListItemCollectionPosition = itemPosition;
+
+                ListItemCollection items = list.GetItems(query);
+                FileCollection fileCol = context.Web.GetFolderByServerRelativeUrl(mainFolder.ServerRelativeUrl).Files;
+
+                context.Load(list);
+                context.Load(items);
+                context.Load(list.Fields);
+                context.Load(fileCol);
+
+                context.ExecuteQuery();
+
+                itemPosition = items.ListItemCollectionPosition;
+
+                int queryItems = items.Count;
+                itemCounter = 0;
+
+                if (queryItems > 0)
+                {
+                    string msg = string.Format("Obteniendo elementos de {0}... 0%\r", mainFolder.ServerRelativeUrl);
+                    Console.Write(msg);
+
+                    List<Item> listItems = new List<Item>();
+
+                    foreach (ListItem listItem in items)
+                    {
+                        List<Field> fields = new List<Field>();
+
+                        if(listItem["ContentTypeId"] != null && !listItem["ContentTypeId"].ToString().Contains("0x012000"))
+                        {
+                            foreach (Microsoft.SharePoint.Client.Field field in list.Fields)
+                            {
+                                if (!field.Hidden && !field.ReadOnlyField)
+                                {
+                                    Field f = new Field();
+                                    f.Title = field.Title;
+                                    f.InternalName = field.InternalName;
+                                    f.FieldType = field.TypeAsString;
+
+                                    try
+                                    {
+                                        if (field.FieldTypeKind == FieldType.Lookup)
+                                        {
+                                            FieldLookupValue lookup = listItem[field.InternalName] as FieldLookupValue;
+                                            FieldLookup fLookup = (FieldLookup)field;
+                                            f.Value = lookup.LookupValue;
+
+                                            if (!string.IsNullOrEmpty(fLookup.LookupList))
+                                            {
+                                                if (!htLookupLists.ContainsKey(fLookup.LookupList))
+                                                {
+                                                    string lookupList = GetListTitle(context, fLookup.LookupList);
+                                                    htLookupLists.Add(fLookup.LookupList, lookupList);
+                                                }
+
+                                                f.LookupList = htLookupLists[fLookup.LookupList].ToString();
+                                            }
+
+                                            f.LookupField = fLookup.LookupField;
+                                        }
+                                        else if (field.FieldTypeKind == FieldType.User)
+                                        {
+                                            FieldUserValue user = listItem[field.InternalName] as FieldUserValue;
+                                            f.Value = user.LookupValue;
+                                        }
+                                        else if (field.FieldTypeKind == FieldType.Choice)
+                                        {
+                                            FieldChoice choice = field as FieldChoice;
+                                            f.Choices = choice.Choices;
+                                            f.Value = listItem[field.InternalName].ToString();
+                                        }
+                                        else
+                                        {
+                                            f.Value = listItem[field.InternalName].ToString();
+                                        }
+
+                                    }
+                                    catch
+                                    {
+                                        f.Value = string.Empty;
+                                    }
+
+                                    fields.Add(f);
+                                }
+
+                            }
+
+                            if (list.BaseType == BaseType.DocumentLibrary)
+                            {
+                                
+                                Microsoft.SharePoint.Client.File file = listItem.File;
+                                if(file != null)
+                                {
+                                    if (context.HasPendingRequest)
+                                        context.ExecuteQuery();
+
+                                    if (!Directory.Exists(pathString))
+                                        Directory.CreateDirectory(pathString);
+
+                                    string fileUrl = string.Format("{0}/{1}", mainFolder.ServerRelativeUrl, listItem["FileLeafRef"]);
+                                    FileInformation fileInfo = Microsoft.SharePoint.Client.File.OpenBinaryDirect(context, fileUrl);
+                                    string fileName = Path.Combine(pathString, listItem["FileLeafRef"].ToString());
+
+                                    using (FileStream fileStream = System.IO.File.Create(fileName))
+                                    {
+                                        fileInfo.Stream.CopyTo(fileStream);
+                                        fileStream.Close();
+                                    }
+                                }
+                            }
+
+                            Item item = new Item();
+                            item.Fields = fields;
+                            item.Folder = mainFolder.ServerRelativeUrl;
+                            listItems.Add(item);
+
+                            itemCounter++;
+
+                            int percentage = (itemCounter * 100) / queryItems;
+
+                            msg = string.Format("Obteniendo elementos de {0}... {1}%\r", mainFolder.ServerRelativeUrl, percentage);
+                            if (percentage < 100)
+                                Console.Write(msg);
+                            else
+                                Console.WriteLine(msg);
+                        }
+                    }
+
+                    if (listItems.Count > 0)
+                    {
+                        if (!Directory.Exists(pathString))
+                            Directory.CreateDirectory(pathString);
+
+                        CreateXml(pathString, listTitle, listItems);
+                    }
+                    else
+                    {
+                        msg = string.Format("Obteniendo elementos de {0}... 1000%", mainFolder.ServerRelativeUrl);
+                        Console.WriteLine(msg);
+                    }
+
+                    if (itemPosition != null)
+                    {
+                        GetItems(context, mainFolder, list, pathString);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+        }
+
         private static void CreateXml(string path, string listTitle, List<Item> listItems)
         {
             string filePath = string.Format("{0}\\{1}.xml", path, listTitle);
@@ -328,46 +531,6 @@ namespace Migracion
                 }
 
                 sw.Flush();
-            }
-        }
-
-        private static void DownloadFiles(Folder mainFolder, ClientContext clientContext, string listTitle, string pathString)
-        {
-            clientContext.Load(mainFolder, k => k.Files, k => k.Folders);
-            clientContext.ExecuteQuery();
-
-            foreach (var folder in mainFolder.Folders)
-            {
-                DownloadFiles(folder, clientContext, listTitle, pathString);
-            }
-
-            int filesCount = mainFolder.Files.Count;
-            int counter = 0;
-
-            foreach (var file in mainFolder.Files)
-            {
-                var fileRef = file.ServerRelativeUrl;
-                var fileInfo = Microsoft.SharePoint.Client.File.OpenBinaryDirect(clientContext, fileRef);
-                var fileName = Path.Combine(pathString, listTitle, mainFolder.Name);
-
-                Directory.CreateDirectory(fileName);
-                fileName = Path.Combine(fileName, file.Name);
-
-                using (var fileStream = System.IO.File.Create(fileName))
-                {
-                    fileInfo.Stream.CopyTo(fileStream);
-                }
-
-                counter++;
-                int percentage = (counter * 100) / filesCount;
-
-                string msg = string.Format("Descargando ficheros de {0}... {1}%\r", mainFolder.Name, percentage);
-
-                if (counter < filesCount)
-                    Console.Write(msg);
-                else
-                    Console.WriteLine(msg);
-
             }
         }
 
@@ -455,6 +618,8 @@ namespace Migracion
                 context.ExecuteQuery();
 
                 CheckFiles(context, list, directory);
+
+                CreateItems(directory, list.Title);
             }
             catch(Exception ex)
             {
@@ -465,6 +630,13 @@ namespace Migracion
         private static void CheckFiles(ClientContext context, List list, DirectoryInfo directory)
         {
             FileInfo[] files = directory.GetFiles();
+
+            while (files.Length == 0)
+            {
+                directory = directory.GetDirectories()[0];
+                files = directory.GetFiles();
+            }
+
             FileInfo file = files[0];
 
             List<Item> items = null;
@@ -475,13 +647,18 @@ namespace Migracion
             }
 
             CreateFields(context, list, items[1].Fields);
-
-            CreateItems(directory, list.Title);
         }
 
         private static void CreateItems(DirectoryInfo directory, string listTitle)
         {
-            Console.WriteLine("Obteniendo elementos a cargar...");
+
+            DirectoryInfo[] directories = directory.GetDirectories();
+
+            foreach(DirectoryInfo dir in directories)
+            {
+                CreateItems(dir, listTitle);
+            }
+
 
             FileInfo[] files = directory.GetFiles();
             List<Item> items = new List<Item>();
@@ -501,12 +678,34 @@ namespace Migracion
             int percentage = 0;
 
             Console.WriteLine("Elementos a cargar {0}", length);
-            Console.WriteLine("Conectando a {0}", importSite);
 
             ClientContext context = new ClientContext(importSite);
             context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
 
             List list = context.Web.Lists.GetByTitle(listTitle);
+            Folder rootFolder = list.RootFolder;
+
+            context.Load(list);
+            context.Load(rootFolder);
+            context.ExecuteQuery();
+
+            string folderUrl = rootFolder.ServerRelativeUrl;
+
+            if (!directory.Name.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
+            {
+                ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+
+                itemCreateInfo.UnderlyingObjectType = FileSystemObjectType.Folder;
+                itemCreateInfo.LeafName = directory.Name;
+
+                ListItem newItem = list.AddItem(itemCreateInfo);
+                newItem["Title"] = directory.Name;
+                newItem.Update();
+                context.ExecuteQuery();
+
+                folderUrl = list.RootFolder.ServerRelativeUrl + '/' + directory.Name;
+            }
+            
             FieldCollection listFields = list.Fields;
 
             context.Load(listFields, fields => fields.Include(field => field.Title, field => field.InternalName));
@@ -515,6 +714,10 @@ namespace Migracion
             foreach (Item item in items)
             {
                 ListItemCreationInformation itemCreateInfo = new ListItemCreationInformation();
+
+                if (!directory.Name.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
+                    itemCreateInfo.FolderUrl = folderUrl;
+
                 ListItem listItem = list.AddItem(itemCreateInfo);
 
                 foreach (Field field in item.Fields)
@@ -558,7 +761,7 @@ namespace Migracion
 
                 counter++;
                 percentage = (counter * 100) / length;
-                Console.Write("Creando elementos en {0}...{1}%\r", listTitle, percentage);
+                Console.Write("Creando elementos en {0}...{1}%\r", folderUrl, percentage);
             }
         }
 
@@ -713,6 +916,11 @@ namespace Migracion
             DirectoryInfo directory = new DirectoryInfo(Path.Combine(path, listTitle));
 
             FileInfo[] files = directory.GetFiles();
+            while(files.Length == 0)
+            {
+                directory = directory.GetDirectories()[0];
+                files = directory.GetFiles();
+            }
 
             foreach (FileInfo file in files)
             {

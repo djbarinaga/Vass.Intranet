@@ -49,7 +49,7 @@ a, a:hover, a:visited{
 }
 
 .bold{
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /*MÁRGENES*/
@@ -276,6 +276,18 @@ header > .row{
 
 .s4-tn li.static > ul a:hover{
     color: #fff;
+}
+
+#SearchBox{
+    width: 100%;
+}
+
+#SearchBox > div{
+    width: 100%;
+}
+
+#SearchBox input{
+    width: 94%;
 }
 
 .search-box{
@@ -524,16 +536,32 @@ ul.root > li ul li.selected {
     width: 370px;
 }
 
+#Value{
+    padding:5px !important;
+}
+
+.ms-ref-selSec > div{
+    background-color: #50BBEB;
+    border-radius: 20px;
+}
+
+.ms-ref-selSec a{
+    color: #fff !important;
+    font-weight: 500;
+}
+
 .ms-srch-hover-outerContainer{
     margin-left: -50px;
 }
 
 .ms-srchnav {
-    border-bottom: solid 1px #ccc;
+    border-bottom: solid 1px #50bbeb;
+    height: 26px;
 }
 
-.ms-srchnav-item {
-    border: solid 1px #fff;
+.ms-srchnav-item h2 a{
+    font-size: 1.2em;
+    font-weight: 600;
 }
 
 .ms-srchnav-item a{
@@ -541,11 +569,8 @@ ul.root > li ul li.selected {
 }
 
 .ms-srchnav-link-selected {
-    border-top: solid 1px #ccc;
-    border-left: solid 1px #ccc;
-    border-right: solid 1px #ccc;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    background-color: #50bbeb;
+    color: #fff !important;
 }
 
 .ms-ref-refiner a.ms-displayBlock {
@@ -554,7 +579,18 @@ ul.root > li ul li.selected {
 
 .ms-ref-refinername {
     font-size: 14px;
-    font-weight: 500;
+    font-weight: 600;
+}
+
+.ms-ref-refiner .ms-commandLink, .ms-ref-refiner .ms-commandLink:visited{
+    text-transform: lowercase;
+    color: #333;
+    text-align: right;
+    width: 100%;
+}
+
+.ms-ref-refiner .ms-commandLink > div, .ms-ref-refiner .ms-commandLink:visited > div{
+    font-size: 12px;
 }
 
 /*ARTICLE*/
@@ -582,6 +618,7 @@ ul.root > li ul li.selected {
     margin-top: 20px;
 }
 /*FIN ARTICLE*/
+
 /*MÓDULOS*/
 .module {
     margin-bottom: 20px;
@@ -594,7 +631,7 @@ ul.root > li ul li.selected {
 }
 
 .ms-webpart-chrome-title span{
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .ms-webpart-chrome-title h2 {
@@ -607,6 +644,24 @@ ul.root > li ul li.selected {
     padding:0px 20px;
 }
 /*FIN MÓDULOS*/
+
+.right-column{
+    background-color: #fafafa;
+    padding: 15px;
+}
+
+.right-column .ms-webpart-chrome-title {
+    background-color: #fafafa !important;
+    height: 45px !important;
+    margin-bottom: 0px;
+    padding-left: 0px !important;
+}
+
+.right-column .ms-webpart-chrome-title h2 span{
+    color: #333;
+    font-weight: 700!important;
+    font-size: 1.2em;
+}
 
 /*FOOTER*/
 footer {
@@ -654,7 +709,7 @@ footer p{
 
 #quickLinks li.group-list ul li a{
     color:#fff;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 #quickLinks li.group-list ul li a:hover{
@@ -998,7 +1053,7 @@ footer p{
     color: #022540;
     text-transform: uppercase;
     letter-spacing: 3px;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 #calendar .month .prev, #calendar .month .next {
@@ -1039,7 +1094,7 @@ footer p{
     display: inline-block;
     width: 13%;
     color: #022540;
-    font-weight: 500;
+    font-weight: 600;
     text-align: center;
 }
 
@@ -1225,7 +1280,7 @@ footer p{
 
 #wizard-indicators div p {
     color: #003454;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 20px !important;
     margin-top: 44px;
     float:left;
@@ -1286,7 +1341,7 @@ footer p{
     color:#fff;
     border:none;
     text-transform: lowercase;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 #wizard-buttons button.btn-grey:hover, #wizard-buttons button.btn-grey:focus{
@@ -1330,7 +1385,7 @@ footer p{
 }
 
 .thumbnail-container a{
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /*DOCUMENT LIST*/
@@ -1399,7 +1454,7 @@ footer p{
 }
 
 .article-list .article-data{
-    font-weight: 500;
+    font-weight: 600;
 }
 
 .article-list .article-data p{
@@ -1470,7 +1525,7 @@ footer p{
     color:#fff;
     border:none;
     text-transform: lowercase;
-    font-weight: 500;
+    font-weight: 600;
 }
 
 /*BOOTBOX*/
@@ -1489,6 +1544,7 @@ footer p{
     margin: 0px 15px;
     text-align: center;
     padding: 20px 0px;
+    border-radius: 5px;
 }
 
 .tile p{

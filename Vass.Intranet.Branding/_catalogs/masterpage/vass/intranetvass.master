@@ -71,11 +71,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         </SharePoint:AjaxDelta>
 
         <PublishingWebControls:EditModePanel runat="server">
-		    <style>
-                #s4-workspace{
-                    overflow-x: auto;
-                }
-		    </style>
+		    <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
 	    </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">

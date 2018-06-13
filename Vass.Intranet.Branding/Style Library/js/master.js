@@ -2056,9 +2056,9 @@ jQuery(document).ready(function () {
         $(this).searchbox();
     });
 
-    jQuery('.banner').each(function () {
-        $(this).banner();
-    });
+    //jQuery('.banner').each(function () {
+    //    $(this).banner();
+    //});
 
     jQuery('#calendar').each(function () {
         $(this).mycalendar();

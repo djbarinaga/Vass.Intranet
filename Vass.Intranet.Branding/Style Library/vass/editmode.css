@@ -1,3 +1,12 @@
 ﻿#s4-ribbonrow{
     display:block !important;
 }
+
+#s4-workspace{
+    overflow-x: auto !important;
+}
+
+.ms-ToolPaneOuter{
+    position:absolute;
+    z-index: 9999;
+}

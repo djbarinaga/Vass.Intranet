@@ -38,12 +38,14 @@ var menuIndex;
 
             if (activeMenu > -1) {
                 var submenu = menu[activeMenu].Nodes.results;
+                var hasItems = false;
 
                 if (submenu.length > 0) {
                     var ul = $('<ul/>');
 
                     for (var i = 0; i < submenu.length; i++) {
                         if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
+                            hasItems = true;
                             if (window.location.href.toLowerCase().indexOf(submenu[i].SimpleUrl.toLowerCase()) > -1) {
                                 $(ul).append('<li class="active"><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                             }
@@ -54,8 +56,11 @@ var menuIndex;
                         
                         
                     }
-                    $('#current-submenu').append(ul);
-                    $('#current-submenu').fadeIn('fast');
+
+                    if (hasItems) {
+                        $('#current-submenu').append(ul);
+                        $('#current-submenu').fadeIn('fast');
+                    }
                 }
                 else {
                     $('#current-submenu').fadeOut('fast');
@@ -69,6 +74,7 @@ var menuIndex;
                         var idx = $(this).data('menu');
                         if (idx != menuIndex) {
                             var submenu = menu[idx].Nodes.results;
+                            var hasItems = false;
 
                             if (submenu.length > 0) {
                                 var ul = $('<ul/>');
@@ -81,12 +87,15 @@ var menuIndex;
 
                                 $('#current-submenu').html('');
                                 $('#current-submenu').attr('data-hidden', 'true');
-                                $('#current-submenu').append(ul);
                                 $('#current-submenu').css('position', 'absolute');
                                 $('#current-submenu').css('z-index', '1');
                                 $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
                                 $('#current-submenu').css('height', $('#current-menu').height() + 132 + 'px'); // +80 padding
-                                $('#current-submenu').fadeIn('fast');
+
+                                if (hasItems) {
+                                    $('#current-submenu').append(ul);
+                                    $('#current-submenu').fadeIn('fast');
+                                }
                             }
                             else {
                                 $('#current-submenu').fadeOut('fast');

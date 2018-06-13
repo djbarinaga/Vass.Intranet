@@ -1825,10 +1825,14 @@ Date.prototype.addMonths = function (value) {
                 return;
             }
 
-            for (var i = 0; i < 4; i++) {
+            var length = tasks.length;
+            if (length > 4)
+                length = 4;
+
+            for (var i = 0; i < length; i++) {
                 var task = tasks[i];
 
-                var taskDate = task.startDateTime;
+                var taskDate = task.dueDateTime;
 
                 if (taskDate == null)
                     taskDate = task.createdDateTime;
@@ -1842,7 +1846,11 @@ Date.prototype.addMonths = function (value) {
 
                 var html = '';
 
-                html += '<li>';
+                if (dateDiff(taskDate, new Date()) < 0)
+                    html += '<li>';
+                else
+                    html += '<li class="fg-red">';
+
                 html += '   <h4>' + task.title + '</h4>';
                 html += '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>';
                 html += '</li>';
@@ -1985,7 +1993,45 @@ Date.prototype.addMonths = function (value) {
     };
 }(jQuery));
 
+/*TILES PLUGIN*/
+(function ($) {
+    $.fn.tiles = function (options) {
+        var $this = this;
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Aplicaciones')/items";
 
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var results = data.d.results;
+            
+            if (results != null && results.length > 0) {
+                var resultsLength = results.length;
+                
+                for (var i = 0; i < resultsLength; i++) {
+                    var result = results[i];
+                    var html = '';
+                    html += '<div class="col tile" style="background-color:' + result.Color + '">';
+
+                    html += '   <a href="' + result.URL.Url + '">';
+
+                    html += '       <img src="' + result.Imagen.Url + '"/>';  
+                    html += '       <p>' + result.Title + '</p>';
+
+                    html += '<div>';
+
+                    $($this).append(html);
+                }
+            }
+        });
+    };
+}(jQuery));
 
 jQuery(document).ready(function () {
     //localStorage.clear();
@@ -2040,6 +2086,10 @@ jQuery(document).ready(function () {
 
     $('#thrones').each(function () {
         $(this).thrones();
+    });
+
+    $('#tiles').each(function () {
+        $(this).tiles();
     });
 });
 

@@ -98,7 +98,7 @@
                                         </ul>
                                     </div>
                         </div>
-                        <div class="col-6 o-hidden pr-0" style="height:230px;background: url('/style library/images/calendar.png') no-repeat 55%;">
+                        <div class="col-6 o-hidden pr-0" style="height:241px;background: url('/style library/images/calendar.png') no-repeat 55%;">
                             <div class="event-today">
                                 <div class="event-date">
                                     <span class="event-day">Viernes</span>
@@ -132,15 +132,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="height: 100px;">
-                        <div class="col">
-                            <WebPartPages:WebPartZone runat="server" Title="Banner 2" ID="WebPartZone2" />
-                        </div>
-                        <div class="col">
-                            <WebPartPages:WebPartZone runat="server" Title="Banner 3" ID="WebPartZone3" />
-                                
-                            </div>
-                        </div>
+                    <div class="row" style="height: 100px;" id="tiles">
+                        
                     </div>
                 </div>
             </div>

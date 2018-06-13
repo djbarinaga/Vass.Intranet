@@ -29,8 +29,7 @@ function courseTemplate(ctx) {
     var course = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupValue;
     var startDate = ctx.CurrentItem.Fecha;
     var courseId = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupId;
-    var status = ctx.CurrentItem._ModerationStatus;
-    var statusNumber = ctx.CurrentItem["_ModerationStatus."];
+    var status = ctx.CurrentItem.Estado;
     var itemId = ctx.CurrentItem.ID;
     var courseDate = '';
 
@@ -41,9 +40,9 @@ function courseTemplate(ctx) {
 
     var statusClass = "fg-orange";
 
-    if (Number(statusNumber) == 0)
+    if (Number(status) == 0)
         statusClass = "fg-green";
-    else if (Number(statusNumber) == 1)
+    else if (Number(status) == 1)
         statusClass = "fg-red";
 
     html += '<td><a href="curso.aspx?curso=' + courseId + '">' + course + '</a></td>';
@@ -52,7 +51,7 @@ function courseTemplate(ctx) {
 
     var daysDiff = dateDiff(new Date(), courseDate);
 
-    if (daysDiff <= 5 && ctx.CurrentItem["Confirmacion_x0020_Asistencia"] == "" && (Number(statusNumber) != 2 && Number(statusNumber) != 1))
+    if (daysDiff <= 5 && ctx.CurrentItem["Confirmacion_x0020_Asistencia"] == "" && (Number(status) != 2 && Number(status) != 1))
         html += '<td class="text-center"><button type="button" class="btn btn-primary" data-argument="' + itemId + '" data-message="¿Desea confirmar la asistencia al curso ' + course + '?">Confirmar asistencia</button></td>';
 
     html += '</tr>';

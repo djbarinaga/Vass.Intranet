@@ -39,6 +39,10 @@ function courseTemplate(ctx) {
     var html = '<tr>';
 
     var statusClass = "fg-orange";
+    if (status == "")
+    {
+        status = "Pendiente";
+    }
 
     if (status == "Aprobado") {
         statusClass = "fg-green";

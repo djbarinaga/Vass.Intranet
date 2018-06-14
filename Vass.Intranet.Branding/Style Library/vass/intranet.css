@@ -1631,3 +1631,51 @@ footer p{
     width: 30px;
     border: solid 2px #fff;
 }
+
+/*ENCUESTAS*/
+.survey .ms-formlabel{
+    font-size: 1.3em;
+}
+
+.survey .ms-formtable{
+    margin-top: -40px;
+    margin-left: 20px;
+}
+
+.survey .ms-formbody{
+    border-bottom: solid 1px #ccc;
+}
+
+.survey .ms-formbody table{
+    width: 90%;
+    margin-left: 100px;
+}
+
+.survey .ms-gridT1{
+    font-weight: 500;
+    width:auto;
+}
+
+.survey .ms-descriptiontext{
+    display: none;
+}
+
+.survey .btn-grey, .survey .btn-grey:hover, .survey .btn-grey:focus{
+    background-color: #666;
+    width: 120px !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-family: "Montserrat" !important;
+    font-size: 14px !important;
+    border: none !important;
+}
+
+.survey .btn-orange, .survey .btn-orange:hover, .survey .btn-orange:focus{
+    background-color: #f39a4a;
+    width: 120px !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-family: "Montserrat" !important;
+    font-size: 14px !important;
+    border: none !important;
+}

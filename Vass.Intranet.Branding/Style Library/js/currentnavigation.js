@@ -23,13 +23,16 @@ var menuIndex;
             menu = data.d.MenuState.Nodes.results;
 
             for (var i = 0; i < menu.length; i++) {
-                if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
-                    $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
-                    activeMenu = i;
+                if (menu[i].Title.toLowerCase() != 'recientes') {
+                    if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
+                        $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                        activeMenu = i;
+                    }
+                    else {
+                        $(ul).append('<li><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                    }
                 }
-                else {
-                    $(ul).append('<li><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
-                }
+                
             }
 
             $($this).append(ul);

@@ -740,7 +740,6 @@ namespace Migracion
                 {
                     string filePath = Path.Combine(directory.FullName, item.Fields[0].Value);
 
-                    Console.Write("Subiendo fichero {0}...\r", filePath);
                     Microsoft.SharePoint.Client.File file = UploadFileSlicePerSlice(context, list, directory, item);
 
                     listItem = file.ListItemAllFields;
@@ -1060,6 +1059,8 @@ namespace Migracion
 
             // Get the size of the file.
             long fileSize = new FileInfo(fileName).Length;
+
+            Console.Write("Subiendo fichero {0} a {1}: 0 de {2}\r", file, docs.Name, BytesToSize(fileSize));
 
             if (fileSize <= blockSize)
             {

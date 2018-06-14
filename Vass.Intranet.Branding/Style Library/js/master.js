@@ -1008,7 +1008,15 @@ Date.prototype.addMonths = function (value) {
                                     currentAction++;
                                     setProgress();
 
-                                    createFolder(0);
+                                    var projectType = $('input[name=teamType]:checked').val();
+
+                                    if (projectType.toLowerCase() == 'gremio')
+                                        addTeamToList(function () {
+                                            $('.progress-bar').css('width', '100%');
+                                            $('#alert').text('Equipo creado');
+                                        });
+                                    else
+                                        createFolder(0);
                                 }
                             })
                         }
@@ -1277,7 +1285,7 @@ Date.prototype.addMonths = function (value) {
                 $('.progress-bar').css('width', '100%');
                 addTeamToList(function () {
                     $('#alert').text('Equipo creado');
-                    window.location.href = 'https://grupovass.sharepoint.com/es-es/mitrabajo/Lists/Teams/AllItems.aspx';
+                    window.location.href = 'https://grupovass.sharepoint.com/es-es/Lists/Teams/AllItems.aspx';
                 });
             }
         }
@@ -1292,7 +1300,7 @@ Date.prototype.addMonths = function (value) {
             };
 
             $.ajax({
-                url: "https://grupovass.sharepoint.com/es-es/mitrabajo/_api/web/lists/getbytitle('Teams')/items",
+                url: "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Teams')/items",
                 type: "POST",
                 contentType: "application/json;odata=verbose",
                 data: JSON.stringify(item),
@@ -1559,10 +1567,10 @@ Date.prototype.addMonths = function (value) {
 
         $(parent).css('cursor', 'pointer');
         $(parent).on('click', function () {
-            window.location.href = 'https://grupovass.sharepoint.com/es-es/businessvalue/marketing/Paginas/eventos.aspx';
+            window.location.href = 'https://grupovass.sharepoint.com/es-es/marketing/Paginas/eventos.aspx';
         })
 
-        var url = "https://grupovass.sharepoint.com/es-es/businessvalue/marketing/_api/web/lists/GetByTitle('Eventos')/items?$top=2&$orderby=EventDate";
+        var url = "https://grupovass.sharepoint.com/es-es/marketing/_api/web/lists/GetByTitle('Eventos')/items?$top=2&$orderby=EventDate";
 
         var $ajax = $.ajax({
             url: url,
@@ -1574,6 +1582,11 @@ Date.prototype.addMonths = function (value) {
         });
 
         $ajax.done(function (data, textStatus, jqXHR) {
+            if (data.d.results == null || data.d.results.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
             var results = data.d.results;
             if (results != null && results.length > 0) {
                 for (var i = 0; i < results.length; i++) {
@@ -1690,26 +1703,137 @@ Date.prototype.addMonths = function (value) {
 
             var teams = data.value;
 
+            var renderTeams = function (index) {
+                var team = teams[index];
+
+                var renderTeamInfo = function (channelData) {
+                    var channel = channelData.value[0];
+
+                    var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
+
+                    var bgColor = getIconColor();
+
+                    var html = '';
+
+                    html += '<li>';
+                    html += '   <div class="row">';
+                    html += '       <div class="col-3 text-center">';
+                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                    html += '       </div>';
+                    html += '       <div class="col">';
+                    html += '           <h4><a href="' + url + '" target="_blank">' + team.displayName + '</a></h4>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</li>';
+
+                    $($this).append(html);
+
+                    if (index < teams.length) {
+                        var currentIndex = index + 1;
+                        renderTeams(currentIndex);
+                    }
+                }
+
+                endpoint = '/groups/' + team.id + '/channels';
+
+                execute({
+                    clientId: variables.clientId.Graph,
+                    version: "beta",
+                    endpoint: endpoint,
+                    type: "GET",
+                    callback: renderTeamInfo
+                });
+            }
+
+            renderTeams(0);
+        }
+
+        function getIconColor() {
+            var bgColors = ['bg-blue', 'bg-purple', 'bg-violet', 'bg-orange', 'bg-green', 'bg-khaki'];
+
+            return bgColors[Math.floor(Math.random() * bgColors.length)];
+        }
+
+        function getTeamIcon(teamName) {
+            var words = teamName.split(' ');
+            var icon = '';
+
+            for (var i = 0; i < 1; i++) {
+                var firstLetter = words[i].substring(0, 1).toUpperCase();
+                icon += firstLetter;
+            }
+
+            return icon;
+        }
+    };
+}(jQuery));
+
+/*MIS PROYECTOS PLUGIN*/
+(function ($) {
+    $.fn.myjoinedprojects = function (options) {
+        var $this = this;
+
+        var guilds;
+
+        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Teams')/items?$filter=TeamType eq 'Proyecto'";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            guilds = data.d.results;
+
+            setContext(variables.clientId.Graph);
+            var $this = $(this);
+
+            var endpoint = "/groups";
+
+            execute({
+                clientId: variables.clientId.Graph,
+                version: "v1.0",
+                endpoint: endpoint,
+                type: "GET",
+                callback: render
+            });
+        });
+
+
+
+        function render(data) {
+            if (data.value.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            var teams = data.value;
+
             for (var i = 0; i < teams.length; i++) {
                 var team = teams[i];
 
-                var bgColor = getIconColor();
+                if (isGuild(team.displayName)) {
+                    var bgColor = getIconColor();
 
-                var html = '';
+                    var html = '';
 
-                html += '<li>';
-                html += '   <div class="row">';
-                html += '       <div class="col-3 text-center">';
-                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                html += '       </div>';
-                html += '       <div class="col">';
-                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                html += '           <span>' + team.description + '</span>';
-                html += '       </div>';
-                html += '   </div>';
-                html += '</li>';
+                    html += '<li>';
+                    html += '   <div class="row">';
+                    html += '       <div class="col-3 text-center">';
+                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                    html += '       </div>';
+                    html += '       <div class="col">';
+                    html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</li>';
 
-                $($this).append(html);
+                    $($this).append(html);
+                }
             }
         }
 
@@ -1729,6 +1853,125 @@ Date.prototype.addMonths = function (value) {
             }
 
             return icon;
+        }
+
+        function isGuild(teamName) {
+            var value = false;
+
+            for (var i = 0; i < guilds.length; i++) {
+                var guild = guilds[i];
+
+                if (guild.Title == teamName) {
+                    value = true;
+                    break;
+                }
+            }
+
+            return value;
+        }
+    };
+}(jQuery));
+
+/*MIS GREMIOS PLUGIN*/
+(function ($) {
+    $.fn.myjoinedguilds = function (options) {
+        var $this = this;
+
+        var guilds;
+
+        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Teams')/items?$filter=TeamType eq 'Gremio'";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            guilds = data.d.results;
+
+            setContext(variables.clientId.Graph);
+            var $this = $(this);
+
+            var endpoint = "/groups";
+
+            execute({
+                clientId: variables.clientId.Graph,
+                version: "v1.0",
+                endpoint: endpoint,
+                type: "GET",
+                callback: render
+            });
+        });
+
+        
+
+        function render(data) {
+            if (data.value.length == 0) {
+                $($this).closest('.col').hide();
+                return;
+            }
+
+            var teams = data.value;
+
+            for (var i = 0; i < teams.length; i++) {
+                var team = teams[i];
+
+                if (isGuild(team.displayName)) {
+                    var bgColor = getIconColor();
+
+                    var html = '';
+
+                    html += '<li>';
+                    html += '   <div class="row">';
+                    html += '       <div class="col-3 text-center">';
+                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                    html += '       </div>';
+                    html += '       <div class="col">';
+                    html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                    html += '       </div>';
+                    html += '   </div>';
+                    html += '</li>';
+
+                    $($this).append(html);
+                }
+            }
+        }
+
+        function getIconColor() {
+            var bgColors = ['bg-blue', 'bg-purple', 'bg-violet', 'bg-orange', 'bg-green', 'bg-khaki'];
+
+            return bgColors[Math.floor(Math.random() * bgColors.length)];
+        }
+
+        function getTeamIcon(teamName) {
+            var words = teamName.split(' ');
+            var icon = '';
+
+            for (var i = 0; i < 1; i++) {
+                var firstLetter = words[i].substring(0, 1).toUpperCase();
+                icon += firstLetter;
+            }
+
+            return icon;
+        }
+
+        function isGuild(teamName) {
+            var value = false;
+
+            for (var i = 0; i < guilds.length; i++) {
+                var guild = guilds[i];
+
+                if (guild.Title == teamName) {
+                    value = true;
+                    break;
+                }
+            }
+
+            return value;
         }
     };
 }(jQuery));
@@ -1820,43 +2063,55 @@ Date.prototype.addMonths = function (value) {
             var allTasks = data.value;
 
             var tasks = getPendingTasks(allTasks);
-            if (tasks.length == 0) {
-                $($this).closest('.col').hide();
-                return;
-            }
 
-            var length = tasks.length;
-            if (length > 4)
-                length = 4;
+            getFormacionTasks(function (data) {
+                for (var i = 0; i < data.length; i++) {
+                    tasks.push(data[i]);
+                }
 
-            for (var i = 0; i < length; i++) {
-                var task = tasks[i];
+                if (tasks.length == 0) {
+                    $($this).closest('.col').hide();
+                    return;
+                }
 
-                var taskDate = task.dueDateTime;
+                var length = tasks.length;
+                if (length > 4)
+                    length = 4;
 
-                if (taskDate == null)
-                    taskDate = task.createdDateTime;
+                for (var i = 0; i < length; i++) {
+                    var task = tasks[i];
 
-                taskDate = taskDate.split('T');
-                taskDate = taskDate[0];
+                    var taskDate = task.dueDateTime;
 
-                taskDate = new Date(taskDate);
+                    if (taskDate == null)
+                        taskDate = task.createdDateTime;
 
-                var taskDateString = taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear();
+                    taskDate = taskDate.split('T');
+                    taskDate = taskDate[0];
 
-                var html = '';
+                    taskDate = new Date(taskDate);
 
-                if (dateDiff(taskDate, new Date()) < 0)
-                    html += '<li>';
-                else
-                    html += '<li class="fg-red">';
+                    var taskDateString = taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear();
 
-                html += '   <h4>' + task.title + '</h4>';
-                html += '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>';
-                html += '</li>';
+                    var html = '';
 
-                $($this).append(html);
-            }
+                    if (dateDiff(taskDate, new Date()) < 0)
+                        html += '<li>';
+                    else
+                        html += '<li class="fg-red">';
+
+                    if (task.link == null)
+                        html += '   <h4>' + task.title + '</h4>';
+                    else
+                        html += '   <h4><a class="fg-red" href="' + task.link + '">' + task.title + '</a></h4>';
+
+                    html += '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>';
+                    html += '</li>';
+
+                    $($this).append(html);
+                }
+
+            });
         }
 
         function getPendingTasks(allTasks) {
@@ -1871,6 +2126,48 @@ Date.prototype.addMonths = function (value) {
             }
 
             return tasks;
+        }
+
+        function getFormacionTasks(callback) {
+            var url = "https://grupovass.sharepoint.com/es-es/formacion/_api/web/lists/getbytitle('Solicitud Cursos-empleados')/items?$select=Confirmacion_x0020_Asistencia,Nombre_x0020_curso/Fecha_x0020_Inicio,Nombre_x0020_curso/Nombre_x0020_Curso,Email_x0020_empleado/Email&$expand=Email_x0020_empleado,Nombre_x0020_curso&$filter=Email_x0020_empleado/Email eq '" + _spPageContextInfo.userEmail + "'";
+
+            var $ajax = $.ajax({
+                url: url,
+                type: "GET",
+                dataType: "json",
+                headers: {
+                    Accept: "application/json;odata=verbose"
+                }
+            });
+
+            var tasksArray = new Array();
+
+            $ajax.done(function (data, textStatus, jqXHR) {
+                var results = data.d.results;
+
+                if (results != null && results.length > 0) {
+                    for (var i = 0; i < results.length; i++) {
+                        var result = results[i];
+
+                        var courseDate = result.Nombre_x0020_curso.Fecha_x0020_Inicio;
+
+                        if (courseDate != null) {
+                            var daysDiff = dateDiff(new Date(), new Date(courseDate.split('T')[0]));
+
+                            if (daysDiff <= 5 && result["Confirmacion_x0020_Asistencia"] == null) {
+                                var task = new Object();
+                                task.title = "Confirmación de asistencia al curso " + result.Nombre_x0020_curso.Nombre_x0020_Curso;
+                                task.dueDateTime = courseDate;
+                                task.link = 'https://grupovass.sharepoint.com/es-es/formacion/Paginas/mis-cursos.aspx';
+                                tasksArray.push(task);
+                            }
+                        }
+                        
+                    }
+
+                    callback(tasksArray);
+                }
+            });
         }
     };
 }(jQuery));
@@ -1918,7 +2215,7 @@ Date.prototype.addMonths = function (value) {
                 }
 
                 //TARGARYEN
-                var html = '<div class="row"><div class="col throne"><h2>Targaryen</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/targaryen.jpg"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="targaryenChart"></canvas></div></div>'
+                var html = '<div class="row"><div class="col throne"><h2>Targaryen</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/targaryen.png"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="targaryenChart"></canvas></div></div>'
                 $($this).append(html);
 
                 var targaryenLabels = new Array();
@@ -1954,7 +2251,7 @@ Date.prototype.addMonths = function (value) {
                 });
 
                 //STARK
-                html = '<div class="row"><div class="col throne"><h2>Stark</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/stark.png"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="starkChart"></canvas></div></div>'
+                html = '<div class="row"><div class="col throne"><h2>Stark</h2><div class="row"><div class="col-4"><img class="img-fluif" src="/es-es/businessvalue/PublishingImages/winter.png"></div><div class="col"><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin finibus, dolor vitae vulputate lobortis, nisi leo placerat tortor, pulvinar ultrices ex nisi eget sem.</p></div></div></div><div class="col"><canvas id="starkChart"></canvas></div></div>'
                 $($this).append(html);
 
                 var starkLabels = new Array();
@@ -1988,6 +2285,133 @@ Date.prototype.addMonths = function (value) {
                         }
                     }
                 });
+            }
+        });
+    };
+}(jQuery));
+
+/*THRONES-SUMMARY PLUGIN*/
+(function ($) {
+    $.fn.thronesSummary = function (options) {
+        var $this = this;
+        var url = "https://grupovass.sharepoint.com/es-es/businessvalue/_api/web/lists/getbytitle('Thrones')/items";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var results = data.d.results;
+
+            if (results != null && results.length > 0) {
+                var targaryen = new Array();
+                var stark = new Array();
+                var lannister = new Array();
+                var tyrell = new Array();
+                var baratheon = new Array();
+                var tully = new Array();
+                var mormont = new Array();
+
+                for (var i = 0; i < results.length; i++) {
+                    if (targaryen.length == 5)
+                        break;
+
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 90) {
+                        targaryen.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 80 && result["Puntos_x0020_Total"] < 90) {
+                        stark.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 70 && result["Puntos_x0020_Total"] < 80) {
+                        lannister.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 60 && result["Puntos_x0020_Total"] < 70) {
+                        tyrell.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 50 && result["Puntos_x0020_Total"] < 60) {
+                        baratheon.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] >= 40 && result["Puntos_x0020_Total"] < 50) {
+                        tully.push(result);
+                    }
+                }
+
+                for (var i = 0; i < results.length; i++) {
+                    var result = results[i];
+                    if (result["Puntos_x0020_Total"] < 40) {
+                        mormont.push(result);
+                    }
+                }
+
+                var html = '';
+                html += '<div class="main"><div class="tile-summary">';
+                html += '   <span class="notify-badge bg-targaryen">' + targaryen.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/targaryen.png" class="img-thumbnail"/>';
+                html += '</div></div>';
+
+                $($this).append(html);
+
+                html = '<div class="secondary">';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-stark">' + stark.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/winter.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-lannister">' + lannister.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/hear.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-tyrell">' + tyrell.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/growing.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-baratheon">' + baratheon.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/our.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-tully">' + tully.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/family.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '<div class="tile-summary">';
+                html += '   <span class="notify-badge bg-mormont">' + mormont.length + '</span>';
+                html += '   <img src="/es-es/businessvalue/PublishingImages/mormont.png" class="img-thumbnail"/>';
+                html += '</div>';
+
+                html += '</div>';
+
+                $($this).append(html);
             }
         });
     };
@@ -2076,6 +2500,14 @@ jQuery(document).ready(function () {
         $(this).myjoinedteams();
     });
 
+    $('#my-guilds').each(function () {
+        $(this).myjoinedguilds();
+    });
+
+    $('#my-projects').each(function () {
+        $(this).myjoinedprojects();
+    });
+
     $('#my-people').each(function () {
         $(this).peoplearoundme();
     });
@@ -2086,6 +2518,10 @@ jQuery(document).ready(function () {
 
     $('#thrones').each(function () {
         $(this).thrones();
+    });
+
+    $('#thrones-resume').each(function () {
+        $(this).thronesSummary();
     });
 
     $('#tiles').each(function () {

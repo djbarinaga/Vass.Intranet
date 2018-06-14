@@ -134,9 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="height: 100px;" id="tiles">
-                        
-                    </div>
+                    <div class="row" style="height: 100px;" id="tiles"></div>
                 </div>
             </div>
         </div>
@@ -162,6 +160,14 @@
                             <p class="panel-title"><span class="font-weight-semi-bold">Tareas</span> pendientes</p>
                             <ul id="my-tasks"></ul>
                           </div>
+                        </div>
+                    </div>
+                </div>
+                <h2 id="page-title">Charlas @innovation depot</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-throne">
+                            <div id="thrones-resume"></div>
                         </div>
                     </div>
                 </div>

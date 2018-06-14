@@ -89,7 +89,7 @@ function setModerationStatus(moderationStatus) {
     bootbox.confirm(message, function (result) {
         if (result) {
             bootbox.prompt({
-                title: "Comenarios",
+                title: "Comentarios",
                 inputType: 'textarea',
                 callback: function (result) {
                     if (result != null) {

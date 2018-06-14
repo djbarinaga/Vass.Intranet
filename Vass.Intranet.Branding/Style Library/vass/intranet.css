@@ -114,7 +114,7 @@ a, a:hover, a:visited{
 }
 
 .fg-red{
-    color:#ff0000;
+    color:#D1232B !important;
 }
 
 .fg-grey{
@@ -146,6 +146,40 @@ a, a:hover, a:visited{
 }
 
 /*BACKGROUND*/
+
+/*.bg-throne{
+    background: url(https://grupovass.sharepoint.com/es-es/businessvalue/PublishingImages/iron-throne.jpg) no-repeat;
+    background-size: cover;
+}*/
+
+.bg-targaryen{
+    background-color: #D1232B;
+}
+
+.bg-stark{
+    background-color: #939393;
+}
+
+.bg-lannister{
+    background-color: #F0B722;
+}
+
+.bg-tyrell{
+    background-color:#BB9917;
+}
+
+.bg-baratheon{
+    background-color:#bb9917;
+}
+
+.bg-tully{
+    background-color:#022140;
+}
+
+.bg-mormont{
+    background-color:#497A32;
+}
+
 .bg-dark-blue{
     background-color: #003354;
 }
@@ -1463,14 +1497,14 @@ footer p{
 }
 
 /*MY TEAMS*/
-#my-teams .team-icon{
+#my-teams .team-icon, #my-projects .team-icon, #my-guilds .team-icon{
     height: 45px;
     width: 45px;
     padding-top: 15px;
     color: #fff;
 }
 
-#my-teams h4 a{
+#my-teams h4 a, #my-projects h4 a, #my-guilds h4 a{
     color: #333;
 }
 
@@ -1549,4 +1583,51 @@ footer p{
 
 .tile p{
     color: #fff;
+}
+
+#thrones-resume{
+    background-color: #fafafa;
+    display: block;
+    width: 100%;
+    overflow: auto;
+    padding: 30px 0px;
+}
+
+.tile-summary{
+    position:relative;
+    padding-top:20px;
+    display:inline-block;
+    margin-right: 40px;
+}
+
+#thrones-resume .main{
+    width:100%;
+    text-align:center;
+}
+
+#thrones-resume .secondary{
+    width: 75%;
+    text-align: center;
+    margin: 0 auto;
+}
+
+#thrones-resume .main .tile-summary{
+    float:none;
+}
+
+.tile-summary img{
+    border-radius: 0px;
+}
+
+.notify-badge{
+    position: absolute;
+    right:-13px;
+    top:10px;
+    text-align: center;
+    border-radius: 50%;
+    color:white;
+    padding: 3px;
+    height: 30px;
+    width: 30px;
+    border: solid 2px #fff;
 }

@@ -26,6 +26,9 @@
             var course = getUrlParam('c');
             if (course != null && course != '') {
                 $('select[title="Curso"]').val(course);
+                var pageTitle = 'Encuesta formación: ' + $('select[title="Curso"] option:selected').text();
+
+                $('#page-title').text(pageTitle);
             }
         })
     </script>

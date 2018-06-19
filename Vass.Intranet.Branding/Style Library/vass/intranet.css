@@ -29,6 +29,12 @@ p, p span {
     font-size: 14px !important;
 }
 
+.center-icon span{
+    font-size: 1.5em;
+    position: relative;
+    top: 4px;
+}
+
 .container-fluid{
     padding-left: 0px;
     padding-right:0px;
@@ -93,6 +99,12 @@ a, a:hover, a:visited{
 .br-10{
     border-radius:10px;
 }
+
+.b-top{
+    border-top: solid 1px #333;
+    padding-top: 15px;
+}
+
 
 /*ALTURAS*/
 .h-50p {
@@ -889,6 +901,12 @@ footer p{
     margin-right:5px;
 }
 
+.panel .toolbar span{
+    top: 6px;
+    position: relative;
+    font-size: 2.2em;
+}
+
 
 /*DATE*/
 .date:before{
@@ -1249,6 +1267,12 @@ footer p{
     color: #333;
 }
 
+.events .event-inscription span{
+    font-size: 2em;
+    position: relative;
+    top: 9px;
+}
+
 
 /*CÍRCULOS*/
 #my-stock h2{
@@ -1386,6 +1410,98 @@ footer p{
     background-color: #f39a4a;
 }
 
+/*Class*/
+.wizard-indicators div{
+    background-color: #FAFAFA;
+    margin-right: 20px;
+    padding: 15px;
+}
+
+.wizard-indicators div .circle{
+    background-color: #50bbeb;
+}
+
+.wizard-indicators div.active{
+    background: #50bbeb;
+}
+
+.wizard-indicators div.active .circle{
+    background-color: #003454;
+}
+
+.wizard-indicators div p {
+    color: #003454;
+    font-weight: 600;
+    font-size: 20px !important;
+}
+
+.wizard-indicators div.active p {
+    color: #fff;
+}
+
+.wizard-indicators .circle {
+    height: 73px;
+    border-radius: 50%;
+    width: 73px;
+    font-size: 46px !important;
+    margin:0 auto;
+    color: #fff;
+}
+
+.wizard-indicators div.completed{
+    background-color: #666;
+}
+
+.wizard-indicators div.completed p{
+    color:#fff;
+}
+
+.wizard-indicators div.completed .circle{
+    background-color: #fff;
+    color:#50BBEB
+}
+
+.wizard-steps {
+    margin-top: 100px;
+    min-height: 150px;
+    clear: both;
+}
+
+.wizard-steps .form-control{
+    height: 60px;
+    border-radius: 0;
+}
+
+.wizard-steps .form-control:focus{
+    border-color: #ababab;
+    box-shadow:none;
+}
+
+.wizard-buttons{
+    text-align: center;
+}
+
+.wizard-buttons button{
+    margin-right: 20px;
+    padding: 10px 40px;
+    color:#fff;
+    border:none;
+    text-transform: lowercase;
+    font-weight: 600;
+}
+
+.wizard-buttons button.btn-grey:hover, .wizard-buttons button.btn-grey:focus{
+    background-color: #666;
+}
+
+.wizard-buttons button.btn-orange:hover, .wizard-buttons button.btn-orange:focus{
+    background-color: #f39a4a;
+}
+
+.wizard-steps h2{
+    font-size: 2em !important;
+}
+
 /*PAGINACIÓN*/
 
 .paging{
@@ -1506,6 +1622,23 @@ footer p{
 
 #my-teams h4 a, #my-projects h4 a, #my-guilds h4 a{
     color: #333;
+}
+
+div#my-teams .col-5, div#my-projects .col-5, div#my-guilds .col-5{
+    background-color: #fafafa;
+    padding: 15px;
+    height: 90px;
+    margin-right: 20px;
+}
+
+div#my-teams a, div#my-projects a, div#my-guilds a{
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+div#my-teams .team-icon, div#my-projects .team-icon, div#my-guilds .team-icon{
+    height: 60px;
+    width: 60px;
 }
 
 /*MY PEOPLE*/
@@ -1633,6 +1766,9 @@ footer p{
 }
 
 /*ENCUESTAS*/
+.survey *{
+    font-family: 'Montserrat', sans-serif;
+}
 .survey .ms-formlabel{
     font-size: 1.3em;
 }
@@ -1678,4 +1814,14 @@ footer p{
     font-family: "Montserrat" !important;
     font-size: 14px !important;
     border: none !important;
+}
+
+.form-control{
+    height: 60px;
+    border-radius: 0;
+}
+
+.form-control:focus{
+    border-color: #ababab;
+    box-shadow:none;
 }

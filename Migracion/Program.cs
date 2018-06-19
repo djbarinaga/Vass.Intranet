@@ -719,82 +719,89 @@ namespace Migracion
 
             foreach (Item item in items)
             {
-                Console.WriteLine();
-
-                if(list.BaseType == BaseType.DocumentLibrary)
+                try
                 {
-                    context = new ClientContext(importSite);
-                    context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
-                }
+                    Console.WriteLine();
 
-                itemCreateInfo = new ListItemCreationInformation();
-
-                if (!currentDirectory.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
-                    itemCreateInfo.FolderUrl = folderUrl;
-                else if (item.Folder != null && list.BaseType == BaseType.DocumentLibrary)
-                    itemCreateInfo.FolderUrl = item.Folder;
-
-                ListItem listItem;
-
-                if(list.BaseType == BaseType.DocumentLibrary)
-                {
-                    string filePath = Path.Combine(directory.FullName, item.Fields[0].Value);
-
-                    Microsoft.SharePoint.Client.File file = UploadFileSlicePerSlice(context, list, directory, item);
-
-                    listItem = file.ListItemAllFields;
-                }
-                else
-                {
-                    listItem = list.AddItem(itemCreateInfo);
-                }
-
-                foreach (Field field in item.Fields)
-                {
-                    try
+                    if (list.BaseType == BaseType.DocumentLibrary)
                     {
-                        if (!string.IsNullOrEmpty(field.Value))
-                        {
-                            if (field.Title != "ID" && field.InternalName != "ContentType" && field.InternalName != "Attachments")
-                            {
-                                var targetField = listFields.FirstOrDefault(f => f.Title == field.Title);
-                                if (targetField != null)
-                                {
-                                    switch (field.FieldType)
-                                    {
-                                        case "DateTime":
-                                            listItem[targetField.InternalName] = Convert.ToDateTime(field.Value);
-                                            break;
-                                        case "Lookup":
-                                            FieldLookupValue lv = GetLookupValue(field.LookupList, field.LookupField, field.Value);
-                                            if (lv != null)
-                                                listItem[targetField.InternalName] = lv;
-                                            break;
-                                        default:
-                                            listItem[targetField.InternalName] = field.Value;
-                                            break;
+                        context = new ClientContext(importSite);
+                        context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+                    }
 
+                    itemCreateInfo = new ListItemCreationInformation();
+
+                    if (!currentDirectory.Equals(listTitle, StringComparison.InvariantCultureIgnoreCase))
+                        itemCreateInfo.FolderUrl = folderUrl;
+                    else if (item.Folder != null && list.BaseType == BaseType.DocumentLibrary)
+                        itemCreateInfo.FolderUrl = item.Folder;
+
+                    ListItem listItem;
+
+                    if (list.BaseType == BaseType.DocumentLibrary)
+                    {
+                        string filePath = Path.Combine(directory.FullName, item.Fields[0].Value);
+
+                        Microsoft.SharePoint.Client.File file = UploadFileSlicePerSlice(context, list, directory, item);
+
+                        listItem = file.ListItemAllFields;
+                    }
+                    else
+                    {
+                        listItem = list.AddItem(itemCreateInfo);
+                    }
+
+                    foreach (Field field in item.Fields)
+                    {
+                        try
+                        {
+                            if (!string.IsNullOrEmpty(field.Value))
+                            {
+                                if (field.Title != "ID" && field.InternalName != "ContentType" && field.InternalName != "Attachments")
+                                {
+                                    var targetField = listFields.FirstOrDefault(f => f.Title == field.Title);
+                                    if (targetField != null)
+                                    {
+                                        switch (field.FieldType)
+                                        {
+                                            case "DateTime":
+                                                listItem[targetField.InternalName] = Convert.ToDateTime(field.Value);
+                                                break;
+                                            case "Lookup":
+                                                FieldLookupValue lv = GetLookupValue(field.LookupList, field.LookupField, field.Value);
+                                                if (lv != null)
+                                                    listItem[targetField.InternalName] = lv;
+                                                break;
+                                            default:
+                                                listItem[targetField.InternalName] = field.Value;
+                                                break;
+
+                                        }
                                     }
                                 }
                             }
-                        }                        
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine(ex.ToString());
+                        }
                     }
-                    catch(Exception ex)
+
+                    listItem.Update();
+
+                    if (list.BaseType != BaseType.DocumentLibrary)
+                        context.ExecuteQuery();
+
+                    if (list.BaseType != BaseType.DocumentLibrary)
                     {
-                        Console.WriteLine(ex.ToString());
+                        counter++;
+                        percentage = (counter * 100) / length;
+                        Console.Write("Creando elementos en {0}...{1}%\r", folderUrl, percentage);
                     }
                 }
-
-                listItem.Update();
-
-                if (list.BaseType != BaseType.DocumentLibrary)
-                    context.ExecuteQuery();
-                
-                if(list.BaseType != BaseType.DocumentLibrary)
+                catch(Exception ex)
                 {
-                    counter++;
-                    percentage = (counter * 100) / length;
-                    Console.Write("Creando elementos en {0}...{1}%\r", folderUrl, percentage);
+                    Console.WriteLine(ex.ToString());
                 }
             }
         }
@@ -1074,7 +1081,16 @@ namespace Migracion
                     uploadFile = docs.Files.Add(fileInfo);
                     ctx.Load(uploadFile);
                     ctx.ExecuteQuery();
-                    // Return the file object for the uploaded file.
+
+
+                    Console.Write("Subiendo fichero {0} a {1}: {2} de {2}\r", file, docs.Name, BytesToSize(fileSize));
+
+                    FileInfo sourceFile = new FileInfo(fileName);
+                    string sourceFileName = sourceFile.Name;
+                    string targetPath = Path.Combine(@"C:\ImportacionLog", sourceFileName);
+                    sourceFile.MoveTo(targetPath);
+
+
                     return uploadFile;
                 }
             }
@@ -1181,6 +1197,11 @@ namespace Migracion
                     {
                         fs.Dispose();
                     }
+
+                    FileInfo sourceFile = new FileInfo(fileName);
+                    string sourceFileName = sourceFile.Name;
+                    string targetPath = Path.Combine(@"C:\ImportacionLog", sourceFileName);
+                    sourceFile.MoveTo(targetPath);
                 }
             }
 

@@ -23,7 +23,7 @@ var menuIndex;
             menu = data.d.MenuState.Nodes.results;
 
             for (var i = 0; i < menu.length; i++) {
-                if (menu[i].Title.toLowerCase() != 'recientes') {
+                if (menu[i].Title.toLowerCase() != 'recientes' && !menu[i].IsHidden) {
                     if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
                         $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
                         activeMenu = i;
@@ -77,13 +77,13 @@ var menuIndex;
                         var idx = $(this).data('menu');
                         if (idx != menuIndex) {
                             var submenu = menu[idx].Nodes.results;
-                            var hasItems = false;
 
                             if (submenu.length > 0) {
                                 var ul = $('<ul/>');
 
                                 for (var i = 0; i < submenu.length; i++) {
                                     if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
+                                        hasItems = true;
                                         $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                                     }
                                 }

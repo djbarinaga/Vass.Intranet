@@ -1,0 +1,125 @@
+﻿<div class="wizard-form container">
+    <div class="row wizard-indicators">
+        <div class="col text-center active">
+            <p class="circle">1</p>
+            <p>Nombre</p>
+        </div>
+        <div class="col text-center">
+            <p class="circle">2</p>
+            <p>Clasificación</p>
+        </div>
+        <div class="col text-center">
+            <p class="circle">3<br /></p>
+            <p>Evaluación</p>
+        </div>
+        <div class="col text-center">
+            <p class="circle">4<br /></p>
+            <p>Valoración</p>
+        </div>
+        <div class="col text-center">
+            <p class="circle">5<br /></p>
+            <p>Fin</p>
+        </div>
+    </div>
+    <div class="wizard-steps">
+        <div class="row">
+            <div class="col">
+                <div class="form">
+                    <div class="form-group">
+                        <label for="txtGame">Nombre del juego</label><input type="text" class="form-control" id="txtGame" placeholder="Nombre del juego" />
+                    </div>
+                    <div class="form-group">
+                        <label for="txtScore">Puntuación por defecto</label><input type="number" class="form-control" id="txtScore" />
+                    </div>
+                    <div class="form-group">
+                        <label for="parentGame">Juego relacionado</label>
+                        <select id="parentGame" class="form-control"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <p>
+                    Aquí puedes definir los diferentes grupos en los que se organizará la clasificación de tu juego. 
+                    Para cada grupo debes definir una puntuación mínima y una puntuación máxima.
+                    Para el grupo de nivel superior, puedes definir sólo una puntuación mínima.
+                </p>
+                <div class="form">
+                    <div id="groups" data-command="groups" class="b-top">
+                        <div class="form-group">
+                            <label>Grupo <span data-role="id">1</span></label><input type="text" class="form-control" data-command="groupName" placeholder="Grupo de clasificación" />
+                        </div>
+                        <div class="form-group">
+                            <label>Puntuación mínima</label><input type="number" data-command="minimunScore" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Puntuación máxima</label><input type="number" data-command="maximunScore" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default float-right center-icon" data-role="clonable-button" data-target="#groups"><span class="icon-mas"></span>&nbsp;Agregar grupo</button>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <p>
+                    Si la puntuación de un juego puede depender de valoraciones adicionales,
+                    en este formulario puedes especificar las preguntas para que los participantes
+                    valoren la actuación del usuario en el juego a modo de encuesta.
+                </p>
+                <div class="form">
+                    <div id="survey" data-command="surveys" class="b-top">
+                        <div class="form-group">
+                            <label>Pregunta <span data-role="id">1</span></label><input type="text" class="form-control" data-command="question" />
+                        </div>
+                        <div class="form-group">
+                            <label>Valor mínimo</label><input type="number" data-command="minimunScore" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Valor máximo</label><input type="number" data-command="maximunScore" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default float-right center-icon" data-role="clonable-button" data-target="#survey"><span class="icon-mas"></span>&nbsp;Agregar valoración</button>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <p>
+                    Aquí puedes indicar la asignación de puntos en base a la media obtenida durante la evaluación del juego.
+                    Si, por ejemplo, la media de evaluación es 7, puedes especificar un intervalo de asignación de 5 puntos
+                    para una evaluación con una media entre 7 y 9. También puedes especificar valores negativos. Recuerda que la evaluación
+                    media se obtiene de la suma de las respuestas de todos los participantes.
+                </p>
+                <div class="form">
+                    <div id="survey-score" data-command="survey-score" class="b-top">
+                        <div class="form-group">
+                            <label>Valoración <span data-role="id">1</span></label><input type="text" class="form-control" data-command="evaluation" />
+                        </div>
+                        <div class="form-group">
+                            <label>Evaluación media mínima</label><input type="number" data-command="minimunScore" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label>Evaluación media máxima</label><input type="number" data-command="maximunScore" class="form-control" />
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-default float-right center-icon" data-role="clonable-button" data-target="#survey-score"><span class="icon-mas"></span>&nbsp;Agregar valoración</button>
+                </div>
+            </div>
+        </div>
+        <div class="row d-none">
+            <div class="col">
+                <p id="alert">Procesando...</p>
+                <div class="progress">
+                    <div class="progress-bar" role="progressbar" style="width: 0%;">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wizard-buttons">
+        <button type="button" class="bg-grey prevStep">Anterior</button>
+        <button type="button" class="bg-orange nextStep">Siguiente</button>
+    </div>
+</div>

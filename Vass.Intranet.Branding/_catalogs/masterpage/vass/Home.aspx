@@ -177,6 +177,9 @@
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> proyectos</p>
                             <ul id="my-projects"></ul>
+                            <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-proyectos.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
                           </div>
                         </div>
                     </div>
@@ -185,6 +188,9 @@
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> gremios</p>
                             <ul id="my-guilds"></ul>
+                              <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-gremios.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
                           </div>
                         </div>
                     </div>
@@ -193,6 +199,9 @@
                           <div class="panel-body">
                             <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
                             <ul id="my-teams"></ul>
+                            <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-equipos.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
                           </div>
                         </div>
                     </div>

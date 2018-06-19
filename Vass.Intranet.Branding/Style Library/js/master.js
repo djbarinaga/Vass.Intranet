@@ -1715,16 +1715,31 @@ Date.prototype.addMonths = function (value) {
 
                     var html = '';
 
-                    html += '<li>';
-                    html += '   <div class="row">';
-                    html += '       <div class="col-3 text-center">';
-                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                    html += '       </div>';
-                    html += '       <div class="col">';
-                    html += '           <h4><a href="' + url + '" target="_blank">' + team.displayName + '</a></h4>';
-                    html += '       </div>';
-                    html += '   </div>';
-                    html += '</li>';
+                    if ($($this).is('ul')) {
+                        html += '<li>';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</li>';
+                    }
+                    else {
+                        html += '<div class="col-5">';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '           <p>' + team.description + '</p>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</div>';
+                    }
 
                     $($this).append(html);
 
@@ -1813,28 +1828,74 @@ Date.prototype.addMonths = function (value) {
 
             var teams = data.value;
 
-            for (var i = 0; i < teams.length; i++) {
-                var team = teams[i];
+            var renderTeams = function (index) {
+                var team = teams[index];
+
+                if (team == null)
+                    return;
 
                 if (isGuild(team.displayName)) {
-                    var bgColor = getIconColor();
 
-                    var html = '';
+                    var renderTeamInfo = function (channelData) {
+                        var channel = channelData.value[0];
 
-                    html += '<li>';
-                    html += '   <div class="row">';
-                    html += '       <div class="col-3 text-center">';
-                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                    html += '       </div>';
-                    html += '       <div class="col">';
-                    html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                    html += '       </div>';
-                    html += '   </div>';
-                    html += '</li>';
+                        var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
 
-                    $($this).append(html);
+                        var bgColor = getIconColor();
+
+                        var html = '';
+
+                        if ($($this).is('ul')) {
+                            html += '<li>';
+                            html += '   <div class="row">';
+                            html += '       <div class="col-3 text-center">';
+                            html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                            html += '       </div>';
+                            html += '       <div class="col">';
+                            html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                            html += '       </div>';
+                            html += '   </div>';
+                            html += '</li>';
+                        }
+                        else {
+                            html += '<div class="col-5">';
+                            html += '   <div class="row">';
+                            html += '       <div class="col-3 text-center">';
+                            html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                            html += '       </div>';
+                            html += '       <div class="col">';
+                            html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                            html += '           <p>' + team.description + '</p>';
+                            html += '       </div>';
+                            html += '   </div>';
+                            html += '</div>';
+                        }
+
+                        $($this).append(html);
+
+                        if (index < teams.length) {
+                            var currentIndex = index + 1;
+                            renderTeams(currentIndex);
+                        }
+                    }
+
+                    endpoint = '/groups/' + team.id + '/channels';
+
+                    execute({
+                        clientId: variables.clientId.Graph,
+                        version: "beta",
+                        endpoint: endpoint,
+                        type: "GET",
+                        callback: renderTeamInfo
+                    });
+                }
+                else if (index < teams.length) {
+                        var currentIndex = index + 1;
+                        renderTeams(currentIndex);
                 }
             }
+
+            renderTeams(0);
         }
 
         function getIconColor() {
@@ -1925,16 +1986,31 @@ Date.prototype.addMonths = function (value) {
 
                     var html = '';
 
-                    html += '<li>';
-                    html += '   <div class="row">';
-                    html += '       <div class="col-3 text-center">';
-                    html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                    html += '       </div>';
-                    html += '       <div class="col">';
-                    html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                    html += '       </div>';
-                    html += '   </div>';
-                    html += '</li>';
+                    if ($($this).is('ul')) {
+                        html += '<li>';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</li>';
+                    }
+                    else {
+                        html += '<div class="col-5">';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '           <p>' + team.description + '</p>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</div>';
+                    }
 
                     $($this).append(html);
                 }

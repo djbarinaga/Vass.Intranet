@@ -52,6 +52,8 @@
         var charlaId = getUrlParam('c');
         var gamesCollection;
 
+        loadCharla();
+
         $(this).find('#btnCancel').on('click', function () {
             window.history.back();
         });
@@ -81,9 +83,40 @@
             );
         });
 
+        function loadCharla() {
+            var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
+
+            var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
+            var item = oList.getItemById(Number(charlaId));
+
+            clientContext.load(item, 'Title', 'Author', 'Fecha_x0020_de_x0020_Realizacion', 'Lugar_x0020_de_x0020_Realizacion', 'Aforo', 'Estado_x0020_de_x0020_la_x0020_C');
+
+            clientContext.executeQueryAsync(
+                Function.createDelegate(this, function () {
+                    var date = new Date(item.get_item('Fecha_x0020_de_x0020_Realizacion'));
+                    $('#page-title').text(item.get_item('Title'));
+                    $('#txtDate').val(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+                    $('#roomSelect').val(item.get_item('Lugar_x0020_de_x0020_Realizacion'));
+                    $('#txtAforo').val(item.get_item('Aforo'));
+                    $('#txtStatus').text(item.get_item('Estado_x0020_de_x0020_la_x0020_C'));
+
+                    var author = item.get_item('Author');
+                    $('p[data-field="Author"]').text("Ponente: " + author.get_lookupValue());
+
+                    if (item.get_item('Estado_x0020_de_x0020_la_x0020_C') != 'Propuesta')
+                        $('#status').remove();
+                }),
+                Function.createDelegate(this, function (sender, args) {
+                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                    //showErrorMessage("No se ha podido crear la solicitud");
+                })
+            );
+        }
+
         function editGame(game, user) {
             var room = $('#roomSelect').val();
             var aforo = $('#txtAforo').val();
+            var date = new Date($('#txtDate').val())
 
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
@@ -92,8 +125,9 @@
 
             item.set_item('Lugar_x0020_de_x0020_Realizacion', room);
             item.set_item('Aforo', Number(aforo));
+            item.set_item('Fecha_x0020_de_x0020_Realizacion', date);
 
-            if ($('#chkAprobar').is(':checked'))
+            if ($('#chkAprobar') != null && $('#chkAprobar').is(':checked'))
                 item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Confirmada');
 
             if ($('#chkFinalizado').is(':checked'))

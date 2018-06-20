@@ -29,6 +29,11 @@ p, p span {
     font-size: 14px !important;
 }
 
+.span-corrector{
+    position: relative;
+    /*top: -13px;*/
+}
+
 .center-icon span{
     font-size: 1.5em;
     position: relative;
@@ -47,6 +52,10 @@ a, a:hover, a:visited{
 
 .o-hidden{
     overflow: hidden;
+}
+
+.hidden{
+    display: none !important;
 }
 
 /*TAMAÑOS FUENTE*/
@@ -255,6 +264,9 @@ a, a:hover, a:visited{
 }
 
 /*HEADER*/
+.breadcrumb{
+    background-color:#fff !important;
+}
 header{
     height:90px;
 }
@@ -1191,7 +1203,7 @@ footer p{
     line-height: 1.2;
 }
 
-.event-date span{
+#home .event-date span{
     display: block;
 }
 
@@ -1248,23 +1260,17 @@ footer p{
     border-right: solid 2px #CCCCCC;
 }
 
-.events .event-date span, .events .event-hour span, .events .event-location span{
-    display: inline;
-    position: relative;
-    top: -13px;
-    color: #00669C;
-}
-
-.events .event-date [class^="icon-"], 
-.events .event-date [class*=" icon-"], 
-.events .event-hour [class^="icon-"], 
-.events .event-hour [class*=" icon-"],
-.events .event-location [class^="icon-"], 
-.events .event-location [class*=" icon-"]{
+.events [class^="icon-"], 
+.events [class*=" icon-"], 
+.events [class^="icon-"], 
+.events [class*=" icon-"],
+.events [class^="icon-"], 
+.events [class*=" icon-"]{
     display:inline;
-    font-size: 42px;
-    top:0px;
+    font-size: 42px !important;
+    top:13px;
     color: #333;
+    position: relative;
 }
 
 .events .event-inscription span{
@@ -1273,6 +1279,9 @@ footer p{
     top: 9px;
 }
 
+.events .event-author img{
+    margin-right: 20px;
+}
 
 /*CÍRCULOS*/
 #my-stock h2{
@@ -1696,7 +1705,7 @@ div#my-teams .team-icon, div#my-projects .team-icon, div#my-guilds .team-icon{
 }
 
 /*BOOTBOX*/
-.bootbox-prompt .bootbox-close-button{
+.bootbox-close-button{
     display:none;
 }
 
@@ -1817,11 +1826,23 @@ div#my-teams .team-icon, div#my-projects .team-icon, div#my-guilds .team-icon{
 }
 
 .form-control{
-    height: 60px;
+    height: 48px !important;
     border-radius: 0;
 }
 
 .form-control:focus{
     border-color: #ababab;
     box-shadow:none;
+}
+
+/*BOTONES*/
+a.btn-orange, a.btn-orange:hover, a.btn-orange:focus, a.btn-orange:visited{
+    background-color: #f39a4a;
+    min-width: 120px !important;
+    color: #fff !important;
+    font-weight: 500 !important;
+    font-family: "Montserrat" !important;
+    font-size: 14px !important;
+    border: none !important;
+    padding:10px;
 }

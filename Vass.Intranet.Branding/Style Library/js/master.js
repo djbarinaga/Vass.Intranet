@@ -78,7 +78,7 @@ Date.prototype.addMonths = function (value) {
 (function ($) {
     $.fn.quicklinks = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/desarrollo/_api/web/lists('698a56a1-a894-4580-835d-242c1bbd1bdc')/items";
+        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Quick Links')/items";
 
         var $ajax = $.ajax({
             url: url,
@@ -128,7 +128,7 @@ Date.prototype.addMonths = function (value) {
 (function ($) {
     $.fn.sociallinks = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/desarrollo/_api/web/lists('3cc277c3-ae2f-469c-a045-36bc751cdc91')/items";
+        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Social Links')/items";
 
         var $ajax = $.ajax({
             url: url,
@@ -2544,13 +2544,13 @@ jQuery(document).ready(function () {
         $(this).wizard();
     });
 
-    //jQuery('#quickLinks').each(function () {
-    //    $(this).quicklinks();
-    //});
+    jQuery('#quickLinks').each(function () {
+        $(this).quicklinks();
+    });
 
-    //jQuery('#socialLinks').each(function () {
-    //    $(this).sociallinks();
-    //});
+    jQuery('#socialLinks').each(function () {
+        $(this).sociallinks();
+    });
 
     jQuery('.search-box').each(function () {
         $(this).searchbox();
@@ -2603,6 +2603,25 @@ jQuery(document).ready(function () {
     $('#tiles').each(function () {
         $(this).tiles();
     });
+
+    var ctx = new SP.ClientContext.get_current();
+    var web = ctx.get_web();
+
+    var ob = new SP.BasePermissions();
+    ob.set(SP.PermissionKind.manageWeb)
+
+    var per = web.doesUserHavePermissions(ob)
+    ctx.executeQueryAsync(
+        function () {
+            if (!per.get_value()) {
+                $('#O365_MainLink_Settings').parent().hide();
+                $('#s4-ribbonrow').hide();
+            }
+        },
+        function (a, b) {
+            console.log("Something wrong");
+        }
+    );
 });
 
 function setHomePage() {

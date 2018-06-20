@@ -93,7 +93,7 @@ var menuIndex;
                                 $('#current-submenu').css('position', 'absolute');
                                 $('#current-submenu').css('z-index', '1');
                                 $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
-                                $('#current-submenu').css('height', $('#current-menu').height() + 132 + 'px'); // +80 padding
+                                $('#current-submenu').css('min-height', $('#current-menu').height() + 132 + 'px'); // +80 padding
 
                                 if (hasItems) {
                                     $('#current-submenu').append(ul);

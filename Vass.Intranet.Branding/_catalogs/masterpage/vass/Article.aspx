@@ -36,7 +36,7 @@
                 <div id="summary-zone">
                     <div class="row">
                         <div class="col-4">
-                            <PublishingWebControls:RichImageField FieldName="PublishingRollupImage" AllowHyperLinks="false" runat="server" />
+                            <PublishingWebControls:RichImageField FieldName="PublishingRollupImage" runat="server" />
                         </div>
                         <div class="col-8" id="summary">
                             <PublishingWebControls:RichHtmlField FieldName="Summary" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>

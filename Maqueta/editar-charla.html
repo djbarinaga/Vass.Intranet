@@ -1,22 +1,39 @@
 ﻿<div class="container" id="editar-charla">
+    <p data-field="Author"></p>
     <div class="row">
+        <div class="col-3">
+            <div class="form-group">
+                <label for="txtDate">Fecha</label>
+                <input type="text" class="form-control" id="txtDate" data-field="Fecha_x0020_de_x0020_Realizacion"/>
+            </div>
+        </div>
         <div class="col">
             <div class="form-group">
                 <label for="roomSelect">Sala</label>
-                <select id="roomSelect" class="form-control"></select>
+                <select id="roomSelect" class="form-control" data-field="Lugar_x0020_de_x0020_Realizacion"></select>
             </div>
+        </div>
+        <div class="col-3">
             <div class="form-group">
-                <label for="txtAforo">Aforo</label><input type="number" class="form-control" id="txtAforo" />
+                <label for="txtAforo">Aforo</label>
+                <input type="number" class="form-control" id="txtAforo" data-field="Aforo"/>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p>Estado: <span id="txtStatus"></span></p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
             <div class="form">
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="chkAprobar">
+                <div class="form-group form-check" id="status">
+                    <input type="checkbox" class="form-check-input" id="chkAprobar" data-field="Estado_x0020_de_x0020_la_x0020_C">
                     <label class="form-check-label" for="chkAprobar">Confirmar charla</label>
                 </div>
-            </div>
-            <div class="form">
                 <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="chkFinalizado">
+                    <input type="checkbox" class="form-check-input" id="chkFinalizado" data-field="Estado_x0020_de_x0020_la_x0020_C">
                     <label class="form-check-label" for="chkFinalizado">Charla realizada</label>
                 </div>
             </div>

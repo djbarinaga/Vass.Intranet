@@ -215,6 +215,18 @@ function createSurveyQuestions() {
     var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
     var oList = clientContext.get_web().get_lists().getByTitle(surveyName);
 
+    //Partida
+    var oField = oList.get_fields().addFieldAsXml("<Field DisplayName='Partida' Type='Text'/>", true, SP.AddFieldOptions.defaultValue);
+
+    clientContext.load(oField);
+
+    clientContext.executeQueryAsync(
+        Function.createDelegate(this, function () {
+            console.log('Pregunta creada');
+        }),
+        Function.createDelegate(this, createGameFailed)
+    );  
+
     $('[data-command="surveys"]').each(function () {
         var question = $(this).find('[data-command="question"]').val();
         var minimunScore = $(this).find('[data-command="minimunScore"]').val();

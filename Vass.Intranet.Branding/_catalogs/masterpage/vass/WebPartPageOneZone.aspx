@@ -21,6 +21,9 @@
         <div class="breadcrumb">
             <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
         </div>
+        <div class="breadcrumb">
+            <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
+        </div>
         <h2 id="page-title">
             <SharePointWebControls:TextField runat="server" FieldName="Title"/>
         </h2>

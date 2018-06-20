@@ -28,16 +28,18 @@ function courseTemplate(ctx) {
 
     html = '<h2 id="page-title">' + title + '</h2>';
 
-    html += '<div id="summary-zone">' +
-        '<div class="row">' +
-        '<div class="col-4">' +
-        imagen +
-        '</div>' +
-        '<div class="col-8" id="summary">' +
-        descripcion +
-        '</div>' +
-        '</div>' +
-        '</div>';
+    if (imagen != null && descripcion != null) {
+        html += '<div id="summary-zone">' +
+            '<div class="row">' +
+            '<div class="col-4">' +
+            imagen +
+            '</div>' +
+            '<div class="col-8" id="summary">' +
+            descripcion +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }
 
     html += '<div class="content"><table class="table">';
 

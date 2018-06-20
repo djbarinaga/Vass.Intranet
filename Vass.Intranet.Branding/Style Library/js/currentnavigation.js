@@ -23,13 +23,16 @@ var menuIndex;
             menu = data.d.MenuState.Nodes.results;
 
             for (var i = 0; i < menu.length; i++) {
-                if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
-                    $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
-                    activeMenu = i;
+                if (menu[i].Title.toLowerCase() != 'recientes' && !menu[i].IsHidden) {
+                    if (window.location.href.toLowerCase().indexOf(menu[i].SimpleUrl.toLowerCase()) > -1) {
+                        $(ul).append('<li class="active"><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                        activeMenu = i;
+                    }
+                    else {
+                        $(ul).append('<li><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
+                    }
                 }
-                else {
-                    $(ul).append('<li><a href="' + menu[i].SimpleUrl + '" data-menu="' + i + '">' + menu[i].Title + '</a></li>');
-                }
+                
             }
 
             $($this).append(ul);
@@ -38,12 +41,14 @@ var menuIndex;
 
             if (activeMenu > -1) {
                 var submenu = menu[activeMenu].Nodes.results;
+                var hasItems = false;
 
                 if (submenu.length > 0) {
                     var ul = $('<ul/>');
 
                     for (var i = 0; i < submenu.length; i++) {
                         if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
+                            hasItems = true;
                             if (window.location.href.toLowerCase().indexOf(submenu[i].SimpleUrl.toLowerCase()) > -1) {
                                 $(ul).append('<li class="active"><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                             }
@@ -54,8 +59,11 @@ var menuIndex;
                         
                         
                     }
-                    $('#current-submenu').append(ul);
-                    $('#current-submenu').fadeIn('fast');
+
+                    if (hasItems) {
+                        $('#current-submenu').append(ul);
+                        $('#current-submenu').fadeIn('fast');
+                    }
                 }
                 else {
                     $('#current-submenu').fadeOut('fast');
@@ -75,18 +83,22 @@ var menuIndex;
 
                                 for (var i = 0; i < submenu.length; i++) {
                                     if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
+                                        hasItems = true;
                                         $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
                                     }
                                 }
 
                                 $('#current-submenu').html('');
                                 $('#current-submenu').attr('data-hidden', 'true');
-                                $('#current-submenu').append(ul);
                                 $('#current-submenu').css('position', 'absolute');
                                 $('#current-submenu').css('z-index', '1');
                                 $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
-                                $('#current-submenu').css('height', $('#current-menu').height() + 132 + 'px'); // +80 padding
-                                $('#current-submenu').fadeIn('fast');
+                                $('#current-submenu').css('min-height', $('#current-menu').height() + 132 + 'px'); // +80 padding
+
+                                if (hasItems) {
+                                    $('#current-submenu').append(ul);
+                                    $('#current-submenu').fadeIn('fast');
+                                }
                             }
                             else {
                                 $('#current-submenu').fadeOut('fast');

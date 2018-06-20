@@ -103,7 +103,7 @@ var Banner = {
 
         var html = '<div class="' + col + '">';
 
-        if (doubleBanner == 1) {
+        if (Number(doubleBanner) == 1) {
             html += '<div class="icon-l">';
 
             html += '<div class="banner-icon ' + bgColor + '">';

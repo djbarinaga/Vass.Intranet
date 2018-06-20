@@ -12,6 +12,8 @@
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
     <script type="text/javascript" src="https://c64.assets-yammer.com/assets/platform_embed.js"></script>
+    <script type= "text/javascript" data-app-id="8Z6wlIYczbZAxWELw2Zyyg" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js" ></script>
+    <script type="text/javascript" src="/style library/js/yammer.js"></script>
 </asp:content>
 <asp:content contentplaceholderid="PlaceHolderPageTitle" runat="server">
 	<SharePointWebControls:FieldValue FieldName="Title" runat="server"/>
@@ -132,9 +134,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row" style="height: 100px;" id="tiles">
-                        
-                    </div>
+                    <div class="row" style="height: 100px;" id="tiles"></div>
                 </div>
             </div>
         </div>
@@ -163,20 +163,45 @@
                         </div>
                     </div>
                 </div>
+                <h2 id="page-title">Charlas @innovation depot</h2>
+                <div class="row">
+                    <div class="col">
+                        <div class="bg-throne">
+                            <div id="thrones-resume"></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="col">
                         <div class="panel icon-left">
                           <div class="panel-body">
-                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
-                            <ul id="my-teams"></ul>
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> proyectos</p>
+                            <ul id="my-projects"></ul>
+                            <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-proyectos.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
                           </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="panel icon-left">
                           <div class="panel-body">
-                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> compañeros</p>
-                            <ul id="my-people"></ul>
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> gremios</p>
+                            <ul id="my-guilds"></ul>
+                              <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-gremios.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="panel icon-left">
+                          <div class="panel-body">
+                            <p class="panel-title"><span class="font-weight-semi-bold">Mis</span> equipos</p>
+                            <ul id="my-teams"></ul>
+                            <div class="toolbar">
+                                <a href="/es-es/Paginas/mis-equipos.aspx"><span class="icon-mas"></span>ver todos</a>
+                            </div>
                           </div>
                         </div>
                     </div>
@@ -199,19 +224,4 @@
         </div>
     </div>
     <SharePointWebControls:ScriptBlock runat="server">if(typeof(MSOLayout_MakeInvisibleIfEmpty) == "function") {MSOLayout_MakeInvisibleIfEmpty();}</SharePointWebControls:ScriptBlock>
-    <script>
-        yam.connect.embedFeed({
-            "config": {
-                "use_sso": false,
-                "header": false,
-                "footer": false,
-                "showOpenGraphPreview": false,
-                "defaultToCanonical": false,
-                "hideNetworkName": false,
-                "theme": "light"
-            },
-            "container": "#yammer",
-            network: 'grupovass.onmicrosoft.com'
-        });
-    </script>
 </asp:Content>

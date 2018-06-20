@@ -7,7 +7,6 @@
 		<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/editmode15.css %>"
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
-    <script type="text/javascript" src="/style library/js/currentnavigation.js"></script>
 	<SharePointWebControls:FieldValue id="PageStylesField" FieldName="HeaderStyleDefinitions" runat="server"/>
 </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderPageTitle" runat="server">
@@ -18,51 +17,32 @@
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderTitleBreadcrumb" runat="server"> <SharePointWebControls:ListSiteMapPath runat="server" SiteMapProviders="CurrentNavigationSwitchableProvider" RenderCurrentNodeAsLink="false" PathSeparator="" CssClass="s4-breadcrumb" NodeStyle-CssClass="s4-breadcrumbNode" CurrentNodeStyle-CssClass="s4-breadcrumbCurrentNode" RootNodeStyle-CssClass="s4-breadcrumbRootNode" NodeImageOffsetX=0 NodeImageOffsetY=289 NodeImageWidth=16 NodeImageHeight=16 NodeImageUrl="/_layouts/15/images/fgimg.png?rev=44" HideInteriorRootNodes="true" SkipLinkText="" /> </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderMain" runat="server">
-	<div id="article" class="container-fluid">
-		<PublishingWebControls:EditModePanel runat="server" CssClass="edit-mode-panel title-edit">
-			<SharePointWebControls:TextField runat="server" FieldName="Title"/>
-		</PublishingWebControls:EditModePanel>
+	<div id="wp-page" class="container">
         <div class="row">
             <a id="menu-button"><span class="icon-menu_cierra"></span></a>
             <div class="float-left" id="current-menu"></div>
             <div class="float-left" style="display:none" id="current-submenu"></div>
-            <div class="col">
-                <div class="breadcrumb">
-                    <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
-                </div>
+            <div class="col" id="highlight-zone">
                 <h2 id="page-title">
-                    <SharePointWebControls:FieldValue runat="server" FieldName="Title"/>
+                    <SharePointWebControls:TextField runat="server" FieldName="Title"/>
                 </h2>
-                <div id="summary-zone">
-                    <div class="row">
-                        <div class="col-4">
-                            <PublishingWebControls:RichImageField FieldName="PublishingRollupImage" runat="server" />
-                        </div>
-                        <div class="col-8" id="summary">
-                            <PublishingWebControls:RichHtmlField FieldName="Summary" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
-                        </div>
-                    </div>
+                <div class="summary">
+                    <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone3" />
                 </div>
             </div>
         </div>
-        <div id="content-zone">
-            <div class="row">
-                <div class="col-md-12">
-                    <PublishingWebControls:RichImageField FieldName="PublishingPageImage" runat="server"/>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <PublishingWebControls:RichHtmlField FieldName="PublishingPageContent" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
-                </div>
+        <div class="row">
+            <div class="col">
+                <PublishingWebControls:RichHtmlField FieldName="PublishingPageContent" HasInitialFocus="True" MinimumEditHeight="400px" runat="server"/>
             </div>
         </div>
-        <div id="sections">
-            <WebPartPages:WebPartZone runat="server" Title="Módulos" ID="modules" />
+        <div class="row">
+            <div class="col">
+                <WebPartPages:WebPartZone runat="server" Title="Zona 1" ID="WebPartZone2" />
+            </div>
+            <div class="col-3 right-column">
+                <WebPartPages:WebPartZone runat="server" Title="Zona 2" ID="WebPartZone1" />
+            </div>
         </div>
-		<PublishingWebControls:EditModePanel runat="server">
-			<SharePointWebControls:BooleanField FieldName="HomeHighlight" runat="server"/>
-			<SharePointWebControls:BooleanField FieldName="SubhomeHighlight" runat="server"/>
-		</PublishingWebControls:EditModePanel>
 	</div>
 </asp:Content>

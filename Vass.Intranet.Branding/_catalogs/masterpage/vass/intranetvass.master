@@ -42,6 +42,8 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:ScriptLink language="javascript" name="callout.js" OnDemand="true" runat="server" Localizable="false" />
         <SharePoint:ScriptLink language="javascript" name="sharing.js" OnDemand="true" runat="server" Localizable="false" />
         <SharePoint:ScriptLink language="javascript" name="suitelinks.js" OnDemand="true" runat="server" Localizable="false" />
+        <SharePoint:ScriptLink ID="ScriptLink1" name="SP.js" runat="server" ondemand="false" localizable="false" loadafterui="true" />
+        <SharePoint:ScriptLink ID="ScriptLink2" name="SP.UserProfiles.js" runat="server" ondemand="false" localizable="false" loadafterui="true" />
         <SharePoint:CustomJSUrl runat="server" />
 
         <SharePoint:SoapDiscoveryLink runat="server"></SharePoint:SoapDiscoveryLink>
@@ -55,6 +57,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
         <script type="text/javascript" src="/style library/js/graph.js"></script>
         <script type="text/javascript" src="/style library/js/master.js"></script>
+        <script type="text/javascript" src="/style library/js/gaming.js"></script>
         <script type="text/javascript" src="/_catalogs/masterpage/vass/Display%20Templates/ListView/jsobjects.js"></script>
 
         <SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">
@@ -71,11 +74,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         </SharePoint:AjaxDelta>
 
         <PublishingWebControls:EditModePanel runat="server">
-		    <style>
-                #s4-workspace{
-                    overflow-x: auto;
-                }
-		    </style>
+		    <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
 	    </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">
@@ -138,7 +137,9 @@ To build the master page directly from this HTML file, simply edit the page as y
                             </div>                           
                         </header>
 
-
+                        <%--<div class="ms-breadcrumb-dropdownBox">
+                            <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
+                        </div>--%>
                         <SharePoint:AjaxDelta id="DeltaPlaceHolderMain" IsMainContent="true" runat="server">
                             <asp:ContentPlaceHolder ID="PlaceHolderMain" runat="server">
                                 <div class="DefaultContentBlock" style="border: medium black solid; background: yellow; color: black;">

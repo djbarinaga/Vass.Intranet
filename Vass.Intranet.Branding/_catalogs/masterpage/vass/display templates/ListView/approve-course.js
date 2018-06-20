@@ -31,8 +31,7 @@ function courseTemplate(ctx) {
         var course = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupValue;
         var startDate = ctx.CurrentItem.Fecha;
         var courseId = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupId;
-        var status = ctx.CurrentItem._ModerationStatus;
-        var statusNumber = ctx.CurrentItem["_ModerationStatus."];
+        var status = ctx.CurrentItem.Estado;
         var itemId = ctx.CurrentItem.ID;
         var email = ctx.CurrentItem.Email_x0020_empleado["0"].lookupValue;
         var courseDate = '';
@@ -44,9 +43,9 @@ function courseTemplate(ctx) {
 
         var statusClass = "fg-orange";
 
-        if (Number(statusNumber) == 0)
+        if (status == 'Aprobado')
             statusClass = "fg-green";
-        else if (Number(statusNumber) == 1)
+        else if (status == 'Rechazado')
             statusClass = "fg-red";
 
         html += '<td><a href="curso.aspx?curso=' + courseId + '" target="_blank">' + course + '</a></td>';
@@ -70,18 +69,18 @@ function footerTemplate(ctx) {
 
 function courseOnPostRender() {
     $('#btnApprove').on('click', function () {
-        setModerationStatus(0); //0 == Approved
+        setModerationStatus('Aprobado'); //0 == Approved
     });
 
     $('#btnReject').on('click', function () {
-        setModerationStatus(1); //1 == Denied
+        setModerationStatus('Rechazado'); //1 == Denied
     });
 }
 
 function setModerationStatus(moderationStatus) {
     var message = '';
 
-    if (moderationStatus == 0)
+    if (moderationStatus == 'Aprobado')
         message = "¿Desea aprobar la solicitud del curso?";
     else
         message = "¿Desea denegar la solicitud del curso?";
@@ -89,7 +88,7 @@ function setModerationStatus(moderationStatus) {
     bootbox.confirm(message, function (result) {
         if (result) {
             bootbox.prompt({
-                title: "Comenarios",
+                title: "Comentarios",
                 inputType: 'textarea',
                 callback: function (result) {
                     if (result != null) {
@@ -101,8 +100,8 @@ function setModerationStatus(moderationStatus) {
                             "__metadata": {
                                 "type": "SP.Data.Solicitud_x0020_CursosempleadosListItem"
                             },
-                            "OData__ModerationStatus": moderationStatus,
-                            "OData__ModerationComments": comments
+                            "Estado": moderationStatus,
+                            "Comentarios": comments
                         };
 
                         $.ajax({
@@ -123,7 +122,7 @@ function setModerationStatus(moderationStatus) {
                                     msg = 'Se ha denegado la solicitud';
 
                                 bootbox.alert(msg, function () {
-                                    window.location.reload();
+                                    window.location.href = '/es-es/formacion';
                                 });
                             },
                             error: function (data) {

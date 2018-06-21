@@ -1596,6 +1596,9 @@ Date.prototype.addMonths = function (value) {
                     var date = new Date(result.EventDate);
                     var dateAsString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
+                    if (description == null)
+                        description = '';
+
                     $($this).append('<li><h4>' + title + '</h4>' + description + '<span class="icon-calendario"></span>' + dateAsString + '</li>');
                 }
             }

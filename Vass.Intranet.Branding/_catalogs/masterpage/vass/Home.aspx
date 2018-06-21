@@ -11,9 +11,7 @@
 		<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/editmode15.css %>"
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
-    <script type="text/javascript" src="https://c64.assets-yammer.com/assets/platform_embed.js"></script>
-    <script type= "text/javascript" data-app-id="8Z6wlIYczbZAxWELw2Zyyg" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js" ></script>
-    <script type="text/javascript" src="/style library/js/yammer.js"></script>
+    <script type="text/javascript" src="/style library/js/ranking.js"></script>
 </asp:content>
 <asp:content contentplaceholderid="PlaceHolderPageTitle" runat="server">
 	<SharePointWebControls:FieldValue FieldName="Title" runat="server"/>
@@ -117,10 +115,6 @@
                     <div class="row">
                         <div class="col">
                             <div id="carouselNews" class="carousel slide" data-ride="carousel" style="overflow:hidden;">
-                              <ol class="carousel-indicators">
-                                <li data-target="#carouselNews" data-slide-to="0" class="active"></li>
-                                <li data-target="#carouselNews" data-slide-to="1"></li>
-                              </ol>
                               <div class="carousel-inner">
                                 <div class="carousel-item active">
                                   <img class="d-block w-100" src="https://grupovass.sharepoint.com/:i:/r/Style%20Library/Images/carousel1.jpg?csf=1&e=DgeSO7" alt="First slide">
@@ -141,7 +135,28 @@
         <div class="content">
             <div class="row">
             <div class="col-4">
-                <div id="yammer" style="height:100%;">
+                <div class="panel">
+                    <div class="panel-body">
+                        <p class="panel-title"><span class="font-weight-semi-bold">Charlas</span> @innovation depot</p>
+                        <div id="ranking">
+                            <div class="row">
+                                <p class="group-title">Targaryen</p>
+                                <div class="col-4">
+                                    <div class="group-image">
+                                        <img src="https://grupovass.sharepoint.com/es-es/businessvalue/PublishingImages/targaryen.png" />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row group-users">
+                                        <div class="col-3"><img src="https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=intranet1@vass.es&UA=0&size=HR64x64&sc=1529538751271" /></div>
+                                        <div class="col-3"><img src="https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=intranet1@vass.es&UA=0&size=HR64x64&sc=1529538751271" /></div>
+                                        <div class="col-3"><img src="https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=intranet1@vass.es&UA=0&size=HR64x64&sc=1529538751271" /></div>
+                                        <div class="col-3"><span class="badge badge-pill badge-info">5</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col">
@@ -160,14 +175,6 @@
                             <p class="panel-title"><span class="font-weight-semi-bold">Tareas</span> pendientes</p>
                             <ul id="my-tasks"></ul>
                           </div>
-                        </div>
-                    </div>
-                </div>
-                <h2 id="page-title">Charlas @innovation depot</h2>
-                <div class="row">
-                    <div class="col">
-                        <div class="bg-throne">
-                            <div id="thrones-resume"></div>
                         </div>
                     </div>
                 </div>

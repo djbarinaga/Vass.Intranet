@@ -39,11 +39,17 @@ function courseTemplate(ctx) {
     var html = '<tr>';
 
     var statusClass = "fg-orange";
+    if (status == "")
+    {
+        status = "Pendiente";
+    }
 
-    if (Number(status) == 0)
+    if (status == "Aprobado") {
         statusClass = "fg-green";
-    else if (Number(status) == 1)
+    }
+    else if (status == "Rechazado") {
         statusClass = "fg-red";
+    }
 
     html += '<td><a href="curso.aspx?curso=' + courseId + '">' + course + '</a></td>';
     html += '<td><span>' + courseDate + '</span></td>';

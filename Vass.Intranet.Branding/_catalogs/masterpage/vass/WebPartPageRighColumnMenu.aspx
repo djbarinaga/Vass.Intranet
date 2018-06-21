@@ -23,6 +23,9 @@
             <div class="float-left" id="current-menu"></div>
             <div class="float-left" style="display:none" id="current-submenu"></div>
             <div class="col" id="highlight-zone">
+                <div class="breadcrumb">
+                    <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
+                </div>
                 <h2 id="page-title">
                     <SharePointWebControls:TextField runat="server" FieldName="Title"/>
                 </h2>

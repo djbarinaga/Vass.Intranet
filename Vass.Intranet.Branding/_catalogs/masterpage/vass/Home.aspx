@@ -11,6 +11,9 @@
 		<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/editmode15.css %>"
 			After="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	</PublishingWebControls:EditModePanel>
+    <script type="text/javascript" src="https://c64.assets-yammer.com/assets/platform_embed.js"></script>
+<script type= "text/javascript" data-app-id="8Z6wlIYczbZAxWELw2Zyyg" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js" ></script>
+<script type="text/javascript" src="/style library/js/yammer.js"></script>
     <script type="text/javascript" src="/style library/js/ranking.js"></script>
 </asp:content>
 <asp:content contentplaceholderid="PlaceHolderPageTitle" runat="server">
@@ -132,7 +135,7 @@
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content" style="height: 1500px;">
             <div class="row">
             <div class="col-4">
                 <div class="panel">
@@ -158,6 +161,9 @@
                         </div>
                     </div>
                 </div>
+
+                <%--<div id="yammer" style="height:300px">
+                </div>--%>
             </div>
             <div class="col">
                 <div class="row">

@@ -2625,6 +2625,19 @@ jQuery(document).ready(function () {
             console.log("Something wrong");
         }
     );
+
+
+    $().SPServices({
+        operation: "GetAllSubWebCollection",
+        webURL: "https://grupovass.sharepoint.com",
+        completefunc: function (xData, Status) {
+            console.log(xData.responseText);
+            $(xData.responseXML).find("Webs > Web").each(function () {
+                var $node = $(this);
+                console.log($node.attr("Title"));
+            });
+        }
+    });
 });
 
 function setHomePage() {

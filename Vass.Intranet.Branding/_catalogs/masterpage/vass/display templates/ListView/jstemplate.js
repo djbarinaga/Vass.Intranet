@@ -30,6 +30,7 @@ function headerTemplate(ctx) {
             return ThumbnailList.headerTemplate(ctx);
             break;
         case "plantillas corporativas":
+        case "evaluadores":
         case "ppts corporativas":
         case "creatividades":
         case "diseños":
@@ -59,6 +60,7 @@ function itemTemplate(ctx) {
             return ThumbnailList.itemTemplate(ctx);
             break;
         case "plantillas corporativas":
+        case "evaluadores":
         case "ppts corporativas":
         case "creatividades":
         case "diseños":
@@ -89,6 +91,7 @@ function footerTemplate(ctx) {
             break;
         case "plantillas corporativas":
         case "ppts corporativas":
+        case "evaluadores":
         case "creatividades":
         case "diseños":
             return DocumentsList.footerTemplate(ctx);
@@ -118,6 +121,7 @@ function postRender(ctx) {
             break;
         case "plantillas corporativas":
         case "ppts corporativas":
+        case "evaluadores":
         case "creatividades":
         case "diseños":
             return DocumentsList.onpostrender(ctx);

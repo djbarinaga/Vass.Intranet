@@ -72,7 +72,14 @@ function pagingControl(ctx) {
 
     html += "<div class='paging'>";
     html += prev ? "<a href='" + prev + "'><span class='icon-izquierda'></span></a>" : "";
-    html += "<span class='ms-paging'><span class='First'>" + firstRow + "</span> - <span class='Last'>" + lastRow + "</span></span>";
+    if (firstRow != null)
+    {
+        html += "<span class='ms-paging'><span class='First'>" + firstRow + "</span> - <span class='Last'>" + lastRow + "</span></span>";
+    }
+    else
+    {
+        html += "<span class='ms-paging'><span class='First'>No hay cursos para esta competencia</span></span>";
+    }
     html += next ? "<a href='" + next + "'><span class='icon-derecha'></a>" : "";
     html += "</div>";
 

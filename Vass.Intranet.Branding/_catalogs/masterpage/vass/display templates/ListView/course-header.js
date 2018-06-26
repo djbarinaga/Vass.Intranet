@@ -30,60 +30,79 @@ function courseTemplate(ctx) {
 
     if (imagen != null && descripcion != null) {
         html += '<div id="summary-zone">' +
-            '<div class="row">' +
-            '<div class="col-4">' +
-            imagen +
-            '</div>' +
-            '<div class="col-8" id="summary">' +
-            descripcion +
-            '</div>' +
-            '</div>' +
-            '</div>';
+                '   <div class="row">' +
+                '       <div class="col-4">' +
+                '           <img src="' + imagen + '"/>' +
+                '       </div>' +
+                '       <div class="col-8" id="summary">' +
+                descripcion +
+                '       </div>' +
+                '   </div>' +
+                '</div>';
     }
 
     html += '<div class="content"><table class="table">';
 
-    html += '<tr>';
-    html += '<th>Horas</th>';
-    html += '<td>' + hours + '</td>';
-    html += '</tr>';
+    if (hours != null && hours != '') {
+        html += '<tr>';
+        html += '<th>Horas</th>';
+        html += '<td>' + hours + '</td>';
+        html += '</tr>';
+    }
 
-    html += '<tr>';
-    html += '<th>Fecha de inicio</th>';
-    html += '<td>' + startDate + '</td>';
-    html += '</tr>';
+    if (startDate != null && startDate != '') {
+        html += '<tr>';
+        html += '<th>Fecha de inicio</th>';
+        html += '<td>' + startDate + '</td>';
+        html += '</tr>';
+    }
+    
+    if (endDate != null && endDate != '') {
+        html += '<tr>';
+        html += '<th>Fecha de fin</th>';
+        html += '<td>' + endDate + '</td>';
+        html += '</tr>';
+    }
 
-    html += '<tr>';
-    html += '<th>Fecha de fin</th>';
-    html += '<td>' + endDate + '</td>';
-    html += '</tr>';
 
-    html += '<tr>';
-    html += '<th>Formador</th>';
-    html += '<td>' + trainer + '</td>';
-    html += '</tr>';
+    if (trainer != null && trainer != '') {
+        html += '<tr>';
+        html += '<th>Formador</th>';
+        html += '<td>' + trainer + '</td>';
+        html += '</tr>';
 
-    html += '<tr>';
-    html += '<th>Perfil</th>';
-    html += '<td>' + profile + '</td>';
-    html += '</tr>';
+    }
 
-    html += '<tr>';
-    html += '<th>Area</th>';
-    html += '<td>' + ctx.CurrentItem["Area_x0020_Afectada"] + '</td>';
-    html += '</tr>';
+    if (profile != null && profile != '') {
+        html += '<tr>';
+        html += '<th>Perfil</th>';
+        html += '<td>' + profile + '</td>';
+        html += '</tr>';
+    }
 
-    html += '<tr>';
-    html += '<th>Ubcación</th>';
-    html += '<td>' + ctx.CurrentItem["Ubicacion"] + '</td>';
-    html += '</tr>';
+    if (ctx.CurrentItem["Area_x0020_Afectada"] != null && ctx.CurrentItem["Area_x0020_Afectada"] != '') {
+        html += '<tr>';
+        html += '<th>Area</th>';
+        html += '<td>' + ctx.CurrentItem["Area_x0020_Afectada"] + '</td>';
+        html += '</tr>';
+    }
 
-    html += '<tr>';
-    html += '<th>Modalidad</th>';
-    html += '<td>' + ctx.CurrentItem["Modalidad_x0020_Curso"] + '</td>';
-    html += '</tr>';
+    if (startDate != null && startDate != '') {
+        html += '<tr>';
+        html += '<th>Ubcación</th>';
+        html += '<td>' + ctx.CurrentItem["Ubicacion"] + '</td>';
+        html += '</tr>';
+    }
 
-    if (ctx.CurrentItem["Remarks"] != '') {
+    if (ctx.CurrentItem["Modalidad_x0020_Curso"] != null && ctx.CurrentItem["Modalidad_x0020_Curso"] != '') {
+
+        html += '<tr>';
+        html += '<th>Modalidad</th>';
+        html += '<td>' + ctx.CurrentItem["Modalidad_x0020_Curso"] + '</td>';
+        html += '</tr>';
+    }
+
+    if (ctx.CurrentItem["Comentarios_x002f_observaciones"] != '') {
         html += '<tr>';
         html += '<th>Observaciones</th>';
         html += '<td>' + ctx.CurrentItem["Comentarios_x002f_observaciones"] + '</td>';

@@ -1596,6 +1596,9 @@ Date.prototype.addMonths = function (value) {
                     var date = new Date(result.EventDate);
                     var dateAsString = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
+                    if (description == null)
+                        description = '';
+
                     $($this).append('<li><h4>' + title + '</h4>' + description + '<span class="icon-calendario"></span>' + dateAsString + '</li>');
                 }
             }
@@ -2622,6 +2625,19 @@ jQuery(document).ready(function () {
             console.log("Something wrong");
         }
     );
+
+
+    $().SPServices({
+        operation: "GetAllSubWebCollection",
+        webURL: "https://grupovass.sharepoint.com",
+        completefunc: function (xData, Status) {
+            console.log(xData.responseText);
+            $(xData.responseXML).find("Webs > Web").each(function () {
+                var $node = $(this);
+                console.log($node.attr("Title"));
+            });
+        }
+    });
 });
 
 function setHomePage() {

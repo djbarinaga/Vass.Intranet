@@ -146,6 +146,10 @@ a, a:hover, a:visited{
     color: #50bbeb;
 }
 
+fg-blue2{
+    color:#458CB4;
+}
+
 .fg-purple{
     color: #6d6ba6;
 }
@@ -1845,4 +1849,56 @@ a.btn-orange, a.btn-orange:hover, a.btn-orange:focus, a.btn-orange:visited{
     font-size: 14px !important;
     border: none !important;
     padding:10px;
+}
+
+/*RANKING*/
+#ranking .group-title{
+    padding-left:20px;
+    width: 100%;
+    color:#458CB4
+}
+
+#ranking .group-description{
+    margin:0px;
+}
+
+#ranking .group-users{
+    position: relative;
+    top: 15%;
+}
+
+#ranking .group-users img{
+    height: 38px;
+    width: 38px;
+}
+
+#ranking .badge-info{
+    width:60px;
+    background-color: #50BBEB;
+    top: 10px;
+    position: relative;
+}
+
+#ranking .group-info{
+    clear: both;
+    width: 100%;
+    display: block;
+    margin: 10px 0px 0px 10px;
+}
+
+#ranking .group-info span{
+    font-size: 20px;
+    position: relative;
+    top: 3px;
+}
+
+#ranking > .row{
+    border-bottom: solid 1px #ccc;
+    padding-bottom: 20px;
+}
+
+#ranking .panel{
+    margin:20px;
+    background-color: #fafafa;
+    padding: 30px;
 }

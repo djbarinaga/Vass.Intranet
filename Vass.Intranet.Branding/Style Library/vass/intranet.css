@@ -1641,7 +1641,7 @@ div#my-teams .col-5, div#my-projects .col-5, div#my-guilds .col-5{
     background-color: #fafafa;
     padding: 15px;
     height: 90px;
-    margin-right: 20px;
+    margin: 20px;
 }
 
 div#my-teams a, div#my-projects a, div#my-guilds a{

@@ -428,6 +428,17 @@ namespace Migracion
                                             f.Choices = choice.Choices;
                                             f.Value = listItem[field.InternalName].ToString();
                                         }
+                                        else if (field.FieldTypeKind == FieldType.MultiChoice)
+                                        {
+                                            FieldMultiChoice choice = field as FieldMultiChoice;
+                                            f.Choices = choice.Choices;
+                                            f.Value = string.Join(";#", (string[])listItem[field.InternalName]);
+                                        }
+                                        else if (field.FieldTypeKind == FieldType.URL)
+                                        {
+                                            FieldUrlValue url = listItem[field.InternalName] as FieldUrlValue;
+                                            f.Value = url.Url;
+                                        }
                                         else
                                         {
                                             f.Value = listItem[field.InternalName].ToString();
@@ -616,7 +627,7 @@ namespace Migracion
 
                 ListCreationInformation creationInfo = new ListCreationInformation();
                 creationInfo.Title = listTitle;
-                creationInfo.TemplateType = (int)ListTemplateType.DocumentLibrary;
+                creationInfo.TemplateType = (int)ListTemplateType.GenericList;
                 List list = web.Lists.Add(creationInfo);
 
                 list.Update();

@@ -7,7 +7,7 @@ var variables = {
     clientId: {
         Teams: "4392d55a-3366-49f1-b553-1206086b9749",
         Events: "abc12551-d625-4f3f-94a9-1dee82fc9c18",
-        Graph: "ab66f287-db0f-40c4-8b34-ddcedd387b8a"
+        Graph: "ebd506d8-cce0-4170-b4f7-b0e95756ec31"
     }
 }
 

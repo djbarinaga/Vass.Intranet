@@ -1031,7 +1031,8 @@ Date.prototype.addMonths = function (value) {
 
             $('#alert').text('Esperando la creación del sitio');
 
-            checkSite(teamSiteUrl, function (formDigest) {
+            var counter = 0;
+            checkSite(teamSiteUrl, null, counter, function (teamSiteUrl, formDigest) {
                 checkFolder(teamSiteUrl, formDigest, function () {
 
                     $('#alert').text('Creando estructura de carpetas');
@@ -1107,21 +1108,40 @@ Date.prototype.addMonths = function (value) {
             });
         }
 
-        function checkSite(teamSiteUrl, callback) {
+        function checkSite(teamSiteUrl, id, counter, callback) {
+            if ((id == null && counter == 100) || (id != null && counter == 1)) {
+                $('#alert').text('Parece que la URL del sitio no coincide con el nombre del equipo. Buscando sitio...');
 
-            var url = teamSiteUrl + "/_api/contextinfo";
+                counter = 0;
+                if (id == null)
+                    id = 1;
+                else
+                    id = id + 1;
+            }
+
+            var url;
+
+            if (id == null)
+                url = teamSiteUrl + "/_api/contextinfo";
+            else
+                url = teamSiteUrl + id + "/_api/contextinfo";
 
             $.ajax({
                 url: url,
                 method: "POST",
                 headers: { Accept: "application/json;odata=verbose", "X-RequestDigest": $("#__REQUESTDIGEST").val() }
             }).done(function (data) {
-                if (data == null || data.d == null || data.d.GetContextWebInformation == null || data.d.GetContextWebInformation.FormDigestValue == null)
-                    setInterval(checkSite(teamSiteUrl, callback), 3000);
-                else
-                    callback(data.d.GetContextWebInformation.FormDigestValue);
-            }).fail(function (j) {
-                setInterval(checkSite(teamSiteUrl, callback), 3000);
+                if (data == null || data.d == null || data.d.GetContextWebInformation == null || data.d.GetContextWebInformation.FormDigestValue == null) {
+                    counter = counter + 1;
+                    setInterval(checkSite(teamSiteUrl, id, counter, callback), 3000);
+                }
+                else {
+                    teamSiteUrl = teamSiteUrl + id;
+                    callback(teamSiteUrl, data.d.GetContextWebInformation.FormDigestValue);
+                }
+                }).fail(function (j) {
+                    counter = counter + 1;
+                    setInterval(checkSite(teamSiteUrl, id, counter, callback), 3000);
             });
         }
 
@@ -1705,11 +1725,13 @@ Date.prototype.addMonths = function (value) {
             }
 
             var teams = data.value;
+            var counter = 0;
 
             var renderTeams = function (index) {
                 var team = teams[index];
 
                 var renderTeamInfo = function (channelData) {
+                    counter++;
                     var channel = channelData.value[0];
 
                     var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
@@ -1747,6 +1769,8 @@ Date.prototype.addMonths = function (value) {
                     $($this).append(html);
 
                     if (index < teams.length) {
+                        if (counter == 3)
+                            return;
                         var currentIndex = index + 1;
                         renderTeams(currentIndex);
                     }
@@ -1810,7 +1834,7 @@ Date.prototype.addMonths = function (value) {
             setContext(variables.clientId.Graph);
             var $this = $(this);
 
-            var endpoint = "/groups";
+            var endpoint = "/groups?$top=500";
 
             execute({
                 clientId: variables.clientId.Graph,
@@ -1830,7 +1854,7 @@ Date.prototype.addMonths = function (value) {
             }
 
             var teams = data.value;
-
+            var counter = 0;
             var renderTeams = function (index) {
                 var team = teams[index];
 
@@ -1840,6 +1864,7 @@ Date.prototype.addMonths = function (value) {
                 if (isGuild(team.displayName)) {
 
                     var renderTeamInfo = function (channelData) {
+                        counter++;
                         var channel = channelData.value[0];
 
                         var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
@@ -1893,8 +1918,11 @@ Date.prototype.addMonths = function (value) {
                     });
                 }
                 else if (index < teams.length) {
-                        var currentIndex = index + 1;
-                        renderTeams(currentIndex);
+                    if (counter == 3)
+                        return;
+
+                    var currentIndex = index + 1;
+                    renderTeams(currentIndex);
                 }
             }
 
@@ -1981,7 +2009,11 @@ Date.prototype.addMonths = function (value) {
 
             var teams = data.value;
 
+            var counter = 0;
+
             for (var i = 0; i < teams.length; i++) {
+                if (counter == 3)
+                    break;
                 var team = teams[i];
 
                 if (isGuild(team.displayName)) {
@@ -2016,6 +2048,8 @@ Date.prototype.addMonths = function (value) {
                     }
 
                     $($this).append(html);
+
+                    counter++;
                 }
             }
         }
@@ -2208,7 +2242,7 @@ Date.prototype.addMonths = function (value) {
         }
 
         function getFormacionTasks(callback) {
-            var url = "https://grupovass.sharepoint.com/es-es/formacion/_api/web/lists/getbytitle('Solicitud Cursos-empleados')/items?$select=Confirmacion_x0020_Asistencia,Nombre_x0020_curso/Fecha_x0020_Inicio,Nombre_x0020_curso/Nombre_x0020_Curso,Email_x0020_empleado/Email&$expand=Email_x0020_empleado,Nombre_x0020_curso&$filter=Email_x0020_empleado/Email eq '" + _spPageContextInfo.userEmail + "'";
+            var url = "https://grupovass.sharepoint.com/es-es/formacion/_api/web/lists/getbytitle('Solicitud Cursos-empleados')/items?$select=Confirmacion_x0020_Asistencia,Nombre_x0020_curso/Fecha_x0020_Inicio,Nombre_x0020_curso,Email_x0020_empleado/Email&$expand=Email_x0020_empleado,Nombre_x0020_curso&$filter=Email_x0020_empleado/Email eq '" + _spPageContextInfo.userEmail + "'";
 
             var $ajax = $.ajax({
                 url: url,
@@ -2241,10 +2275,14 @@ Date.prototype.addMonths = function (value) {
                                 tasksArray.push(task);
                             }
                         }
-                        
+
                     }
 
                     callback(tasksArray);
+                }
+                else {
+                    $($this).closest('.col').hide();
+                    return;
                 }
             });
         }
@@ -2629,7 +2667,7 @@ jQuery(document).ready(function () {
 
     $().SPServices({
         operation: "GetAllSubWebCollection",
-        webURL: "https://grupovass.sharepoint.com",
+        webURL: "https://grupovass.sharepoint.com/teams",
         completefunc: function (xData, Status) {
             console.log(xData.responseText);
             $(xData.responseXML).find("Webs > Web").each(function () {

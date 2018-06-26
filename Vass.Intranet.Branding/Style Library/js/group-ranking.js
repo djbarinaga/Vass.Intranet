@@ -34,6 +34,7 @@
                         var title = oListItem.get_item('Title');
                         var image = oListItem.get_item('Imagen').get_url();
                         var bigImage;
+
                         if (oListItem.get_item('Imagen_x0020_Grande') != null)
                             bigImage = oListItem.get_item('Imagen_x0020_Grande').get_url();
 

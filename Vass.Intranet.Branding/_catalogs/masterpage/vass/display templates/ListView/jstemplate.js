@@ -16,6 +16,9 @@ function headerTemplate(ctx) {
     var listName = ctx.ListTitle.toLowerCase();
 
     switch (listName) {
+        case "modelo para evaluadores":
+            return Links.headerTemplate(ctx);
+            break;
         case "sugerencias":
             return Suggestion.headerTemplate(ctx);
             break;
@@ -46,6 +49,9 @@ function itemTemplate(ctx) {
     var listName = ctx.ListTitle.toLowerCase();
 
     switch (listName) {
+        case "modelo para evaluadores":
+            return Links.itemTemplate(ctx);
+            break;
         case "sugerencias":
             return Suggestion.itemTemplate(ctx);
             break;
@@ -76,6 +82,9 @@ function footerTemplate(ctx) {
     var listName = ctx.ListTitle.toLowerCase();
 
     switch (listName) {
+        case "modelo para evaluadores":
+            return Links.footerTemplate(ctx);
+            break;
         case "sugerencias":
             return Suggestion.footerTemplate(ctx);
             break;
@@ -106,6 +115,9 @@ function postRender(ctx) {
     var listName = ctx.ListTitle.toLowerCase();
 
     switch (listName) {
+        case "modelo para evaluadores":
+            return Links.onpostrender(ctx);
+            break;
         case "sugerencias":
             return Suggestion.onpostrender(ctx);
             break;

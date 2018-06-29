@@ -67,7 +67,7 @@ namespace Migracion
         static string importSite = "";
         static List<File> files = new List<File>();
 
-        static bool createLookupLists = true;
+        static bool createLookupLists = false;
 
         static void Main(string[] args)
         {
@@ -129,37 +129,37 @@ namespace Migracion
 
             foreach (List list in web.Lists)
             {
+                if (!list.Title.Equals("biblioteca referencias en", StringComparison.InvariantCultureIgnoreCase))
+                    continue;
+
                 files = new List<File>();
 
-                //if (list.BaseType == BaseType.DocumentLibrary)
-                //{
-                //    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
-                //    GetFiles(list.RootFolder, context, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
-
-
-                //}
-
-                if (list.BaseType != BaseType.DocumentLibrary)
+                if (list.BaseType == BaseType.DocumentLibrary)
                 {
-                    Console.WriteLine("Obteniendo elementos de {0}", list.Title);
-                    GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+                    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
+                    GetFiles(list.RootFolder, context, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
 
-                    //if (files.Count > 0)
-                    //{
-                    //    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<File>));
 
-                    //    using (StreamWriter sw = new StreamWriter(Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title, "files.xml"), true))
-                    //    {
-                    //        using (XmlWriter writer = XmlWriter.Create(sw))
-                    //        {
-                    //            serializer.Serialize(writer, files);
-                    //        }
-
-                    //        sw.Flush();
-                    //    }
-                    //}
                 }
-                
+
+                Console.WriteLine("Obteniendo elementos de {0}", list.Title);
+                GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+
+                if (files.Count > 0)
+                {
+                    System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<File>));
+
+                    using (StreamWriter sw = new StreamWriter(Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title, "files.xml"), true))
+                    {
+                        using (XmlWriter writer = XmlWriter.Create(sw))
+                        {
+                            serializer.Serialize(writer, files);
+                        }
+
+                        sw.Flush();
+                    }
+                }
+
             }
 
             Console.WriteLine();
@@ -400,9 +400,26 @@ namespace Migracion
                                     {
                                         if (field.FieldTypeKind == FieldType.Lookup)
                                         {
-                                            FieldLookupValue lookup = listItem[field.InternalName] as FieldLookupValue;
                                             FieldLookup fLookup = (FieldLookup)field;
-                                            f.Value = lookup.LookupValue;
+                                            if (fLookup.AllowMultipleValues)
+                                            {
+                                                FieldLookupValue[] lookupMulti = listItem[field.InternalName] as FieldLookupValue[];
+
+                                                ArrayList lookupValues = new ArrayList();
+
+                                                foreach (var lookupValue in lookupMulti)
+                                                {
+                                                    lookupValues.Add(lookupValue.LookupValue);
+                                                }
+
+                                                f.Value = string.Join(";#", lookupValues.ToArray());
+                                            }
+                                            else
+                                            {
+                                                FieldLookupValue lookup = listItem[field.InternalName] as FieldLookupValue;
+                                                f.Value = lookup.LookupValue;
+                                            }
+                                                
 
                                             if (!string.IsNullOrEmpty(fLookup.LookupList))
                                             {
@@ -445,7 +462,7 @@ namespace Migracion
                                         }
 
                                     }
-                                    catch
+                                    catch(Exception ex)
                                     {
                                         f.Value = string.Empty;
                                     }
@@ -457,9 +474,9 @@ namespace Migracion
 
                             if (list.BaseType == BaseType.DocumentLibrary)
                             {
-                                
+
                                 Microsoft.SharePoint.Client.File file = listItem.File;
-                                if(file != null)
+                                if (file != null)
                                 {
                                     if (context.HasPendingRequest)
                                         context.ExecuteQuery();
@@ -618,22 +635,25 @@ namespace Migracion
 
                 Console.WriteLine("Creando lista {0}", listTitle);
 
-                if (createLookupLists)
-                    EnsureLookupList(context, listTitle);
+                //if (createLookupLists)
+                //    EnsureLookupList(context, listTitle);
 
-                EnsureNewList(context, listTitle);
+                //EnsureNewList(context, listTitle);
 
                 Web web = context.Web;
 
-                ListCreationInformation creationInfo = new ListCreationInformation();
-                creationInfo.Title = listTitle;
-                creationInfo.TemplateType = (int)ListTemplateType.GenericList;
-                List list = web.Lists.Add(creationInfo);
+                //ListCreationInformation creationInfo = new ListCreationInformation();
+                //creationInfo.Title = listTitle;
+                //creationInfo.TemplateType = (int)ListTemplateType.DocumentLibrary;
+                //List list = web.Lists.Add(creationInfo);
 
-                list.Update();
+                //list.Update();
+
+                List list = web.Lists.GetByTitle(listTitle);
+                context.Load(list);
                 context.ExecuteQuery();
 
-                CheckFiles(context, list, directory);
+                //CheckFiles(context, list, directory);
 
                 CreateItems(directory, list.Title);
             }
@@ -751,7 +771,8 @@ namespace Migracion
 
                     if (list.BaseType == BaseType.DocumentLibrary)
                     {
-                        string filePath = Path.Combine(directory.FullName, item.Fields[0].Value);
+                        string fileName = GetItemValue(item, "FileLeafRef");
+                        string filePath = Path.Combine(directory.FullName, fileName);
 
                         Microsoft.SharePoint.Client.File file = UploadFileSlicePerSlice(context, list, directory, item);
 
@@ -783,6 +804,30 @@ namespace Migracion
                                                 if (lv != null)
                                                     listItem[targetField.InternalName] = lv;
                                                 break;
+                                            case "LookupMulti":
+                                                string[] values = field.Value.Split(new string[] { ";#" }, StringSplitOptions.RemoveEmptyEntries);
+
+                                                List<FieldLookupValue> lookupValues = new List<FieldLookupValue>();
+                                                ArrayList al = new ArrayList();
+
+                                                for(int i = 0; i < values.Length; i++)
+                                                {
+                                                    FieldLookupValue lvMulti = GetLookupValue(field.LookupList, field.LookupField, values[i]);
+                                                    if (lvMulti != null)
+                                                    {
+                                                        lookupValues.Add(lvMulti);
+                                                        al.Add(lvMulti.LookupId);
+                                                        al.Add(values[i]);
+                                                    }
+                                                }
+
+                                                listItem.ParseAndSetFieldValue(targetField.InternalName, null);
+                                                listItem.Update();
+                                                listItem[targetField.InternalName] = lookupValues.ToArray();
+                                                listItem.Update();
+
+
+                                                break;
                                             default:
                                                 listItem[targetField.InternalName] = field.Value;
                                                 break;
@@ -800,8 +845,10 @@ namespace Migracion
 
                     listItem.Update();
 
-                    if (list.BaseType != BaseType.DocumentLibrary)
-                        context.ExecuteQuery();
+                    context.ExecuteQuery();
+
+                    //if (list.BaseType != BaseType.DocumentLibrary)
+                    //    context.ExecuteQuery();
 
                     if (list.BaseType != BaseType.DocumentLibrary)
                     {
@@ -898,9 +945,30 @@ namespace Migracion
                             schemaTextField = string.Format("<Field Type='{0}' Name='{1}' StaticName='{1}' DisplayName='{2}' List='{3}' ShowField='{4}'/>", field.FieldType, field.InternalName, field.Title, listIds[field.LookupList], field.LookupField);
                         }
                         break;
+                    case "LookupMulti":
+                        if (!string.IsNullOrEmpty(field.LookupList))
+                        {
+                            if (!listIds.Contains(field.LookupList))
+                            {
+                                string listId = GetListId(field.LookupList);
+                                listIds.Add(field.LookupList, listId);
+                            }
+
+                            schemaTextField = string.Format("<Field Type='{0}' Name='{1}' StaticName='{1}' DisplayName='{2}' List='{3}' ShowField='{4}' Mult=\"TRUE\"/>", field.FieldType, field.InternalName, field.Title, listIds[field.LookupList], field.LookupField);
+                        }
+                        break;
                     case "Choice":
                         schemaTextField = string.Format("<Field Type='{0}' Name='{1}' StaticName='{1}' DisplayName='{2}'><CHOICES>", field.FieldType, field.InternalName, field.Title, field.LookupList, field.LookupField);
                         for(int i = 0; i < field.Choices.Length; i++)
+                        {
+                            schemaTextField += string.Format("<CHOICE>{0}</CHOICE>", field.Choices[i]);
+
+                        }
+                        schemaTextField += "</CHOICES></Field>";
+                        break;
+                    case "MultiChoice":
+                        schemaTextField = string.Format("<Field Type='{0}' Name='{1}' StaticName='{1}' DisplayName='{2}'><CHOICES>", field.FieldType, field.InternalName, field.Title, field.LookupList, field.LookupField);
+                        for (int i = 0; i < field.Choices.Length; i++)
                         {
                             schemaTextField += string.Format("<CHOICE>{0}</CHOICE>", field.Choices[i]);
 

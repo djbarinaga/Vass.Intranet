@@ -2655,27 +2655,20 @@ jQuery(document).ready(function () {
     ctx.executeQueryAsync(
         function () {
             if (!per.get_value()) {
-                $('#O365_MainLink_Settings').parent().hide();
                 $('#s4-ribbonrow').hide();
+
+                var checkExist = setInterval(function () {
+                    if ($('#O365_MainLink_Settings').length) {
+                        $('#O365_MainLink_Settings').parent().hide();
+                        clearInterval(checkExist);
+                    }
+                }, 100);
             }
         },
         function (a, b) {
             console.log("Something wrong");
         }
     );
-
-
-    $().SPServices({
-        operation: "GetAllSubWebCollection",
-        webURL: "https://grupovass.sharepoint.com/teams",
-        completefunc: function (xData, Status) {
-            console.log(xData.responseText);
-            $(xData.responseXML).find("Webs > Web").each(function () {
-                var $node = $(this);
-                console.log($node.attr("Title"));
-            });
-        }
-    });
 });
 
 function setHomePage() {

@@ -87,7 +87,7 @@
                     if (gameScore != null) {
                         var user = {
                             name: title,
-                            picture: picture,
+                            picture: '/_layouts/15/userphoto.aspx?size=L&accountname=' + email,
                             score: gameScore
                         }
 
@@ -147,7 +147,7 @@
                     html += '<div class="col-5 panel" data-aos="fade-up" data-aos-once="true">';
                     html += '<div class="row">';
                     html += '<div class="col">';
-                    html += '<img src="' + currentRanking.users[j].picture + '" title="' + currentRanking.users[j].name + '" />';
+                    html += '<img src="' + currentRanking.users[j].picture + '" title="' + currentRanking.users[j].name + '" style="max-height:120px"/>';
                     html += '</div>';
                     html += '<div class="col">';
                     html += '<p>' + currentRanking.users[j].name + '</p>';

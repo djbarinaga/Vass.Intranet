@@ -79,7 +79,7 @@
                     if (gameScore != null) {
                         var user = {
                             name: title,
-                            picture: picture,
+                            picture: '/_layouts/15/userphoto.aspx?size=L&accountname=' + email,
                             score: gameScore
                         }
 
@@ -150,13 +150,7 @@
                 $($this).append(html);
             }
 
-            AOS.init({
-                targetSelector: ".group-detail",
-            });
-
-            $('#s4-workspace').on('scroll', function () {
-                AOS.refresh();
-            })
+            AOS.init();
         }
 
         function compare(a, b) {
@@ -185,4 +179,8 @@
 
 jQuery(document).ready(function () {
     jQuery('#ranking').ranking();
+
+    $('#s4-workspace').on('scroll', function () {
+        AOS.refreshHard();
+    });
 });

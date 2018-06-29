@@ -8,6 +8,16 @@
         var currentAction = 0;
 
         $('.nextStep').on('click', function () {
+            if (currentStep == -1) {
+                if ($('#txtGame').val() == '') {
+                    alert("Introduzca el nombre del juego.");
+                    return;
+                }
+                if ($('#txtScore').val() == '') {
+                    alert("Introduzca la puntuación por defecto.");
+                    return;
+                }
+            }
             $('.wizard-steps .row').each(function (index) {
                 if (!$(this).hasClass('d-none'))
                     currentStep = index;

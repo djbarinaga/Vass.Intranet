@@ -464,42 +464,27 @@ var ImageGallery = {
 }
 
 var Links = {
-    headerTemplate: function (ctx) {
-        var html = '<div class="module doc-list">' +
-            '<div class="module-content">' +
-            '<table class="table table-striped">';
+    headerTemplate: function(ctx) {
+        var html = '';
+    html += '<table class="table table-striped">';
 
-        return html;
+    return html;
     },
 
-    itemTemplate: function (ctx) {
-        var link = ctx.CurrentItem["FileRef"];
-        var name = ctx.CurrentItem["FileLeafRef"];
-        var type = ctx.CurrentItem["File_x0020_Type"];
-        var description = ctx.CurrentItem["Description"];
-        var size = this.bytesToSize(ctx.CurrentItem["File_x0020_Size"]);
+    itemTemplate: function(ctx) {
+        var title = ctx.CurrentItem["URL.desc"];
+        var link = ctx.CurrentItem["URL"];
 
         var html = '<tr>';
 
-        html += '<td><span class="icon-pdf"></span><a href="' + link + '" download="' + name + '">' + name + '</a></td>';
-
-        if (description != null && description != '')
-            html += '<td>' + description + '</td>';
-
-        if (ctx.CurrentItem["File_x0020_Size"] != null)
-            html += '<td>' + size + '</td>';
+        html += '<td><a href="' + link + '" target="_blank">' + title + '</a></td>';
 
         html += '</tr>';
-
 
         return html;
     },
 
     footerTemplate: function (ctx) {
-        return '</div></div></div>';
-    },
-
-    onpostrender: function (ctx) {
-        $('.ms-webpart-titleText a').removeAttr('href');
-    },
+        return '</table>';
+    }
 }

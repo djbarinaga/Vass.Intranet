@@ -318,7 +318,7 @@ var ThumbnailList = {
 
         var col = 'col-3';
 
-        var html = '<div class="' + col + '">';
+        var html = '<div class="' + col + '" data-aos="fade-up" data-aos-once="true">';
 
         html += '<div class="thumbnail-container"><div class="row">';
 
@@ -327,7 +327,7 @@ var ThumbnailList = {
         html += '</div>';
 
         html += '<div class="col">';
-        html += '<a href="' + link + '" download="' + name + '">' + name + '</a>';
+        html += '<a href="' + link + '" download="' + name + '">Descargar</a>';
         html += '</div>';
 
 
@@ -366,7 +366,12 @@ var DocumentsList = {
 
         var html = '<tr>';
 
-        html += '<td><span class="icon-pdf"></span><a href="' + link + '" download="' + name + '">' + name + '</a></td>';
+        var iconclass = 'icon-texto';
+
+        if (type == 'jpg' || type == 'jpeg' || type == 'png' || type == 'gif')
+            iconclass = "icon-foto_01";
+
+        html += '<td><span class="' + iconclass + '"></span><a href="' + link + '" download="' + name + '">' + name + '</a></td>';
 
         if(description != null && description != '')
             html += '<td>' + description + '</td>';
@@ -413,17 +418,18 @@ var ImageGallery = {
         var height = ctx.CurrentItem["ImageHeight"];
         var width = ctx.CurrentItem["ImageWidth"];
 
-        var html = '<div class="col-3">';
+        var html = '<div class="col-3" data-aos="fade-up" data-aos-once="true">';
 
         html += '<div class="card">';
 
-        html += '<img class="card-img-top" src="' + link + '"/>';
+        html += '<a href="' + link + '" data-lightbox="roadtrip"><img class="card-img-top" src="' + link + '"/></a>';
 
         html += '<div class="card-body">';
 
-        html += '<h5 class="card-title">' + name + '</h5>';
-        html += '<p class="card-text"><span class="icon-expande"></span>' + width + 'px x ' + height + 'px&nbsp;<span class="icon-cloud_baja"></span>' + size + '</p>';
-        html += '<a href="' + link + '" download="' + name + '" class="float-right">Descargar</a>';
+        //html += '<h5 class="card-title">' + name + '</h5>';
+        html += '<p class="card-text"><span class="icon-expande"></span>' + width + 'px x ' + height + 'px&nbsp;<span class="icon-cloud_baja"></span>' + size;
+        html += '<a href="' + link + '" download="' + name + '" class="float-right pt-4">Descargar</a>';
+        html += '</p>';
 
         html += '</div>';
         html += '</div>';

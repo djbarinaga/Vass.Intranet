@@ -1,28 +1,34 @@
 ﻿<div class="container" id="editar-charla">
-    <p data-field="Author"></p>
+    <p data-field="Author">Ponente: Intranet1 Admin</p>
     <div class="row">
-        <div class="col-3">
+        <div class="col-2">
             <div class="form-group">
-                <label for="txtDate">Fecha</label>
-                <input type="text" class="form-control" id="txtDate" data-field="Fecha_x0020_de_x0020_Realizacion"/>
+                <label for="txtDate">Fecha</label><input type="text" class="form-control datepicker" id="txtDate" data-field="Fecha_x0020_de_x0020_Realizacion" />
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label for="txtHour">Hora</label>
+                <select class="form-control" id="hourSelect"></select>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="roomSelect">Sala</label>
-                <select id="roomSelect" class="form-control" data-field="Lugar_x0020_de_x0020_Realizacion"></select>
+                <label for="roomSelect">Sala</label><input type="text" class="form-control" id="roomSelect" data-field="Lugar_x0020_de_x0020_Realizacion" value="Madrid - Planta 0 - Innovation Depot" />
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-2">
             <div class="form-group">
-                <label for="txtAforo">Aforo</label>
-                <input type="number" class="form-control" id="txtAforo" data-field="Aforo"/>
+                <label for="txtAforo">Aforo</label><input type="number" class="form-control" id="txtAforo" data-field="Aforo" value="20" />
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <p>Estado: <span id="txtStatus"></span></p>
+            <p>
+                Estado:
+                <span id="txtStatus"></span>
+            </p>
         </div>
     </div>
     <div class="row">
@@ -40,7 +46,6 @@
         </div>
     </div>
     <div id="wizard-buttons">
-        <button type="button" class="bg-orange" id="btnOk">Aceptar</button>
-        <button type="button" class="bg-grey" id="btnCancel">Cancelar</button>
+        <button type="button" class="bg-orange" id="btnOk">Aceptar</button><button type="button" class="bg-grey" id="btnCancel">Cancelar</button> ​<br />​<br />​<br />​<br />
     </div>
-</div>
+</div> 

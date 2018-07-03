@@ -2,6 +2,7 @@
 (function ($) {
     $.fn.chat = function (options) {
         var $this = this;
+        populateHours('#hourSelect');
 
         $(this).find('#btnOk').on('click', function () {
             var chatName = $('#txtNombreCharla').val();
@@ -9,7 +10,12 @@
             var chatDate = $('#txtFechaCharla').val();
             var chatTime = $('#txtTiempoCharla').val();
 
-            var date = new Date(chatDate);
+            var chatSplit = chatDate.split('/');
+            var chatDay = Number(chatSplit[0]);
+            var chatMonth = Number(chatSplit[1]);
+            var chatYear = Number(chatSplit[2]);
+
+            var date = new Date(chatYear, chatMonth - 1, chatDay);
 
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
@@ -28,7 +34,9 @@
 
             clientContext.executeQueryAsync(
                 Function.createDelegate(this, function () {
-                    showOkMessage("Tu solicitud se ha creado correctamente");
+                    showOkMessage("Tu solicitud se ha creado correctamente", function () {
+                        window.location.href = 'mis-charlas.aspx';
+                    });
                 }),
                 Function.createDelegate(this, function (sender, args) {
                     console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
@@ -46,8 +54,6 @@
 //EDIT CHAT
 (function ($) {
     $.fn.editChat = function (options) {
-        setContext(variables.clientId.Graph);
-
         var $this = this;
         var charlaId = getUrlParam('c');
         var gamesCollection;
@@ -96,9 +102,11 @@
                     var date = new Date(item.get_item('Fecha_x0020_de_x0020_Realizacion'));
                     $('#page-title').text(item.get_item('Title'));
                     $('#txtDate').val(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+                    $('#txtDate').datepicker('update');
                     $('#roomSelect').val(item.get_item('Lugar_x0020_de_x0020_Realizacion'));
                     $('#txtAforo').val(item.get_item('Aforo'));
                     $('#txtStatus').text(item.get_item('Estado_x0020_de_x0020_la_x0020_C'));
+                    $('#hourSelect').val(date.getHours() + ':' + date.getMinutes());
 
                     var author = item.get_item('Author');
                     $('p[data-field="Author"]').text("Ponente: " + author.get_lookupValue());
@@ -116,8 +124,8 @@
         function editGame(game, user) {
             var room = $('#roomSelect').val();
             var aforo = $('#txtAforo').val();
-            var date = new Date($('#txtDate').val())
-
+            var date = toDate($('#txtDate').val(), $('#hourSelect').val());
+            
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
             var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
@@ -137,10 +145,17 @@
 
             clientContext.executeQueryAsync(
                 Function.createDelegate(this, function () {
-                    if ($('#chkFinalizado').is(':checked')) //Se asigna la puntuación al usuario
+                    if ($('#chkFinalizado').is(':checked')) {
+                        //Enviamos la encuesta
+                        sendSurvey(game);
+
+                        //Se asigna la puntuación al usuario
                         getGames(game, user);
+                    }
                     else
-                        showOkMessage('La charla se ha modificado correctamente');
+                        showOkMessage('La charla se ha modificado correctamente', function () {
+                            window.history.back();
+                        });
                 }),
                 Function.createDelegate(this, function (sender, args) {
                     console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
@@ -150,30 +165,59 @@
         }
         //FIN EDICIÓN
 
-        //SALAS
-        var endpoint = "/me/findRooms";
+        function sendSurvey(game) {
+            var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
+            var oList = clientContext.get_web().get_lists().getByTitle('Inscripciones charlas');
 
-        execute({
-            clientId: variables.clientId.Graph,
-            version: "beta",
-            endpoint: endpoint,
-            type: "GET",
-            callback: setRooms
-        });
+            var camlQuery = new SP.CamlQuery();
+            camlQuery.set_viewXml(
+                '<View><Query><Where><Eq><FieldRef Name=\'Charla\'/>' +
+                '<Value Type=\'Lookup\'>' + game + '</Value></Eq></Where></Query></View>'
+            );
 
-        function setRooms(data) {
-            var results = data.value;
-            var length = results.length;
-            for (var i = 0; i < length; i++) {
-                var room = results[i];
+            var items = oList.getItems(camlQuery);
 
-                $('#roomSelect').append($('<option>', {
-                    value: room.name,
-                    text: room.name
-                }));
-            }
+            clientContext.load(items);
+
+            clientContext.executeQueryAsync(
+                Function.createDelegate(this, function () {
+                    if (items.get_count() > 0) {
+                        var listItemEnumerator = items.getEnumerator();
+                        while (listItemEnumerator.moveNext()) {
+                            var item = listItemEnumerator.get_current();
+
+                            var user = item.get_item('Author');
+                            var email = user.get_email();
+                            var lookup = item.get_item('Charla');
+                            var charlaTitle = lookup.get_lookupValue();
+
+                            var url = "https://grupovass.sharepoint.com/es-es/businessvalue/gaming/Paginas/valorar-partida.aspx?s=" + _spPageContextInfo.webServerRelativeUrl + "&n=Charlas&c=" + lookup.get_lookupId();
+
+                            clientContext.executeQueryAsync(
+                                Function.createDelegate(this, function () {
+                                    var body = '';
+                                    body += '<p>A continuación te enviamos una encuesta para valorar la charla ' + game + '</p>';
+                                    body += '<a href="' + url + '">Encuesta</a>';
+
+                                    sendEmail('no-reply@sharepointonline.com', email, body, "Encuesta sobre la charla " + game);
+                                }),
+                                Function.createDelegate(this, function (sender, args) {
+                                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                                })
+                            );
+
+                            break;
+                        }
+                    }
+                    else {
+                        showOkMessage("Tu inscripción se ha dado de baja correctamente.");
+                    }
+                }),
+                Function.createDelegate(this, function (sender, args) {
+                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                })
+            );
         }
-        //FIN SALAS
 
         //ASIGNACIÓN DE PUNTOS
         function getGames(game, user) {
@@ -286,6 +330,8 @@
                 if (currentScore == "")
                     currentScore = 0;
 
+                currentScore = Number(currentScore);
+
                 currentScore += Number(gameScore);
 
                 userScore[gameIndex] = currentScore;
@@ -320,9 +366,13 @@ $(document).ready(function () {
     $('#editar-charla').editChat();
 });
 
-function showOkMessage(msg) {
+function showOkMessage(msg, callback) {
     bootbox.alert(msg, function () {
-        window.location.reload();
+        if (callback == null)
+            window.location.reload();
+        else {
+            callback();
+        }
     });
 }
 

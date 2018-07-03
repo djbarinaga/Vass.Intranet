@@ -29,25 +29,26 @@ function charlaTemplate(ctx) {
     var charlaDay = charlaDateParts[0];
     var charlaMonthNumber = Number(charlaDateParts[1]) - 1;
     var charlaMonth = months[charlaMonthNumber];
-    charlaMonth = charlaMonth.substring(0, 3);
 
-    var charlaHours = charlaStartDate.split(' ')[1];
+    var html = '<div class="row event-detail" data-aos="fade-up" data-aos-once="true">';
 
-    var html = '<div class="row event-detail">';
+    var fg = 'fg-green';
+
+    if (status == "Propuesta")
+        fg = 'fg-orange';
 
     html += '<div class="col-8 event">';
-    html += '   <h3 class="event-title"><a href="/es-es/businessvalue/Paginas/Editar-charla.aspx?c=' + id + '">' + title + '</a></h3>';
+    html += '   <h3 class="event-title">' + title + '</h3>';
     html += '   <p class="event-author"><img src="https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=' + author["0"].email + '&UA=0&size=HR48x48&sc=1529465121474"/>' + author["0"].title + '</p>';
-    html += '   <p class="event-description">' + status + '</p>';
+    html += '   <p class="event-description ' + fg + '">' + status + '</p>';
     html += '   <p class="event-description">' + description + '</p>';
-    html += '   <p data-charlaid="' + id + '" class="float-right"></p>';
     html += '</div>';
     html += '<div class="col">';
     html += '   <div class="row">';
     html += '       <div class="col">';
     html += '           <div class="row">';
     html += '               <div class="col event-date">';
-    html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + ' ' + charlaHours + '</span>';
+    html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + '</span>';
     html += '               </div>';
     html += '               <div class="col event-hour">';
     html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaTime + ' min.</span>';
@@ -89,7 +90,7 @@ function pagingControl(ctx) {
 }
 
 function charlasPostRender(ctx) {
-    var charlas = $('#charlas p[data-charlaid]');
+    var charlas = $('#charlas a[data-charlaid]');
     var users = $('#charlas [data-uid]');
 
     checkAforo(charlas, 0);
@@ -119,8 +120,11 @@ function checkAforo(charlas, index) {
     clientContext.executeQueryAsync(
         Function.createDelegate(this, function () {
             if (items.get_count() > 0) {
-                $(charla).text("Inscripciones: " + items.get_count());
+                $(charla).next().text("Inscripciones: " + items.get_count());
+                $(charla).next().attr("data-inscriciones", items.get_count());
             }
+
+            $(charla).removeClass('hidden');
 
             var currentIndex = index;
             currentIndex += 1;
@@ -130,4 +134,60 @@ function checkAforo(charlas, index) {
             console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
         })
     );
+}
+
+function getUser(users, index) {
+    if (index == users.length)
+        return;
+
+    var clientContext = SP.ClientContext.get_current();
+
+    var userId = $(users[index]).data('uid');
+
+    var user = clientContext.get_web().getUserById(userId);
+
+    clientContext.load(user);
+
+    clientContext.executeQueryAsync(
+        function () {
+            var login = user.get_loginName();
+
+            var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
+            var userProfileProperties = peopleManager.getPropertiesFor(login);
+
+            clientContext.load(userProfileProperties);
+
+            clientContext.executeQueryAsync(
+                Function.createDelegate(this, function () {
+                    
+                    var image = userProfileProperties.get_userProfileProperties().PictureURL;
+
+                    if (image != null && image != '')
+                        $(users[index]).prepend('<img src="' + image + '"/>');
+
+                    var currentIndex = index;
+                    currentIndex += 1;
+                    getUser(users, currentIndex);
+                }),
+                Function.createDelegate(this, function (sender, args) {
+                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                    //showErrorMessage("No se ha podido crear la solicitud");
+                }));
+        },
+        function (sender, args) {
+            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+        }
+    );
+}
+
+function showOkMessage(msg) {
+    bootbox.alert(msg, function () {
+        window.location.reload();
+    });
+}
+
+function showErrorMessage(msg) {
+    bootbox.alert(msg, function () {
+        window.history.back();
+    });
 }

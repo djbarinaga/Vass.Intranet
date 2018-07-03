@@ -77,6 +77,7 @@ var menuIndex;
                         var idx = $(this).data('menu');
                         if (idx != menuIndex) {
                             var submenu = menu[idx].Nodes.results;
+                            hasItems = false;
 
                             if (submenu.length > 0) {
                                 var ul = $('<ul/>');
@@ -98,6 +99,9 @@ var menuIndex;
                                 if (hasItems) {
                                     $('#current-submenu').append(ul);
                                     $('#current-submenu').fadeIn('fast');
+                                }
+                                else {
+                                    $('#current-submenu').hide();
                                 }
                             }
                             else {

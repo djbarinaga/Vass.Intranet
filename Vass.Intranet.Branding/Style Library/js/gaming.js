@@ -232,39 +232,49 @@ function createSurveyQuestions() {
 
     clientContext.executeQueryAsync(
         Function.createDelegate(this, function () {
-            console.log('Pregunta creada');
+            var length = $('[data-command="surveys"]').length;
+
+            var create = function (index) {
+                if (index == $('[data-command="surveys"]').length) {
+                    createSurveyScore();
+                    return;
+                }
+
+                var surveyQuestion = $('[data-command="surveys"]')[index];
+
+                var question = $(surveyQuestion).find('[data-command="question"]').val();
+                var minimunScore = $(surveyQuestion).find('[data-command="minimunScore"]').val();
+                var maximunScore = $(surveyQuestion).find('[data-command="maximunScore"]').val();
+
+                var oField;
+
+                if (maximunScore != '')
+                    oField = oList.get_fields().addFieldAsXml("<Field DisplayName='" + question + "' Type='Number' Max='" + maximunScore + "' Min='" + minimunScore + "'/>", true, SP.AddFieldOptions.defaultValue);
+                else
+                    oField = oList.get_fields().addFieldAsXml("<Field DisplayName='" + question + "' Type='Number' Min='" + minimunScore + "'/>", true, SP.AddFieldOptions.defaultValue);
+
+                var fieldNumber = clientContext.castTo(oField, SP.FieldNumber);
+                fieldNumber.set_maximumValue(10);
+                fieldNumber.set_minimumValue(1);
+                fieldNumber.update();
+
+                clientContext.load(oField);
+
+                clientContext.executeQueryAsync(
+                    Function.createDelegate(this, function () {
+                        console.log('Pregunta creada');
+                        var currentIndex = index;
+                        currentIndex = currentIndex + 1;
+                        create(currentIndex);
+                    }),
+                    Function.createDelegate(this, createGameFailed)
+                );
+            }
+
+            create(0);
         }),
         Function.createDelegate(this, createGameFailed)
     );  
-
-    $('[data-command="surveys"]').each(function () {
-        var question = $(this).find('[data-command="question"]').val();
-        var minimunScore = $(this).find('[data-command="minimunScore"]').val();
-        var maximunScore = $(this).find('[data-command="maximunScore"]').val();
-
-        var oField;
-
-        if (maximunScore != '')
-            oField = oList.get_fields().addFieldAsXml("<Field DisplayName='" + question + "' Type='Number' Max='" + maximunScore + "' Min='" + minimunScore + "'/>", true, SP.AddFieldOptions.defaultValue);
-        else
-            oField = oList.get_fields().addFieldAsXml("<Field DisplayName='" + question + "' Type='Number' Min='" + minimunScore + "'/>", true, SP.AddFieldOptions.defaultValue);
-
-        var fieldNumber = clientContext.castTo(oField, SP.FieldNumber);
-        fieldNumber.set_maximumValue(10);
-        fieldNumber.set_minimumValue(1);
-        fieldNumber.update();
-
-        clientContext.load(oField);
-
-        clientContext.executeQueryAsync(
-            Function.createDelegate(this, function () {
-                console.log('Pregunta creada');
-            }),
-            Function.createDelegate(this, createGameFailed)
-        );  
-    });
-
-    createSurveyScore();
 }
 
 function createSurveyScore() {

@@ -38,14 +38,14 @@ Date.prototype.addMonths = function (value) {
                         complete: function () {
                             if ($(span).hasClass('icon-menu_cierra')) {
                                 $(span).removeClass('icon-menu_cierra').addClass('icon-menu');
-                                $('#page-title').animate({
-                                    'padding-left': '32px'
+                                $('.breadcrumb').animate({
+                                    'padding-left': '50px'
                                 });
                             }
                             else {
                                 $(span).removeClass('icon-menu').addClass('icon-menu_cierra');
-                                $('#page-title').animate({
-                                    'padding-left': '0px'
+                                $('.breadcrumb').animate({
+                                    'padding-left': '10px'
                                 });
                             }
                         }
@@ -1431,7 +1431,9 @@ Date.prototype.addMonths = function (value) {
             var startDate = selectedDate.getFullYear() + '-' + (Number(currentMonth) + 1) + '-01';
             var endDate = selectedDate.getFullYear() + '-' + (Number(currentMonth) + 1) + '-' + lastDay;
 
-            var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and end/dateTime le '" + endDate + "'";
+            var queryEndDate = selectedDate.getFullYear() + '-' + (Number(currentMonth) + 2) + '-01';
+
+            var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and start/dateTime le '" + queryEndDate + "'";
 
             execute({
                 clientId: variables.clientId.Graph,
@@ -1519,20 +1521,20 @@ Date.prototype.addMonths = function (value) {
                     var eventEndDay = eventEndDate.getDate();
 
                     if ((today >= eventDay && today <= eventEndDay) && addedEvents.indexOf(today + ":" + event.subject) == -1) {
-                        var eventHours = eventDate.getHours();
+                        var eventHours = eventDate.getHours() + 2;
                         var eventMinutes = eventDate.getMinutes();
                         if (eventHours < 10)
                             eventHours = '0' + eventHours;
                         if (eventMinutes < 10)
                             eventMinutes = '0' + eventMinutes;
 
-                        $('.events').append('<li><span class="clock">' + eventHours + ':' + eventMinutes + '</span><span>' + event.subject + '</span></li>');
+                        $('.events').append('<li><span class="icon-reloj"></span><span>' + eventHours + ':' + eventMinutes + '</span><span>' + event.subject + '</span></li>');
                         addedEvents.push(today + ":" + event.subject);
                     }
                 }
-
-                $('.event-date').append('<a target="_bank" href="https://outlook.office.com/owa/?realm=vass.es&exsvurl=1&ll-cc=3082&modurl=1&path=/calendar/view/Month">Ver todo</a>');
             }
+
+            $('.event-date').append('<a target="_bank" href="https://outlook.office.com/owa/?realm=vass.es&exsvurl=1&ll-cc=3082&modurl=1&path=/calendar/view/Month">Ver todo</a>');
         }
 
         function setCalendar(data) {
@@ -2575,7 +2577,22 @@ Date.prototype.addMonths = function (value) {
 }(jQuery));
 
 jQuery(document).ready(function () {
-    //localStorage.clear();
+    checkPermissions(); 
+
+    if ($('.datepicker').length) {
+        $('.datepicker').datepicker({
+            format: 'd/m/yyyy',
+            language: 'es-ES',
+            autoclose: true
+        });
+    }
+    
+
+    AOS.init();
+
+    $('#s4-workspace').on('scroll', function () {
+        AOS.refreshHard();
+    });
 
     setHomePage();
 
@@ -2645,13 +2662,17 @@ jQuery(document).ready(function () {
         $(this).tiles();
     });
 
+    
+});
+
+function checkPermissions() {
     var ctx = new SP.ClientContext.get_current();
     var web = ctx.get_web();
 
     var ob = new SP.BasePermissions();
-    ob.set(SP.PermissionKind.manageWeb)
+    ob.set(SP.PermissionKind.manageWeb);
 
-    var per = web.doesUserHavePermissions(ob)
+    var per = web.doesUserHavePermissions(ob);
     ctx.executeQueryAsync(
         function () {
             if (!per.get_value()) {
@@ -2669,7 +2690,7 @@ jQuery(document).ready(function () {
             console.log("Something wrong");
         }
     );
-});
+}
 
 function setHomePage() {
     $('.logo a').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
@@ -2718,17 +2739,22 @@ function getUrlParam(param, url) {
     }
 }
 
-function toDate(text) {
+function toDate(date, hour) {
     var language = _spPageContextInfo.currentLanguage;
     var d = null;
 
     if (language == 3082) {
         //español
-        var textAsDate = text.split('/');
-        d = new Date(textAsDate[2], Number(textAsDate[1]) - 1, textAsDate[0]);
+        var textAsDate = date.split('/');
+        if (hour != null) {
+            var hourSplit = hour.split(':');
+            d = new Date(Number(textAsDate[2]), Number(textAsDate[1]) - 1, Number(textAsDate[0]), Number(hourSplit[0]), Number(hourSplit[1]));
+        }
+        else
+            d = new Date(textAsDate[2], Number(textAsDate[1]) - 1, textAsDate[0]);
     }
     else {
-        d = new Date(text);
+        d = new Date(date);
     }
 
     return d;
@@ -3010,4 +3036,58 @@ function getIcon(icon) {
         return '<span class="' + iconClass + '"></span>';
     else
         return null;
+}
+
+function populateHours(selector) {
+    var select = $(selector);
+    var hours, minutes, ampm;
+    for (var i = 420; i <= 1320; i += 15) {
+        hours = Math.floor(i / 60);
+        minutes = i % 60;
+        if (minutes < 10) {
+            minutes = '0' + minutes;
+        }
+
+        if (hours === 0) {
+            hours = 12;
+        }
+        select.append($('<option></option>')
+            .attr('value', hours + ':' + minutes)
+            .text(hours + ':' + minutes));
+    }
+}
+
+function sendEmail(from, to, body, subject, callback) {
+    var urlTemplate = _spPageContextInfo.webAbsoluteUrl + "/_api/SP.Utilities.Utility.SendEmail";
+    var formDigest = document.getElementById("__REQUESTDIGEST").value;
+
+    var $ajax = $.ajax({
+        url: urlTemplate,
+        type: "POST",
+        contentType: 'application/json',
+        data: JSON.stringify({
+            'properties': {
+                '__metadata': { 'type': 'SP.Utilities.EmailProperties' },
+                'From': from,
+                'To': { 'results': [to] },
+                'Subject': subject,
+                'Body': body
+            }
+        }),
+        headers: {
+            "Accept": "application/json;odata=verbose",
+            "content-type": "application/json;odata=verbose",
+            "X-RequestDigest": formDigest
+        }
+    });
+
+    $ajax.done(function (data, textStatus, jqXHR) {
+        console.log(data.d.results);
+        if (callback != null)
+            callback();
+    });
+
+    $ajax.fail(function (data, textStatus, jqXHR) {
+        console.log(JSON.stringify(data));
+    });
 }

@@ -100,6 +100,10 @@ a, a:hover, a:visited{
     padding-left: 15px;
 }
 
+.pt-4{
+    padding-top: 4px !important;
+}
+
 .pr-0{
     padding-right:0px;
 }
@@ -831,6 +835,9 @@ footer p{
     border-right: none;
 }
 
+.card{
+    min-height:290px;
+}
 
 .card .card-title {
     background-color: #fff;
@@ -1232,10 +1239,16 @@ footer p{
     text-align: left;
 }
 
-.events li span{
+#home .events li span{
     display: inline;
-    font-size: 11px;
+    font-size: 12px !important;
+    color:#fff;
     margin-left: 2px;
+}
+
+#home .events li span.icon-reloj{
+    font-size:16px !important;
+    top:3px !important;
 }
 
 /*LISTADO EVENTOS*/
@@ -1545,6 +1558,7 @@ footer p{
 
 .thumbnail-container img{
     background-color: #ededed;
+    max-height: 75px;
 }
 
 .thumbnail-container a{
@@ -1569,7 +1583,7 @@ footer p{
 }
 
 .img-gallery .card{
-    height: 320px;
+    height: 255px;
     overflow: hidden;
     margin-bottom: 40px;
 }
@@ -1580,15 +1594,22 @@ footer p{
 
 .img-gallery .card .card-body{
     position: relative;
-    top: 200px;
+    top: 185px;
     background-color: rgba(255, 255, 255, 0.9);
+    padding-left:5px;
+    padding-right:5px;
+}
+
+.img-gallery .card .card-body p, .img-gallery .card .card-body a{
+    font-size: 12px !important;
+    padding-left:0px;
 }
 
 .img-gallery .card .card-body .card-title{
     background:none;
 }
 
-.img-gallery .card .card-body span{
+.img-gallery .card .card-body span[class^="icon-"]{
     font-size: 24px !important;
     position: relative;
     top: 5px;

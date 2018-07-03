@@ -53,7 +53,6 @@
                         var survey = oListItem.get_item('Title');
                         $('#hdnMiniGame').val(survey);
                         checkResponses(survey);
-                        getMiniGameQuestions(survey);
                         break;
                     }
                 }),

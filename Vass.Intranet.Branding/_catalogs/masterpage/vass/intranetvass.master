@@ -36,6 +36,11 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:CssRegistration runat="server" ID="CssRegistration3" Name="/style library/vass/vass-font/style.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration4" Name="/style library/vass/intranet.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration6" Name="/style library/js/aos/aos.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration8" Name="/style library/datepicker/css/bootstrap-datepicker.min.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration9" Name="/style library/datepicker/css/bootstrap-datepicker.standalone.min.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration10" Name="/style library/datepicker/css/bootstrap-datepicker3.min.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration11" Name="/style library/datepicker/css/bootstrap-datepicker3.standalone.min.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration7" Name="/style library/lightbox/css/lightbox.min.css" After="corev15.css" />
 
         <SharePoint:PageRenderMode runat="server" RenderModeType="Standard" />
         <SharePoint:ScriptLink language="javascript" name="core.js" OnDemand="true" runat="server" Localizable="false" />
@@ -61,6 +66,9 @@ To build the master page directly from this HTML file, simply edit the page as y
         <script type="text/javascript" src="/style library/js/master.js"></script>
         <script type="text/javascript" src="/style library/js/gaming.js"></script>
         <script type="text/javascript" src="/style library/js/aos/aos.js"></script>
+        <script type="text/javascript" src="/style library/datepicker/js/bootstrap-datepicker.min.js"></script>
+        <script type="text/javascript" src="/style library/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
+        <script type="text/javascript" src="/style library/lightbox/js/lightbox.min.js"></script>
         <script type="text/javascript" src="/_catalogs/masterpage/vass/Display%20Templates/ListView/jsobjects.js"></script>
 
         <SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">

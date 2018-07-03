@@ -149,8 +149,6 @@
 
                 $($this).append(html);
             }
-
-            AOS.init();
         }
 
         function compare(a, b) {
@@ -179,8 +177,4 @@
 
 jQuery(document).ready(function () {
     jQuery('#ranking').ranking();
-
-    $('#s4-workspace').on('scroll', function () {
-        AOS.refreshHard();
-    });
 });

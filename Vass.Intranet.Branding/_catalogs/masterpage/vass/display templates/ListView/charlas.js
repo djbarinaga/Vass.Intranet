@@ -28,21 +28,22 @@ function charlaTemplate(ctx) {
     var charlaDay = charlaDateParts[0];
     var charlaMonthNumber = Number(charlaDateParts[1]) - 1;
     var charlaMonth = months[charlaMonthNumber];
+    charlaMonth = charlaMonth.substring(0, 3);
 
-    var html = '<div class="row event-detail">';
+    var html = '<div class="row event-detail" data-aos="fade-up" data-aos-once="true">';
 
     html += '<div class="col-8 event">';
     html += '   <h3 class="event-title">' + title + '</h3>';
     html += '   <p class="event-author"><img src="https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=' + author["0"].email + '&UA=0&size=HR48x48&sc=1529465121474"/>' + author["0"].title + '</p>';
     html += '   <p class="event-description">' + description + '</p>';
-    html += '   <a href="#" data-charlaid="' + id + '" data-aforo="' + aforo + '"class="float-right event-inscription hidden">Inscribirme</a><span data-charlaid="' + id + '"></span>';
+    html += '   <a href="#" data-time="' + charlaTime + '" data-location="' + location + '" data-title="' + title + '" data-charlaid="' + id + '" data-aforo="' + aforo + '" data-date="' + charlaStartDate+ '" class="float-right event-inscription hidden">Inscribirme</a><span data-charlaid="' + id + '"></span>';
     html += '</div>';
     html += '<div class="col">';
     html += '   <div class="row">';
     html += '       <div class="col">';
     html += '           <div class="row">';
     html += '               <div class="col event-date">';
-    html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + '</span>';
+    html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + ' ' + charlaStartDate.split(' ')[1]; + '</span>';
     html += '               </div>';
     html += '               <div class="col event-hour">';
     html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaTime + ' min.</span>';
@@ -96,36 +97,153 @@ function charlasPostRender(ctx) {
     $('#charlas a[data-charlaid]').each(function () {
         $(this).on('click', function () {
             var charlaId = $(this).data('charlaid');
+            var charlaDate = $(this).data('date');
+            var charlaTitle = $(this).data('title');
+            var charlaTime = $(this).data('time');
+            var charlaLocation = $(this).data('location');
+            var inscription = $(this).data('inscription');
             var aforo = $(this).data('aforo');
             var inscripciones = $(this).next().data('inscriciones');
-
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
-
             var oList = clientContext.get_web().get_lists().getByTitle('Inscripciones charlas');
 
-            var itemCreateInfo = new SP.ListItemCreationInformation();
-            var newItem = oList.addItem(itemCreateInfo);
+            if ($(this).data('command') != 'delete') {
 
-            newItem.set_item('Charla', charlaId);
-            newItem.set_item('ListaEspera', inscripciones >= aforo);
-            newItem.update();
+                var itemCreateInfo = new SP.ListItemCreationInformation();
+                var newItem = oList.addItem(itemCreateInfo);
 
-            clientContext.load(newItem);
+                newItem.set_item('Charla', charlaId);3
+                newItem.set_item('ListaEspera', inscripciones >= aforo);
+                newItem.update();
 
-            clientContext.executeQueryAsync(
-                Function.createDelegate(this, function () {
-                    if (inscripciones >= aforo)
-                        showOkMessage("Tu inscripción se ha creado correctamente. <br/>El aforo está completo y se confirmará tu inscripción si se produce alguna baja.");
-                    else
-                        showOkMessage("Tu inscripción se ha creado correctamente");
-                }),
-                Function.createDelegate(this, function (sender, args) {
-                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
-                    showErrorMessage("No se ha podido realizar la inscripción al curso. Si el problema persiste ponte en contacto con el administrador del sistema.");
-                })
-            );
+                clientContext.load(newItem);
+
+                clientContext.executeQueryAsync(
+                    Function.createDelegate(this, function () {
+                        if (inscripciones >= aforo)
+                            showOkMessage("Tu inscripción se ha creado correctamente. <br/>El aforo está completo y se confirmará tu inscripción si se produce alguna baja.");
+                        else {
+                            createCalendarEvent(charlaDate, charlaTitle, charlaLocation, charlaTime);
+                        }
+                    }),
+                    Function.createDelegate(this, function (sender, args) {
+                        console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        showErrorMessage("No se ha podido realizar la inscripción al curso. Si el problema persiste ponte en contacto con el administrador del sistema.");
+                    })
+                );
+            }
+            else {
+                bootbox.confirm("¿Deseas darte de baja de la charla " + charlaTitle + "?", function (result) {
+                    if (result) {
+                        var inscriptionItem = oList.getItemById(inscription);
+                        inscriptionItem.deleteObject();
+
+                        clientContext.executeQueryAsync(
+                            Function.createDelegate(this, function () {
+                                setEnEspera();
+                            }),
+                            Function.createDelegate(this, function (sender, args) {
+                                console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                                showErrorMessage("No se ha podido realizar la inscripción al curso. Si el problema persiste ponte en contacto con el administrador del sistema.");
+                            })
+                        );
+                    }
+                });
+            }
         });
     });
+}
+
+function createCalendarEvent(date, title, location, time) {
+    setContext(variables.clientId.Graph);
+
+    var dateSplit = date.split(' ');
+    var eventDate = toDate(dateSplit[0], dateSplit[1]);
+
+    var endDate = new Date(eventDate);
+    endDate.setMinutes(eventDate.getMinutes() + Number(time));
+
+    var event = {
+        "subject": title,
+        "start": {
+            "dateTime": eventDate.toISOString(),
+            "timeZone": "UTC"
+        },
+        "end": {
+            "dateTime": endDate.toISOString(),
+            "timeZone": "UTC"
+        },
+        "location": {
+            "displayName": location
+        }
+    }
+
+    execute({
+        clientId: variables.clientId.Graph,
+        version: "v1.0",
+        endpoint: "/me/events",
+        type: "POST",
+        data: event,
+        callback: function (result) {
+            bootbox.alert("Tu inscripción se ha creado correctamente", function () {
+                window.location.reload();
+            });
+        }
+    })
+}
+
+function setEnEspera() {
+    var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
+
+    var oList = clientContext.get_web().get_lists().getByTitle('Inscripciones charlas');
+
+    var camlQuery = new SP.CamlQuery();
+    camlQuery.set_viewXml(
+        '<View><Query><Where><Eq><FieldRef Name=\'ListaEspera\' />' +
+        '<Value Type="Boolean">1</Value></Eq></Where></Query><RowLimit>1</RowLimit></View>'
+    );
+
+    var items = oList.getItems(camlQuery);
+
+    clientContext.load(items);
+
+    clientContext.executeQueryAsync(
+        Function.createDelegate(this, function () {
+            if (items.get_count() > 0) {
+                var listItemEnumerator = items.getEnumerator();
+                while (listItemEnumerator.moveNext()) {
+                    var item = listItemEnumerator.get_current();
+
+                    var user = item.get_item('Author');
+                    var email = user.get_email();
+                    var lookup = item.get_item('Charla');
+                    var charlaTitle = lookup.get_lookupValue()
+
+                    item.set_item('ListaEspera', 0);
+                    item.update();
+
+                    clientContext.executeQueryAsync(
+                        Function.createDelegate(this, function () {
+                            sendEmail('no-reply@sharepointonline.com', email, 'Se ha producido una baja en la charla ' + charlaTitle + ' por lo que se ha realizado tu inscripción.', 'Inscripción en ' + charlaTitle, function () {
+                                showOkMessage("Tu inscripción se ha dado de baja correctamente.");
+                            });
+                        }),
+                        Function.createDelegate(this, function (sender, args) {
+                            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        })
+                    );
+
+                    break;
+                }
+            }
+            else {
+                showOkMessage("Tu inscripción se ha dado de baja correctamente.");
+            }
+        }),
+        Function.createDelegate(this, function (sender, args) {
+            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+        })
+    );
 }
 
 function checkAforo(charlas, index) {
@@ -197,16 +315,17 @@ function checkInscription(charlas, index, callback) {
                 while (listItemEnumerator.moveNext()) {
                     var oListItem = listItemEnumerator.get_current();
                     var enEspera = oListItem.get_item('ListaEspera');
-                    if (!enEspera)
-                        $(charla).parent().append('<span class="fg-green float-right">Inscrito</span>');
+                    if (!enEspera) {
+                        $(charla).text('Borrarme').attr('data-command', 'delete');
+                        $(charla).attr('data-inscription', oListItem.get_item('ID'));
+                    }
                     else
                         $(charla).parent().append('<span class="fg-orange float-right">En lista de espera</span>');
-
-                    $(charla).remove();
-
-                    if (callback != null)
-                        callback();
                 }
+
+                var currentIndex = index;
+                currentIndex += 1;
+                checkInscription(charlas, currentIndex);
             }
 
             var currentIndex = index;

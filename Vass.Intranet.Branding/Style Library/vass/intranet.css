@@ -88,6 +88,10 @@ a, a:hover, a:visited{
     margin-bottom: 0px;
 }
 
+.mr-20 {
+    margin-right: 20px;
+}
+
 .no-padding{
     padding: 0px;
 }
@@ -211,6 +215,7 @@ fg-blue2{
 
 .bg-dark-blue{
     background-color: #003354;
+    color:#fff;
 }
 
 .bg-grey{

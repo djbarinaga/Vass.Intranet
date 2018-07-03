@@ -4,7 +4,7 @@ This HTML file has been associated with a SharePoint Master Page (.master file) 
 
 To build the master page directly from this HTML file, simply edit the page as you normally would.  Use the Snippet Generator at https://grupovass.sharepoint.com/_layouts/15/ComponentHome.aspx?Url=https%3A%2F%2Fgrupovass%2Esharepoint%2Ecom%2F%5Fcatalogs%2Fmasterpage%2Fintranetvass%2Emaster to create and customize useful SharePoint entities, then copy and paste them as HTML snippets into your HTML code.   All updates to this file will automatically sync to the associated Master Page.
 
- --%>
+--%>
 
 <%@ Master Language="C#" %>
 
@@ -41,6 +41,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:CssRegistration runat="server" ID="CssRegistration10" Name="/style library/datepicker/css/bootstrap-datepicker3.min.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration11" Name="/style library/datepicker/css/bootstrap-datepicker3.standalone.min.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration7" Name="/style library/lightbox/css/lightbox.min.css" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration12" Name="/style library/vass/animate.css" After="corev15.css" />
 
         <SharePoint:PageRenderMode runat="server" RenderModeType="Standard" />
         <SharePoint:ScriptLink language="javascript" name="core.js" OnDemand="true" runat="server" Localizable="false" />
@@ -85,8 +86,8 @@ To build the master page directly from this HTML file, simply edit the page as y
         </SharePoint:AjaxDelta>
 
         <PublishingWebControls:EditModePanel runat="server">
-		    <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
-	    </PublishingWebControls:EditModePanel>
+            <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
+        </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">
         <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent" />
@@ -145,7 +146,7 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <div class="col-3">
                                     <input type="text" class="search-box" placeholder="busca personas, documentos..." />
                                 </div>
-                            </div>                           
+                            </div>
                         </header>
 
                         <%--<div class="ms-breadcrumb-dropdownBox">
@@ -185,6 +186,115 @@ To build the master page directly from this HTML file, simply edit the page as y
             </div>
             <div id="navBarContainer">
                 <asp:ContentPlaceHolder ID="PlaceHolderLeftNavBar" runat="server" />
+            </div>
+
+            <div class="modal" id="gdpr" tabindex="-1" role="dialog" data-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark-blue">
+                            <h3 class="modal-title">GDPR</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div id="gdprInfo" class="gdpr-form">
+                                <h4><span class="icon-geo"></span>&nbsp;Información</h4>
+                                <div class="container">
+                                    <p>Para poder acceder a la intranet, es necesario que nos des tu consentimiento de acuerdo a la normativa de protección de datos personales Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016.</p>
+                                </div>
+                            </div>
+                            <div id="gdprGeolocalizacion" class="gdpr-form" style="display:none;">
+                                <h4><span class="icon-geo"></span>&nbsp;Geolocalización</h4>
+                                <div class="container">
+                                    <p>Finalidad: Herramienta de MDM corporativo para gestión de dispositivos móviles.</p>
+                                    <div class="form-inline">
+                                        <div class="form-group form-check mr-20">
+                                            <input type="radio" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionOk" value="true">
+                                            <label class="form-check-label" for="gdprGeolocalizacionOk">Sí</label>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="radio" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionNo" value="false">
+                                            <label class="form-check-label" for="gdprGeolocalizacionNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="gdprEnvioDatos" class="gdpr-form" style="display:none;">
+                                <h4><span class="icon-geo"></span>&nbsp;Envío de sus datos personales a otros países</h4>
+                                <div class="container">
+                                    <p>País: Empresas del Grupo o clientes.</p>
+                                    <p>Finalidad: Para procesos o puestos en proyecto de las empresas del grupo o para clientes.</p>
+                                    <div class="form-inline">
+                                        <div class="form-group form-check mr-20">
+                                            <input type="radio" name="EnvioDatosPersonales" class="form-check-input" id="gdprEnvioDatosOk" value="true">
+                                            <label class="form-check-label" for="gdprEnvioDatosOk">Sí</label>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="radio" name="EnvioDatosPersonales" class="form-check-input" id="gdprEnvioDatosNo" value="false">
+                                            <label class="form-check-label" for="gdprEnvioDatosNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="gdprImagenes" class="gdpr-form" style="display:none;">
+                                <h4><span class="icon-geo"></span>&nbsp;Imágenes</h4>
+                                <div class="container">
+                                    <p>Consiento la publicación de mi imagen en la página web de la entidad, Internet y otros medios similares para difundir las actividades de su entidad:</p>
+                                    <div class="form-inline">
+                                        <div class="form-group form-check mr-20">
+                                            <input type="radio" name="Imagenes" class="form-check-input" id="gdprImagenesOk" value="true">
+                                            <label class="form-check-label" for="gdprImagenesOk">Sí</label>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="radio" name="Imagenes" class="form-check-input" id="gdprImagenesNo" value="false">
+                                            <label class="form-check-label" for="gdprImagenesNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="gdprCesionDatos" class="gdpr-form" style="display:none;">
+                                <h4><span class="icon-geo"></span>&nbsp;Cesión de sus datos personales</h4>
+                                <div class="container">
+                                    <p>Consiento la cesión de mis datos personales a:</p>
+                                    <ul>
+                                        <li>
+                                            Entidad: Las necesarias para la relación laboral con VASS
+                                        </li>
+                                        <li>
+                                            Finalidad: Poder gestionar la relación laboral con VASS
+                                        </li>
+                                    </ul>
+                                    <div class="form-inline">
+                                        <div class="form-group form-check mr-20">
+                                            <input type="radio" name="CesionDatosPersonales" class="form-check-input" id="gdprCesionDatosOk" value="true">
+                                            <label class="form-check-label" for="gdprCesionDatosOk">Sí</label>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="radio" name="CesionDatosPersonales" class="form-check-input" id="gdprCesionDatosNo" value="false">
+                                            <label class="form-check-label" for="gdprCesionDatosNo">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="gdprPoliticaPrivacidad" class="gdpr-form" style="display:none;">
+                                <h4><span class="icon-geo"></span>&nbsp;Política de privacidad</h4>
+                                <div class="container">
+                                    <div class="form-inline">
+                                        <div class="form-group form-check mr-20">
+                                            <input type="checkbox" name="NormasUsoEmpleados" class="form-check-input" id="gdprPoliticaPrivacidadOk">
+                                            <label class="form-check-label" for="gdprCesionDatosOk">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/Shared%20Documents/normas_uso_empleados_B82422015_VASS_CONSULTORIA_DE_SISTEMAS_SL.DOCX.pdf">Política de uso del sistema de información</a></label>
+                                        </div>
+                                        <div class="form-group form-check">
+                                            <input type="checkbox" name="UtilizacionDatos" class="form-check-input" id="gdprPoliticaPrivacidad2Ok">
+                                            <label class="form-check-label" for="gdprCesionDatosNo">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/Shared%20Documents/SUS DATOS SEGUROS.DOCX.pdf">Información de la normativa de protección de datos personales</a></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="gdprOk">Siguiente</button>
+                        </div>
+                    </div>
+                </div>
             </div>
             <SharePoint:AjaxDelta id="DeltaFormDigest" BlockElement="true" runat="server">
                 <asp:ContentPlaceHolder ID="PlaceHolderFormDigest" runat="server">

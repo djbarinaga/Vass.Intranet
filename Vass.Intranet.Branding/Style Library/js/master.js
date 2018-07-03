@@ -22,6 +22,10 @@ Date.prototype.addMonths = function (value) {
     return this;
 };
 
+function isNullOrEmpty(text) {
+    return text == null || text == '';
+};
+
 /*MENU PLUGIN*/
 (function ($) {
     $.fn.menu = function (options) {
@@ -2577,7 +2581,14 @@ Date.prototype.addMonths = function (value) {
 }(jQuery));
 
 jQuery(document).ready(function () {
+
+    checkGdpr();
+
     checkPermissions(); 
+
+    AOS.init();
+
+    setHomePage();
 
     if ($('.datepicker').length) {
         $('.datepicker').datepicker({
@@ -2586,15 +2597,10 @@ jQuery(document).ready(function () {
             autoclose: true
         });
     }
-    
-
-    AOS.init();
 
     $('#s4-workspace').on('scroll', function () {
         AOS.refreshHard();
     });
-
-    setHomePage();
 
     jQuery('#menu-button').menu();
 
@@ -2661,8 +2667,6 @@ jQuery(document).ready(function () {
     $('#tiles').each(function () {
         $(this).tiles();
     });
-
-    
 });
 
 function checkPermissions() {
@@ -2694,13 +2698,6 @@ function checkPermissions() {
 
 function setHomePage() {
     $('.logo a').attr('href', '/' + _spPageContextInfo.currentCultureName.toLowerCase());
-}
-
-function hideRibbon() {
-    //if (window.isInEditMode)
-    //    $('#s4-ribbonrow').show();
-    //else
-    //    $('#s4-ribbonrow').hide();
 }
 
 var maxLength = 255;
@@ -3091,3 +3088,139 @@ function sendEmail(from, to, body, subject, callback) {
         console.log(JSON.stringify(data));
     });
 }
+
+function checkGdpr(callback) {
+    var clientContext = SP.ClientContext.get_current();
+    var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
+    var userProfileProperties = peopleManager.getMyProperties();
+
+    clientContext.load(userProfileProperties);
+
+    clientContext.executeQueryAsync(
+        function () {
+            var properties = userProfileProperties.get_userProfileProperties();
+            var geolocalizacion = properties["Geolocalizacion"];
+            var envioDatosPersonales = properties["EnvioDatosPersonales"];
+            var imagenes = properties["Imagenes"];
+            var cesionDatosPersonales = properties["CesionDatosPersonales"];
+            var checkedProperties = {};
+            var currentIndex = 0;
+
+            $('#gdprOk').on('click', function () {
+                var modalBody = $(this).parent().prev();
+                var length = $(modalBody).find('.gdpr-form').length;
+
+                if (currentIndex == length - 2) {
+                    $('#gdpr').modal('toggle');
+
+                    var clientContext = SP.ClientContext.get_current();
+                    var user = clientContext.get_web().get_siteUsers().getById(_spPageContextInfo.userId);
+
+                    clientContext.load(user);
+                    clientContext.executeQueryAsync(
+                        function () {
+                            var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
+                            var userProfileProperties = peopleManager.getMyProperties();
+
+                            for (var key in checkedProperties) {
+                                peopleManager.setSingleValueProfileProperty(user.get_loginName(), key, checkedProperties[key]);
+                            }
+
+                            clientContext.executeQueryAsync(
+                                Function.createDelegate(this, function () {
+                                    window.location.reload();
+                                }),
+                                Function.createDelegate(this, function (sender, args) {
+                                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                                    //showErrorMessage("No se ha podido crear la solicitud");
+                                }));
+                        },
+                        function (sender, args) {
+                            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                            //showErrorMessage("No se ha podido crear la solicitud");
+                        }
+                    );
+                }
+
+                $(modalBody).find('.gdpr-form').each(function (index) {
+                    if ($(this).css('display') != 'none') {
+                        currentIndex = index;
+
+                        $(this).animateCss('fadeOut', function () {
+                            $('#gdprOk').prop('disabled', true);
+
+                            $($(modalBody).find('.gdpr-form')[currentIndex]).hide();
+
+                            var nextForm = $(modalBody).find('.gdpr-form')[currentIndex + 1];
+                            $(nextForm).show();
+                            $(nextForm).animateCss("fadeInRight");
+
+                            if (currentIndex == length - 2) {
+                                $('#gdprOk').text('Finalizar');
+
+                                $(nextForm).find('input[type="checkbox"]').each(function () {
+                                    $(this).on('click', function () {
+                                        $('#gdprOk').prop('disabled', $(nextForm).find('input[type="checkbox"]:checked').length < 2);
+
+                                        checkedProperties[$(this).attr('name')] = $(this).is(":checked");
+                                    })
+                                });
+                            }
+                            else {
+                                $(nextForm).find('input[type="radio"]').each(function () {
+                                    $(this).on('click', function () {
+                                        if ($(this).val() == "true") {
+                                            $('#gdprOk').prop('disabled', false);
+                                        }
+                                        else {
+                                            $('#gdprOk').prop('disabled', true);
+                                        }
+
+                                        checkedProperties[$(this).attr('name')] = ($(this).val() == "true");
+                                    })
+                                })
+                            }
+                            
+                        });
+
+                        return false;
+                    }
+                });
+            });
+
+            if (isNullOrEmpty(geolocalizacion) || isNullOrEmpty(envioDatosPersonales) || isNullOrEmpty(imagenes) || isNullOrEmpty(cesionDatosPersonales)) {
+                $('#gdpr').modal();
+            }
+        },
+        function (sender, args) {
+            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+        }
+    );
+}
+
+$.fn.extend({
+    animateCss: function (animationName, callback) {
+        var animationEnd = (function (el) {
+            var animations = {
+                animation: 'animationend',
+                OAnimation: 'oAnimationEnd',
+                MozAnimation: 'mozAnimationEnd',
+                WebkitAnimation: 'webkitAnimationEnd',
+            };
+
+            for (var t in animations) {
+                if (el.style[t] !== undefined) {
+                    return animations[t];
+                }
+            }
+        })(document.createElement('div'));
+
+        this.addClass('animated ' + animationName).one(animationEnd, function () {
+            $(this).removeClass('animated ' + animationName);
+
+            if (typeof callback === 'function') callback();
+        });
+
+        return this;
+    },
+});

@@ -15,7 +15,7 @@
             var camlQuery = new SP.CamlQuery();
             camlQuery.set_viewXml(
                 '<View><Query><Where><Eq><FieldRef Name=\'JuegoPadre\'/>' +
-                '<Value Type=\'Lookup\'>Juego de tronos</Value></Eq></Where></Query></View>'
+                '<Value Type=\'Lookup\'>Juego de tronos</Value></Eq></Where><OrderBy><FieldRef Name="PuntuacionMinima" Ascending="False"/></OrderBy></Query></View>'
             );
 
             var groupCollection = oList.getItems(camlQuery);

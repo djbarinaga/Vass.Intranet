@@ -129,24 +129,24 @@ namespace Migracion
 
             foreach (List list in web.Lists)
             {
-                
+                if(!list.Title.Equals("biblioteca referencias es", StringComparison.InvariantCultureIgnoreCase))
+                {
+                    continue;
+                }
 
                 files = new List<File>();
 
-                //if (list.BaseType == BaseType.DocumentLibrary)
-                //{
-                //    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
-                //    GetFiles(list.RootFolder, context, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
-
-
-                //}
-
-                if(list.BaseType != BaseType.DocumentLibrary)
+                if (list.BaseType == BaseType.DocumentLibrary)
                 {
-                    Console.WriteLine("Obteniendo elementos de {0}", list.Title);
-                    GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+                    Console.WriteLine("Obteniendo ficheros de {0}", list.Title);
+                    GetFiles(list.RootFolder, context, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+
+
                 }
-                
+
+                Console.WriteLine("Obteniendo elementos de {0}", list.Title);
+                GetItems(context, list.RootFolder, list, Path.Combine(System.Configuration.ConfigurationManager.AppSettings["path"], list.Title));
+
 
                 if (files.Count > 0)
                 {

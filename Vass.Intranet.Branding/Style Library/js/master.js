@@ -3099,10 +3099,10 @@ function checkGdpr(callback) {
     clientContext.executeQueryAsync(
         function () {
             var properties = userProfileProperties.get_userProfileProperties();
-            var geolocalizacion = properties["Geolocalizacion"];
-            var envioDatosPersonales = properties["EnvioDatosPersonales"];
-            var imagenes = properties["Imagenes"];
-            var cesionDatosPersonales = properties["CesionDatosPersonales"];
+            var geolocalizacion = properties["Geolocalizacion"] == "True";
+            var envioDatosPersonales = properties["EnvioDatosPersonales"] == "True";
+            var imagenes = properties["Imagenes"] == "True";
+            var cesionDatosPersonales = properties["CesionDatosPersonales"] == "True";
             var checkedProperties = {};
             var currentIndex = 0;
 
@@ -3188,7 +3188,7 @@ function checkGdpr(callback) {
                 });
             });
 
-            if (isNullOrEmpty(geolocalizacion) || isNullOrEmpty(envioDatosPersonales) || isNullOrEmpty(imagenes) || isNullOrEmpty(cesionDatosPersonales)) {
+            if (!geolocalizacion || !envioDatosPersonales || !imagenes || !cesionDatosPersonales) {
                 $('#gdpr').modal();
             }
         },

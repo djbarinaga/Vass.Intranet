@@ -14,7 +14,8 @@ var variables = {
 window.config = {
     tenant: variables.azureAD,
     clientId: variables.clientId,
-    postLogoutRedirectUri: window.location.origin,
+    redirectUri: window.location.origin,
+    navigateToLoginRequestUrl: false,
     endpoints: {
         graphApiUri: "https://graph.microsoft.com"
     },
@@ -24,75 +25,54 @@ window.config = {
 function setContext(clientId) {
     config.clientId = clientId;
 
-    var authContext = new AuthenticationContext(config);
-
-    //authContext.TokenCache.Clear();
-
-    if (authContext.isCallback(window.location.hash)) {
-
-        authContext.handleWindowCallback();
-        var err = authContext.getLoginError();
-        if (err) {
-            console.log(err);
-        }
-    }
-    else {
-
-        var user = authContext.getCachedUser();
-        if (!user) {
-            authContext.login();
-        }
-    }
+    
 }
 
 function execute(options) {
     config.clientId = options.clientId;
+
     var authContext = new AuthenticationContext(config);
 
-    if (authContext.isCallback(window.location.hash)) {
+    var isCallback = authContext.isCallback(window.location.hash);
+    authContext.handleWindowCallback();
 
-        authContext.handleWindowCallback();
-        var err = authContext.getLoginError();
-        if (err) {
-            console.log(err);
-        }
+    if (isCallback && !authContext.getLoginError()) {
+        window.location = authContext._getItem(authContext.CONSTANTS.STORAGE.LOGIN_REQUEST);
     }
-    else {
 
-        var user = authContext.getCachedUser();
-        if (!user) {
-            authContext.login();
+    var user = authContext.getCachedUser();
+    if (!user) {
+        authContext.login();
+    }
+
+    authContext.acquireToken(config.endpoints.graphApiUri, function (error, token) {
+        if (error || !token) {
+            console.log("ADAL error occurred: " + error);
+            return;
         }
+        else {
+            var url = config.endpoints.graphApiUri + "/" + options.version + options.endpoint;
 
-        authContext.acquireToken(config.endpoints.graphApiUri, function (error, token) {
-            if (error || !token) {
-                console.log("ADAL error occurred: " + error);
-                return;
-            }
-            else {
-                var url = config.endpoints.graphApiUri + "/" + options.version + options.endpoint;
-
-                var ajaxOptions = {
-                    url: url,
-                    type: options.type,
-                    headers: {
-                        "Authorization": "Bearer " + token,
-                        "Content-Type": "application/json",
-                        "Accept": "application/json"
-                    }
-                };
-
-                if (options.type == "POST" || options.type == "PUT") {
-                    ajaxOptions.data = JSON.stringify(options.data);
+            var ajaxOptions = {
+                url: url,
+                type: options.type,
+                headers: {
+                    "Authorization": "Bearer " + token,
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
                 }
+            };
 
-                $.ajax(ajaxOptions).done(function (response) {
-                    if (options.callback != null)
-                        options.callback(response);
-                }).fail(function (j, h, d) {
-                    console.log(j);
-                });
+            if (options.type == "POST" || options.type == "PUT") {
+                ajaxOptions.data = JSON.stringify(options.data);
             }
-        });
-    }
+
+            $.ajax(ajaxOptions).done(function (response) {
+                if (options.callback != null)
+                    options.callback(response);
+            }).fail(function (j, h, d) {
+                console.log(j);
+            });
+        }
+    });
 }

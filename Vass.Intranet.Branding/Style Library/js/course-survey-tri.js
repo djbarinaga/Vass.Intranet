@@ -26,7 +26,7 @@ function checkSurvey() {
 
     var clientContext = SP.ClientContext.get_current();
 
-    var oList = clientContext.get_web().get_lists().getByTitle('Listado Cursos');
+    var oList = clientContext.get_web().get_lists().getByTitle('Listado Cursos Gestión');
     var item = oList.getItemById(Number(courseId));
 
     clientContext.load(item, 'Title', 'ID');
@@ -76,7 +76,7 @@ function getCourse() {
 
     var clientContext = SP.ClientContext.get_current();
 
-    var oList = clientContext.get_web().get_lists().getByTitle('Listado Cursos');
+    var oList = clientContext.get_web().get_lists().getByTitle('Listado Cursos Gestión');
     var item = oList.getItemById(Number(courseId));
 
     clientContext.load(item, 'Title', 'ID');

@@ -15,6 +15,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tools", "Tools\Tools.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AjustesOffering", "AjustesOffering\AjustesOffering.csproj", "{9EE53AFE-73E0-4ED6-AEC0-F1701A3C5B4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FormacionIntranet", "FormacionIntranet\FormacionIntranet.csproj", "{394C2E18-4EDC-4A18-89F7-58AD213F2D43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{9EE53AFE-73E0-4ED6-AEC0-F1701A3C5B4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EE53AFE-73E0-4ED6-AEC0-F1701A3C5B4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EE53AFE-73E0-4ED6-AEC0-F1701A3C5B4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{394C2E18-4EDC-4A18-89F7-58AD213F2D43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{394C2E18-4EDC-4A18-89F7-58AD213F2D43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{394C2E18-4EDC-4A18-89F7-58AD213F2D43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{394C2E18-4EDC-4A18-89F7-58AD213F2D43}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

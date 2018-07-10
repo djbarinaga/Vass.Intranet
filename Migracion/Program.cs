@@ -66,6 +66,7 @@ namespace Migracion
         static System.Xml.Serialization.XmlSerializer serializer = new System.Xml.Serialization.XmlSerializer(typeof(List<Item>));
         static string importSite = "";
         static List<File> files = new List<File>();
+        static Hashtable tecnologias = new Hashtable();
 
         static bool createLookupLists = false;
 
@@ -656,9 +657,9 @@ namespace Migracion
                 context.Load(list);
                 context.ExecuteQuery();
 
-                //CheckFiles(context, list, directory);
+                CheckFiles(context, list, directory);
 
-                CreateItems(directory, list.Title);
+                //CreateItems(directory, list.Title);
             }
             catch(Exception ex)
             {
@@ -819,16 +820,10 @@ namespace Migracion
                                                     if (lvMulti != null)
                                                     {
                                                         lookupValues.Add(lvMulti);
-                                                        al.Add(lvMulti.LookupId);
-                                                        al.Add(values[i]);
                                                     }
                                                 }
 
-                                                listItem.ParseAndSetFieldValue(targetField.InternalName, null);
-                                                listItem.Update();
-                                                listItem[targetField.InternalName] = lookupValues.ToArray();
-                                                listItem.Update();
-
+                                                listItem[targetField.InternalName] = (FieldLookupValue[]) lookupValues.ToArray();
 
                                                 break;
                                             default:
@@ -869,36 +864,44 @@ namespace Migracion
 
         private static FieldLookupValue GetLookupValue(string listTitle, string fieldName, string fieldValue)
         {
-            ClientContext clientContext = new ClientContext(importSite);
-            clientContext.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
-
-            List list = clientContext.Web.Lists.GetByTitle(listTitle);
-            FieldCollection fields = list.Fields;
-            CamlQuery camlQueryForItem = new CamlQuery();
-            camlQueryForItem.ViewXml = string.Format(@"<View>
-                                    <Query>
-                                        <Where>
-                                            <Eq>
-                                                <FieldRef Name='{0}'/>
-                                                <Value Type='Text'>{1}</Value>
-                                            </Eq>
-                                        </Where>
-                                    </Query>
-                                </View>", fieldName, fieldValue);
-
-            ListItemCollection listItems = list.GetItems(camlQueryForItem);
-            clientContext.Load(listItems);
-            clientContext.ExecuteQuery();
-            
-            if(listItems.Count > 0)
+            if(listTitle.Equals("tecnologias", StringComparison.InvariantCultureIgnoreCase) && tecnologias.Count == 0)
             {
-                ListItem item = listItems[0];
+                ClientContext clientContext = new ClientContext(importSite);
+                clientContext.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
 
-                FieldLookupValue lv = new FieldLookupValue();
-                lv.LookupId = Convert.ToInt32(item["ID"]);
+                List list = clientContext.Web.Lists.GetByTitle(listTitle);
+                FieldCollection fields = list.Fields;
+                CamlQuery camlQueryForItem = new CamlQuery();
+                camlQueryForItem = CamlQuery.CreateAllItemsQuery();
 
-                return lv;
+                ListItemCollection listItems = list.GetItems(camlQueryForItem);
+                clientContext.Load(listItems);
+                clientContext.ExecuteQuery();
+
+                foreach(ListItem item in listItems)
+                {
+
+                    int id = Convert.ToInt32(item["ID"]);
+                    string title = item["Title"].ToString();
+
+                    if (!tecnologias.ContainsKey(id))
+                    {
+                        tecnologias.Add(id, title);
+                    }
+                }
             }
+
+            foreach(DictionaryEntry de in tecnologias)
+            {
+                if(de.Value.ToString().Equals(fieldName, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    FieldLookupValue lv = new FieldLookupValue();
+                    lv.LookupId = Convert.ToInt32(de.Key);
+
+                    return lv;
+                }
+            }
+            
 
 
             return null;

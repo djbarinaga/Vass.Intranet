@@ -31,7 +31,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <SharePoint:StartScript runat="server" />
         <SharePoint:CssLink runat="server" Version="15"></SharePoint:CssLink>
         <SharePoint:CacheManifestLink runat="server" />
-        <SharePoint:CssRegistration runat="server" ID="CssRegistration1" Name="https://fonts.googleapis.com/css?family=Montserrat:500,600,700,800" After="corev15.css" />
+        <SharePoint:CssRegistration runat="server" ID="CssRegistration1" Name="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700,800" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration2" Name="/style library/vass/bootstrap.min.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration3" Name="/style library/vass/vass-font/style.css" After="corev15.css" />
         <SharePoint:CssRegistration runat="server" ID="CssRegistration4" Name="/style library/vass/intranet.css" After="corev15.css" />
@@ -64,6 +64,7 @@ To build the master page directly from this HTML file, simply edit the page as y
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
         <script type="text/javascript" src="/style library/js/graph.js"></script>
+        <script type="text/javascript" src="/style library/js/animate.js"></script>
         <script type="text/javascript" src="/style library/js/master.js"></script>
         <script type="text/javascript" src="/style library/js/gaming.js"></script>
         <script type="text/javascript" src="/style library/js/aos/aos.js"></script>
@@ -196,62 +197,49 @@ To build the master page directly from this HTML file, simply edit the page as y
                         </div>
                         <div class="modal-body">
                             <div id="gdprInfo" class="gdpr-form">
-                                <h4><span class="icon-geo"></span>&nbsp;Información</h4>
                                 <div class="container">
                                     <p>Para poder acceder a la intranet, es necesario que nos des tu consentimiento de acuerdo a la normativa de protección de datos personales Reglamento (UE) 2016/679 del Parlamento Europeo y del Consejo, de 27 de abril de 2016.</p>
                                 </div>
                             </div>
-                            <div id="gdprGeolocalizacion" class="gdpr-form" style="display:none;">
-                                <h4><span class="icon-geo"></span>&nbsp;Geolocalización</h4>
+                            <div id="gdprGeolocalizacion" class="gdpr-form mb-20">
+                                <h5><span class="icon-geo"></span>&nbsp;Geolocalización</h5>
                                 <div class="container">
-                                    <p>Finalidad: Herramienta de MDM corporativo para gestión de dispositivos móviles.</p>
+                                    <p>Finalidad: Herramienta de MDM corporativo para gestión de dispositivos móviles corporativos.</p>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
-                                            <input type="radio" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionOk" value="true">
-                                            <label class="form-check-label" for="gdprGeolocalizacionOk">Sí</label>
-                                        </div>
-                                        <div class="form-group form-check">
-                                            <input type="radio" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionNo" value="false">
-                                            <label class="form-check-label" for="gdprGeolocalizacionNo">No</label>
+                                            <input type="checkbox" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionOk" value="true">
+                                            <label class="form-check-label" for="gdprGeolocalizacionOk">Acepto</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="gdprEnvioDatos" class="gdpr-form" style="display:none;">
-                                <h4><span class="icon-geo"></span>&nbsp;Envío de sus datos personales a otros países</h4>
+                            <div id="gdprEnvioDatos" class="gdpr-form mb-20">
+                                <h5><span class="icon-geo"></span>&nbsp;Envío de sus datos personales a otros países</h5>
                                 <div class="container">
                                     <p>País: Empresas del Grupo o clientes.</p>
                                     <p>Finalidad: Para procesos o puestos en proyecto de las empresas del grupo o para clientes.</p>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
-                                            <input type="radio" name="EnvioDatosPersonales" class="form-check-input" id="gdprEnvioDatosOk" value="true">
-                                            <label class="form-check-label" for="gdprEnvioDatosOk">Sí</label>
-                                        </div>
-                                        <div class="form-group form-check">
-                                            <input type="radio" name="EnvioDatosPersonales" class="form-check-input" id="gdprEnvioDatosNo" value="false">
-                                            <label class="form-check-label" for="gdprEnvioDatosNo">No</label>
+                                            <input type="checkbox" name="EnvioDatosPersonales" class="form-check-input" id="gdprEnvioDatosOk" value="true">
+                                            <label class="form-check-label" for="gdprEnvioDatosOk">Acepto</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="gdprImagenes" class="gdpr-form" style="display:none;">
-                                <h4><span class="icon-geo"></span>&nbsp;Imágenes</h4>
+                            <div id="gdprImagenes" class="gdpr-form mb-20">
+                                <h5><span class="icon-geo"></span>&nbsp;Imágenes</h5>
                                 <div class="container">
                                     <p>Consiento la publicación de mi imagen en la página web de la entidad, Internet y otros medios similares para difundir las actividades de su entidad:</p>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
-                                            <input type="radio" name="Imagenes" class="form-check-input" id="gdprImagenesOk" value="true">
-                                            <label class="form-check-label" for="gdprImagenesOk">Sí</label>
-                                        </div>
-                                        <div class="form-group form-check">
-                                            <input type="radio" name="Imagenes" class="form-check-input" id="gdprImagenesNo" value="false">
-                                            <label class="form-check-label" for="gdprImagenesNo">No</label>
+                                            <input type="checkbox" name="Imagenes" class="form-check-input" id="gdprImagenesOk" value="true">
+                                            <label class="form-check-label" for="gdprImagenesOk">Acepto</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="gdprCesionDatos" class="gdpr-form" style="display:none;">
-                                <h4><span class="icon-geo"></span>&nbsp;Cesión de sus datos personales</h4>
+                            <div id="gdprCesionDatos" class="gdpr-form mb-20">
+                                <h5><span class="icon-geo"></span>&nbsp;Cesión de sus datos personales</h5>
                                 <div class="container">
                                     <p>Consiento la cesión de mis datos personales a:</p>
                                     <ul>
@@ -264,34 +252,30 @@ To build the master page directly from this HTML file, simply edit the page as y
                                     </ul>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
-                                            <input type="radio" name="CesionDatosPersonales" class="form-check-input" id="gdprCesionDatosOk" value="true">
-                                            <label class="form-check-label" for="gdprCesionDatosOk">Sí</label>
-                                        </div>
-                                        <div class="form-group form-check">
-                                            <input type="radio" name="CesionDatosPersonales" class="form-check-input" id="gdprCesionDatosNo" value="false">
-                                            <label class="form-check-label" for="gdprCesionDatosNo">No</label>
+                                            <input type="checkbox" name="CesionDatosPersonales" class="form-check-input" id="gdprCesionDatosOk" value="true">
+                                            <label class="form-check-label" for="gdprCesionDatosOk">Acepto</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="gdprPoliticaPrivacidad" class="gdpr-form" style="display:none;">
-                                <h4><span class="icon-geo"></span>&nbsp;Política de privacidad</h4>
+                            <div id="gdprPoliticaPrivacidad" class="gdpr-form mb-20">
+                                <h5><span class="icon-geo"></span>&nbsp;Política de privacidad</h5>
                                 <div class="container">
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
                                             <input type="checkbox" name="NormasUsoEmpleados" class="form-check-input" id="gdprPoliticaPrivacidadOk">
-                                            <label class="form-check-label" for="gdprCesionDatosOk">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/Shared%20Documents/normas_uso_empleados_B82422015_VASS_CONSULTORIA_DE_SISTEMAS_SL.DOCX.pdf">Política de uso del sistema de información</a></label>
+                                            <label class="form-check-label" for="gdprCesionDatosOk">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/info/Paginas/politica-de-uso-del-sistema-de-informacion.aspx">Política de uso del sistema de información</a></label>
                                         </div>
                                         <div class="form-group form-check">
                                             <input type="checkbox" name="UtilizacionDatos" class="form-check-input" id="gdprPoliticaPrivacidad2Ok">
-                                            <label class="form-check-label" for="gdprCesionDatosNo">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/Shared%20Documents/SUS DATOS SEGUROS.DOCX.pdf">Información de la normativa de protección de datos personales</a></label>
+                                            <label class="form-check-label" for="gdprCesionDatosNo">He leído y acepto la&nbsp;<a target="_blank" href="https://grupovass.sharepoint.com/info/Paginas/Sus-datos-seguros.aspx">Información de la normativa de protección de datos personales</a></label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" id="gdprOk">Siguiente</button>
+                            <button type="button" class="btn btn-primary" id="gdprOk" disabled>Siguiente</button>
                         </div>
                     </div>
                 </div>

@@ -136,51 +136,31 @@ function courseOnPostRender() {
         bootbox.confirm(message, function (result) {
 
             if (result) {
-                //Obtenemos las propiedades del usuario
-                var url = _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/GetByTitle('Empleados')/items?$filter=Email eq '" + _spPageContextInfo.userEmail + "'";
+                var listName = 'Solicitud Cursos-empleados';
+                var item = {
+                    "__metadata": {
+                        "type": "SP.Data.Solicitud_x0020_CursosempleadosListItem"
+                    },
+                    "Nombre_x0020_cursoId": courseId
+                };
 
-                var $ajax = $.ajax({
-                    url: url,
-                    type: "GET",
-                    dataType: "json",
+                $.ajax({
+                    url: _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items",
+                    type: "POST",
+                    contentType: "application/json;odata=verbose",
+                    data: JSON.stringify(item),
                     headers: {
-                        Accept: "application/json;odata=verbose"
+                        "Accept": "application/json;odata=verbose",
+                        "X-RequestDigest": $("#__REQUESTDIGEST").val()
+                    },
+                    success: function (data) {
+                        bootbox.alert('La inscripción al curso se ha realizado correctamente.', function () {
+                            window.location.href = 'mis-cursos.aspx';
+                        });
+                    },
+                    error: function (data) {
+                        console.log(data);
                     }
-                });
-
-                $ajax.done(function (data, textStatus, jqXHR) {
-                    var results = data.d.results;
-                    var currentUser;
-                    if (results != null)
-                        currentUser = results[0];
-
-                    var listName = 'Solicitud Cursos-empleados';
-                    var item = {
-                        "__metadata": {
-                            "type": "SP.Data.Solicitud_x0020_CursosempleadosListItem"
-                        },
-                        "Nombre_x0020_cursoId": courseId,
-                        "Email_x0020_empleadoId": currentUser["ID"]
-                    };
-
-                    $.ajax({
-                        url: _spPageContextInfo.webAbsoluteUrl + "/_api/web/lists/getbytitle('" + listName + "')/items",
-                        type: "POST",
-                        contentType: "application/json;odata=verbose",
-                        data: JSON.stringify(item),
-                        headers: {
-                            "Accept": "application/json;odata=verbose",
-                            "X-RequestDigest": $("#__REQUESTDIGEST").val()
-                        },
-                        success: function (data) {
-                            bootbox.alert('La inscripción al curso se ha realizado correctamente.', function () {
-                                window.location.href = 'mis-cursos.aspx';
-                            });
-                        },
-                        error: function (data) {
-                            console.log(data);
-                        }
-                    });
                 });
             }
 

@@ -21,6 +21,8 @@
 	<SharePoint:SPShortcutIcon runat="server" IconUrl="/_layouts/15/images/favicon.ico?rev=44" />
 	<SharePoint:StartScript runat="server" />
 	<SharePoint:CssLink runat="server" Version="15"/>
+    <SharePoint:CssRegistration runat="server" ID="CssRegistration12" Name="/style library/vass/animate.css" After="corev15.css" />
+    <SharePoint:CssRegistration runat="server" ID="CssRegistration4" Name="/style library/vass/intranet.css" After="corev15.css" />
 	<SharePoint:ScriptLink language="javascript" name="core.js" OnDemand="true" runat="server" Localizable="false" />
 	<SharePoint:ScriptLink language="javascript" name="menu.js" OnDemand="true" runat="server" Localizable="false" />
 	<SharePoint:ScriptLink language="javascript" name="callout.js" OnDemand="true" runat="server" Localizable="false" />
@@ -29,6 +31,7 @@
 	<SharePoint:CustomJSUrl runat="server" />
 	<SharePoint:SoapDiscoveryLink runat="server" />
     <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="/style library/js/animate.js"></script>
     <script src="https://secure.aadcdn.microsoftonline-p.com/lib/1.0.7/js/adal.min.js"></script>
     <script type="text/javascript" src="/style library/js/graph.js"></script>
 	<SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">
@@ -40,6 +43,56 @@
     <style>
         #suiteBarTop, #s4-titlerow, #sideNavBox, #s4-ribbonrow{
             display:none !important;
+        }
+
+        #contentBox{
+            margin:50px;
+        }
+
+        #s4-workspace{
+            background-color: rgb(0, 51, 84);
+        }
+
+        #DeltaPlaceHolderMain{
+            height: 800px;
+        }
+
+        .logo{
+            padding: 0px;
+            height: 75px;
+            margin: 0 auto;
+            width: 260px;
+            position: relative;
+            top: 20%;
+        }
+
+        .logo a{
+            display: inline-block;
+            border-right: solid 1px #50bbeb;
+            float: left;
+            width: 169px;
+            height: 100%;
+            padding-left: 10px;
+            padding-top: 12px;
+        }
+
+        .logo img{
+            width: auto !important;
+        }
+
+        .logo span{
+            font-weight: 400;
+            color: #50bbeb;
+            display: inline-block;
+            margin-top: 45px;
+            margin-left: 5px;
+            font-size: 20px;
+        }
+
+        .logo p{
+            color:#fff;
+            margin-top: 40px;
+            text-align: center;
         }
     </style>
 </head>

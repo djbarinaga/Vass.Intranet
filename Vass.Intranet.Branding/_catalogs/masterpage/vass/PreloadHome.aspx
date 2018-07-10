@@ -4,6 +4,19 @@
 	<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	<script type="text/javascript">
         $(document).ready(function () {
+
+            function animate(index) {
+                $($('.logo p span')[index]).animateCss('pulse', function () {
+                    index++;
+                    if (index == 3)
+                        index = 0;
+
+                    animate(index);
+                });
+            }
+
+            animate(0);
+
             setContext(variables.clientId.Graph);
             execute({
                 clientId: variables.clientId.Graph,
@@ -11,7 +24,10 @@
                 endpoint: "/me",
                 type: "GET",
                 callback: function () {
-                    window.location.href = '/Pages/VariationRoot.aspx';
+                    $('.logo').animateCss('flipOutY', function () {
+                        window.location.href = '/Pages/VariationRoot.aspx';
+                        $('.logo').hide();
+                    });
                 }
             });
         });
@@ -25,5 +41,11 @@
 </asp:Content>
 <asp:Content ContentPlaceHolderId="PlaceHolderTitleBreadcrumb" runat="server"> <SharePointWebControls:ListSiteMapPath runat="server" SiteMapProviders="CurrentNavigationSwitchableProvider" RenderCurrentNodeAsLink="false" PathSeparator="" CssClass="s4-breadcrumb" NodeStyle-CssClass="s4-breadcrumbNode" CurrentNodeStyle-CssClass="s4-breadcrumbCurrentNode" RootNodeStyle-CssClass="s4-breadcrumbRootNode" NodeImageOffsetX=0 NodeImageOffsetY=289 NodeImageWidth=16 NodeImageHeight=16 NodeImageUrl="/_layouts/15/images/fgimg.png?rev=44" HideInteriorRootNodes="true" SkipLinkText="" /> </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderMain" runat="server">
-    <img src="/PublishingImages/loading.gif" style="position: fixed;top: 50%;left: 50%;transform: translate(-50%, -50%);"/>
+    <div class="logo">
+        <a href="#">
+            <img src="/style library/images/logo.png" />
+        </a>
+        <span>intranet</span>
+        <p>Personalizando Intranet<span style="color:#fff !important;font-size:2em !important">.</span><span style="color:#fff !important;font-size:2em !important">.</span><span style="color:#fff !important;font-size:2em !important">.</span></p>
+    </div>
 </asp:Content>

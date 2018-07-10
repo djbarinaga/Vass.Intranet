@@ -348,6 +348,46 @@ var ThumbnailList = {
     }
 }
 
+var ThumbnailGallery = {
+    headerTemplate: function (ctx) {
+        var html = '<div class="module thumbnail">' +
+            '<div class="module-content">' +
+            '<div class="row">';
+
+        return html;
+    },
+
+    itemTemplate: function (ctx) {
+        var link = ctx.CurrentItem["FileRef"];
+        var name = ctx.CurrentItem["FileLeafRef"];
+
+        var total = ctx.ListData.Row.length;
+        var colWidth = 12 / total;
+
+        if (colWidth < 3)
+            colWidth = 3;
+
+        var col = 'col-3';
+
+        var html = '<div class="' + col + ' text-center" data-aos="fade-up" data-aos-once="true">';
+
+        html += '<img src="' + link + '" class="img-thumbnail"/>';
+
+        html += '</div>';
+
+
+        return html;
+    },
+
+    footerTemplate: function (ctx) {
+        return '</div></div></div>';
+    },
+
+    onpostrender: function (ctx) {
+        $('.ms-webpart-titleText a').removeAttr('href');
+    }
+}
+
 var DocumentsList = {
     headerTemplate: function (ctx) {
         var html = '<div class="module doc-list">' +

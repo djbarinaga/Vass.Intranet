@@ -33,7 +33,7 @@ function courseTemplate(ctx) {
         var courseId = ctx.CurrentItem.Nombre_x0020_curso["0"].lookupId;
         var status = ctx.CurrentItem.Estado;
         var itemId = ctx.CurrentItem.ID;
-        var email = ctx.CurrentItem.Email_x0020_empleado["0"].lookupValue;
+        var email = ctx.CurrentItem.Author["0"].email;
         var courseDate = '';
 
         if (startDate != '')

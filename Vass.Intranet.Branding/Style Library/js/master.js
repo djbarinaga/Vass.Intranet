@@ -1410,6 +1410,7 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.mycalendar = function (options) {
         setContext(variables.clientId.Graph);
+
         var $this = $(this);
         var events;
         var today = new Date();
@@ -1437,7 +1438,7 @@ function isNullOrEmpty(text) {
 
             var queryEndDate = selectedDate.getFullYear() + '-' + (Number(currentMonth) + 2) + '-01';
 
-            var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and start/dateTime le '" + queryEndDate + "'";
+            var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and start/dateTime le '" + queryEndDate + "'&$orderby=start/dateTime";
 
             execute({
                 clientId: variables.clientId.Graph,
@@ -1494,15 +1495,12 @@ function isNullOrEmpty(text) {
                 });
             });
 
-            renderEvents();
+            renderEvents(new Date());
         }
 
         function renderEvents(currentDate) {
             if (currentDate == null)
                 currentDate = getFirstDate();
-
-            if (currentDate == null)
-                currentDate = new Date();
 
 
             $('.event-day').text(daysOfWeek[currentDate.getDay()]);
@@ -1636,7 +1634,7 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.carousel = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/_api/search/query?querytext='HomeHighlight:true'&trimduplicates=false&selectproperties='Title%2cPath%2cPublishingImage%2cHitHighlightedSummary'";
+        var url = "https://grupovass.sharepoint.com/_api/search/query?querytext='HomeHighlight:true'&trimduplicates=false&selectproperties='Title%2cPath%2cPublishingImage%2cHitHighlightedSummary,Description'";
 
         var $ajax = $.ajax({
             url: url,
@@ -1682,10 +1680,10 @@ function isNullOrEmpty(text) {
                     if (i == 0)
                         css += " active";
 
-                    var carouselItem = $('<div class="' + css + '"/>');
-                    $(carouselItem).append(img);
+                    var carouselItem = $('<div class="' + css + '" style="background-image:url(\'' + img.attr('src') + '\');background-size:cover;"/>');
+                    //$(carouselItem).append(img);
 
-                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><h5><a href="' + url + '">' + title + '</a></h5><p>' + description + '</p></div>');
+                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><h5><a href="' + url + '">' + title + '</a></h5></div>');
                     carouselItem.append(carouselCaption);
 
                     carouselInner.append(carouselItem);
@@ -2543,8 +2541,9 @@ function isNullOrEmpty(text) {
 /*TILES PLUGIN*/
 (function ($) {
     $.fn.tiles = function (options) {
+        var type = $(this).data('type');
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Aplicaciones')/items";
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Aplicaciones')/items?$orderby=Posicion";
 
         var $ajax = $.ajax({
             url: url,
@@ -2563,14 +2562,21 @@ function isNullOrEmpty(text) {
                 
                 for (var i = 0; i < resultsLength; i++) {
                     var result = results[i];
-                    var html = '';
-                    html += '<div class="col tile" style="background-color:' + result.Color + '">';
+                    var css = 'medium';
+                    if (result.Size.toLowerCase() == 'grande')
+                        css = 'big';
+                    else if (result.Size.toLowerCase() == 'pequeño')
+                        css = 'small';
 
-                    html += '   <a href="' + result.URL.Url + '">';
+                    var html = '';
+
+                    html += '<div class="tile ' + css + '" style="background-color:' + result.Color + '">';
+
+                    html += '   <a href="' + result.URL.Url + '" target="_blank">';
 
                     html += '       <img src="' + result.Imagen.Url + '"/>';  
                     html += '       <p>' + result.Title + '</p>';
-
+                    html += '   </a>';
                     html += '<div>';
 
                     $($this).append(html);
@@ -2582,90 +2588,90 @@ function isNullOrEmpty(text) {
 
 jQuery(document).ready(function () {
 
-    checkGdpr();
+    checkGdpr(function () {
+        checkPermissions();
 
-    checkPermissions(); 
+        AOS.init();
 
-    AOS.init();
+        setHomePage();
 
-    setHomePage();
+        if ($('.datepicker').length) {
+            $('.datepicker').datepicker({
+                format: 'd/m/yyyy',
+                language: 'es-ES',
+                autoclose: true
+            });
+        }
 
-    if ($('.datepicker').length) {
-        $('.datepicker').datepicker({
-            format: 'd/m/yyyy',
-            language: 'es-ES',
-            autoclose: true
+        $('#s4-workspace').on('scroll', function () {
+            AOS.refreshHard();
         });
-    }
 
-    $('#s4-workspace').on('scroll', function () {
-        AOS.refreshHard();
-    });
+        jQuery('#menu-button').menu();
 
-    jQuery('#menu-button').menu();
+        jQuery('#graph-wizard').each(function () {
+            $(this).wizard();
+        });
 
-    jQuery('#graph-wizard').each(function () {
-        $(this).wizard();
-    });
+        jQuery('#quickLinks').each(function () {
+            $(this).quicklinks();
+        });
 
-    jQuery('#quickLinks').each(function () {
-        $(this).quicklinks();
-    });
+        jQuery('#socialLinks').each(function () {
+            $(this).sociallinks();
+        });
 
-    jQuery('#socialLinks').each(function () {
-        $(this).sociallinks();
-    });
+        jQuery('.search-box').each(function () {
+            $(this).searchbox();
+        });
 
-    jQuery('.search-box').each(function () {
-        $(this).searchbox();
-    });
+        //jQuery('.banner').each(function () {
+        //    $(this).banner();
+        //});
 
-    //jQuery('.banner').each(function () {
-    //    $(this).banner();
-    //});
+        jQuery('#calendar').each(function () {
+            $(this).mycalendar();
+        });
 
-    jQuery('#calendar').each(function () {
-        $(this).mycalendar();
-    });
+        jQuery('#vass-calendar').each(function () {
+            $(this).events();
+        });
 
-    jQuery('#vass-calendar').each(function () {
-        $(this).events();
-    });
+        jQuery('#carouselNews').each(function () {
+            $(this).carousel();
+        });
 
-    jQuery('#carouselNews').each(function () {
-        $(this).carousel();
-    });
+        $('#my-teams').each(function () {
+            $(this).myjoinedteams();
+        });
 
-    $('#my-teams').each(function () {
-        $(this).myjoinedteams();
-    });
+        $('#my-guilds').each(function () {
+            $(this).myjoinedguilds();
+        });
 
-    $('#my-guilds').each(function () {
-        $(this).myjoinedguilds();
-    });
+        $('#my-projects').each(function () {
+            $(this).myjoinedprojects();
+        });
 
-    $('#my-projects').each(function () {
-        $(this).myjoinedprojects();
-    });
+        $('#my-people').each(function () {
+            $(this).peoplearoundme();
+        });
 
-    $('#my-people').each(function () {
-        $(this).peoplearoundme();
-    });
+        $('#my-tasks').each(function () {
+            $(this).mytasks();
+        });
 
-    $('#my-tasks').each(function () {
-        $(this).mytasks();
-    });
+        $('#thrones').each(function () {
+            $(this).thrones();
+        });
 
-    $('#thrones').each(function () {
-        $(this).thrones();
-    });
+        $('#thrones-resume').each(function () {
+            $(this).thronesSummary();
+        });
 
-    $('#thrones-resume').each(function () {
-        $(this).thronesSummary();
-    });
-
-    $('#tiles').each(function () {
-        $(this).tiles();
+        $('[data-role="tiles"]').each(function () {
+            $(this).tiles();
+        });
     });
 });
 
@@ -3106,90 +3112,50 @@ function checkGdpr(callback) {
             var checkedProperties = {};
             var currentIndex = 0;
 
-            $('#gdprOk').on('click', function () {
-                var modalBody = $(this).parent().prev();
-                var length = $(modalBody).find('.gdpr-form').length;
+            $('#gdpr input[type="checkbox"]').each(function () {
+                $(this).on('click', function () {
+                    $('#gdprOk').prop('disabled', $('#gdpr input[type="checkbox"]:checked').length < 6);
 
-                if (currentIndex == length - 2) {
-                    $('#gdpr').modal('toggle');
-
-                    var clientContext = SP.ClientContext.get_current();
-                    var user = clientContext.get_web().get_siteUsers().getById(_spPageContextInfo.userId);
-
-                    clientContext.load(user);
-                    clientContext.executeQueryAsync(
-                        function () {
-                            var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
-                            var userProfileProperties = peopleManager.getMyProperties();
-
-                            for (var key in checkedProperties) {
-                                peopleManager.setSingleValueProfileProperty(user.get_loginName(), key, checkedProperties[key]);
-                            }
-
-                            clientContext.executeQueryAsync(
-                                Function.createDelegate(this, function () {
-                                    window.location.reload();
-                                }),
-                                Function.createDelegate(this, function (sender, args) {
-                                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
-                                    //showErrorMessage("No se ha podido crear la solicitud");
-                                }));
-                        },
-                        function (sender, args) {
-                            console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
-                            //showErrorMessage("No se ha podido crear la solicitud");
-                        }
-                    );
-                }
-
-                $(modalBody).find('.gdpr-form').each(function (index) {
-                    if ($(this).css('display') != 'none') {
-                        currentIndex = index;
-
-                        $(this).animateCss('fadeOut', function () {
-                            $('#gdprOk').prop('disabled', true);
-
-                            $($(modalBody).find('.gdpr-form')[currentIndex]).hide();
-
-                            var nextForm = $(modalBody).find('.gdpr-form')[currentIndex + 1];
-                            $(nextForm).show();
-                            $(nextForm).animateCss("fadeInRight");
-
-                            if (currentIndex == length - 2) {
-                                $('#gdprOk').text('Finalizar');
-
-                                $(nextForm).find('input[type="checkbox"]').each(function () {
-                                    $(this).on('click', function () {
-                                        $('#gdprOk').prop('disabled', $(nextForm).find('input[type="checkbox"]:checked').length < 2);
-
-                                        checkedProperties[$(this).attr('name')] = $(this).is(":checked");
-                                    })
-                                });
-                            }
-                            else {
-                                $(nextForm).find('input[type="radio"]').each(function () {
-                                    $(this).on('click', function () {
-                                        if ($(this).val() == "true") {
-                                            $('#gdprOk').prop('disabled', false);
-                                        }
-                                        else {
-                                            $('#gdprOk').prop('disabled', true);
-                                        }
-
-                                        checkedProperties[$(this).attr('name')] = ($(this).val() == "true");
-                                    })
-                                })
-                            }
-                            
-                        });
-
-                        return false;
-                    }
+                    checkedProperties[$(this).attr('name')] = $(this).is(":checked");
                 });
+            })
+
+            $('#gdprOk').on('click', function () {
+                var clientContext = SP.ClientContext.get_current();
+                var user = clientContext.get_web().get_siteUsers().getById(_spPageContextInfo.userId);
+
+                clientContext.load(user);
+                clientContext.executeQueryAsync(
+                    function () {
+                        var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
+                        var userProfileProperties = peopleManager.getMyProperties();
+
+                        for (var key in checkedProperties) {
+                            peopleManager.setSingleValueProfileProperty(user.get_loginName(), key, checkedProperties[key]);
+                        }
+
+                        clientContext.executeQueryAsync(
+                            Function.createDelegate(this, function () {
+                                window.location.reload();
+                            }),
+                            Function.createDelegate(this, function (sender, args) {
+                                console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                                //showErrorMessage("No se ha podido crear la solicitud");
+                            }));
+                    },
+                    function (sender, args) {
+                        console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        //showErrorMessage("No se ha podido crear la solicitud");
+                    }
+                );
             });
 
             if (!geolocalizacion || !envioDatosPersonales || !imagenes || !cesionDatosPersonales) {
                 $('#gdpr').modal();
+            }
+            else {
+                if (callback != null)
+                    callback();
             }
         },
         function (sender, args) {
@@ -3197,30 +3163,3 @@ function checkGdpr(callback) {
         }
     );
 }
-
-$.fn.extend({
-    animateCss: function (animationName, callback) {
-        var animationEnd = (function (el) {
-            var animations = {
-                animation: 'animationend',
-                OAnimation: 'oAnimationEnd',
-                MozAnimation: 'mozAnimationEnd',
-                WebkitAnimation: 'webkitAnimationEnd',
-            };
-
-            for (var t in animations) {
-                if (el.style[t] !== undefined) {
-                    return animations[t];
-                }
-            }
-        })(document.createElement('div'));
-
-        this.addClass('animated ' + animationName).one(animationEnd, function () {
-            $(this).removeClass('animated ' + animationName);
-
-            if (typeof callback === 'function') callback();
-        });
-
-        return this;
-    },
-});

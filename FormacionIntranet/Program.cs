@@ -45,11 +45,37 @@ namespace FormacionIntranet
 
             foreach(ListItem item in items)
             {
+                GetUsers(context, item);
+            }
+        }
+
+        static void GetUsers(ClientContext context, ListItem course)
+        {
+            CamlQuery query = new CamlQuery();
+
+            query.ViewXml = string.Format(@"<View Scope='RecursiveAll'>
+                                    <Query>
+                                        <Where>
+                                            <Eq>
+                                                <FieldRef Name='Nombre_x0020_curso' LookupId='TRUE'/>
+                                                <Value Type='Lookup'>{0}</Value>
+                                            </Eq>
+                                        </Where>
+                                    </Query>
+                                </View>", course["ID"]);
+
+            List list = context.Web.Lists.GetByTitle("Solicitud Cursos-empleados");
+            ListItemCollection items = list.GetItems(query);
+
+            context.Load(list);
+            context.Load(items);
+
+            context.ExecuteQuery();
+
+            foreach (ListItem item in items)
+            {
                 SendSurvey(context, item);
             }
-
-            Console.ReadLine();
-
         }
 
         static void SendSurvey(ClientContext context, ListItem item)

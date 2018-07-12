@@ -57,12 +57,12 @@ namespace FormacionIntranet
                                     <Query>
                                         <Where>
                                             <Eq>
-                                                <FieldRef Name='Nombre_x0020_curso' LookupId='TRUE'/>
+                                                <FieldRef Name='Nombre_x0020_curso'/>
                                                 <Value Type='Lookup'>{0}</Value>
                                             </Eq>
                                         </Where>
                                     </Query>
-                                </View>", course["ID"]);
+                                </View>", course["Title"]);
 
             List list = context.Web.Lists.GetByTitle("Solicitud Cursos-empleados");
             ListItemCollection items = list.GetItems(query);
@@ -74,12 +74,21 @@ namespace FormacionIntranet
 
             foreach (ListItem item in items)
             {
-                SendSurvey(context, item);
+                SendSurvey(context, item, course);
             }
         }
 
-        static void SendSurvey(ClientContext context, ListItem item)
+        static void SendSurvey(ClientContext context, ListItem item, ListItem course)
         {
+            var url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion.aspx?c={0}", item["ID"]);
+
+            if(course["Tipo_x0020_de_x0020_encuesta"].ToString() == "FUNDAE")
+                url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion2.aspx?c={0}", item["ID"]);
+
+            string body = string.Format(@"<p>El curso ya ha finalizado, solo falta un último paso, ¡queremos saber tu satisfacción sobre el mismo!</p>
+                                    <p>Por favor completa la siguiente <a href='{0}'>encuesta</a>.</p>
+                                    <p>¡Muchas gracias, hasta la próxima!</p>", url);
+
             FieldUserValue user = item["Author"] as FieldUserValue;
 
             EmailProperties emailp = new EmailProperties();
@@ -87,9 +96,9 @@ namespace FormacionIntranet
             emailp.To = new List<string> { user.Email };
             emailp.From = "no-reply@sharepointonline.com";
 
-            emailp.Body = string.Format("<a href='https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion.aspx?c={0}'>{1}</a>", item["ID"], item["Nombre_x0020_Curso"]);
+            emailp.Body = body;
 
-            emailp.Subject = "Encuesta de formación";
+            emailp.Subject = string.Format("Encuesta de {0}", course["Nombre_x0020_Curso"]);
 
             Utility.SendEmail(context, emailp);
 

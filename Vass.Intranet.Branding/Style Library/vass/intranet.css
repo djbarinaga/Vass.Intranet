@@ -21,6 +21,7 @@
 
 .container-fluid * {
     font-family: 'Montserrat', sans-serif;
+    font-weight: 400;
     font-size: 14px;
 }
 
@@ -60,11 +61,15 @@ a, a:hover, a:visited{
 
 /*TAMAÑOS FUENTE*/
 .font-weight-semi-bold{
-    font-weight: 600;
+    font-weight: 500;
 }
 
 .bold{
     font-weight: 600;
+}
+
+.fw-normal {
+    font-weight: 400 !important;
 }
 
 /*MÁRGENES*/
@@ -988,8 +993,8 @@ footer p{
 
 /*BANNER*/
 
-.banner{
-    height: 300px;
+.banner {
+    height: 268px;
 }
 
 .icon-l .banner {
@@ -1044,6 +1049,12 @@ footer p{
     color:#fff;
 }
 
+    .banner.image .panel-body p {
+        color: #fff;
+        float: right;
+        font-size: 1.3em !important;
+    }
+
 .icon-l .banner-icon{
     height: 268px;
     float: left;
@@ -1054,6 +1065,10 @@ footer p{
 .icon-l .banner-icon span{
     font-size: 20em;
     color: #fff;
+}
+
+.col-6 .icon-l .banner-icon span {
+    font-size: 16em;
 }
 
 .icon-l .banner{

@@ -9,13 +9,16 @@
             var chatDescription = $('#txtDescripcionCharla').val();
             var chatDate = $('#txtFechaCharla').val();
             var chatTime = $('#txtTiempoCharla').val();
+            var chatHours = $('#hourSelect').val();
 
             var chatSplit = chatDate.split('/');
             var chatDay = Number(chatSplit[0]);
             var chatMonth = Number(chatSplit[1]);
             var chatYear = Number(chatSplit[2]);
+            var chatHour = chatHours.split(':')[0];
+            var chatMinutes = chatHours.split(':')[1];
 
-            var date = new Date(chatYear, chatMonth - 1, chatDay);
+            var date = new Date(chatYear, chatMonth - 1, chatDay, chatHour, chatMinutes);
 
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
@@ -95,24 +98,26 @@
             var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
             var item = oList.getItemById(Number(charlaId));
 
-            clientContext.load(item, 'Title', 'Author', 'Fecha_x0020_de_x0020_Realizacion', 'Lugar_x0020_de_x0020_Realizacion', 'Aforo', 'Estado_x0020_de_x0020_la_x0020_C');
+            clientContext.load(item, 'Title', 'Descripcion', 'Author', 'Fecha_x0020_de_x0020_Realizacion', 'Lugar_x0020_de_x0020_Realizacion', 'Aforo', 'Estado_x0020_de_x0020_la_x0020_C');
 
             clientContext.executeQueryAsync(
                 Function.createDelegate(this, function () {
                     var date = new Date(item.get_item('Fecha_x0020_de_x0020_Realizacion'));
                     $('#page-title').text(item.get_item('Title'));
-                    $('#txtDate').val(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
-                    $('#txtDate').datepicker('update');
-                    $('#roomSelect').val(item.get_item('Lugar_x0020_de_x0020_Realizacion'));
-                    $('#txtAforo').val(item.get_item('Aforo'));
+
+                    $('[data-field="Fecha"]').text(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear());
+
+                    $('[data-field="Hora"]').text(date.getHours() + ':' + date.getMinutes());
+
                     $('#txtStatus').text(item.get_item('Estado_x0020_de_x0020_la_x0020_C'));
-                    $('#hourSelect').val(date.getHours() + ':' + date.getMinutes());
+
+                    $('[data-field="Descripcion"]').text(item.get_item('Descripcion'));
 
                     var author = item.get_item('Author');
-                    $('p[data-field="Author"]').text("Ponente: " + author.get_lookupValue());
+                    $('[data-field="Author"]').text(author.get_lookupValue());
 
                     if (item.get_item('Estado_x0020_de_x0020_la_x0020_C') != 'Propuesta')
-                        $('#status').remove();
+                        $('#wizard-buttons').remove();
                 }),
                 Function.createDelegate(this, function (sender, args) {
                     console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
@@ -122,46 +127,14 @@
         }
 
         function editGame(game, user) {
-            var room = $('#roomSelect').val();
-            var aforo = $('#txtAforo').val();
-            var date = toDate($('#txtDate').val(), $('#hourSelect').val());
-            
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
             var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
             var item = oList.getItemById(Number(charlaId));
 
-            item.set_item('Lugar_x0020_de_x0020_Realizacion', room);
-            item.set_item('Aforo', Number(aforo));
-            item.set_item('Fecha_x0020_de_x0020_Realizacion', date);
-
-            if ($('#chkAprobar') != null && $('#chkAprobar').is(':checked'))
-                item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Confirmada');
-
-            if ($('#chkFinalizado').is(':checked'))
-                item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Realizada');
+            item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Confirmada');
 
             item.update();
-
-            clientContext.executeQueryAsync(
-                Function.createDelegate(this, function () {
-                    if ($('#chkFinalizado').is(':checked')) {
-                        //Enviamos la encuesta
-                        sendSurvey(game);
-
-                        //Se asigna la puntuación al usuario
-                        getGames(game, user);
-                    }
-                    else
-                        showOkMessage('La charla se ha modificado correctamente', function () {
-                            window.history.back();
-                        });
-                }),
-                Function.createDelegate(this, function (sender, args) {
-                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
-                    //showErrorMessage("No se ha podido crear la solicitud");
-                })
-            );
         }
         //FIN EDICIÓN
 

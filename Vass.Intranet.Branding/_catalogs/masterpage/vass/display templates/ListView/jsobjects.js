@@ -131,6 +131,7 @@ var Banner = {
                 html += '<div class="panel-body">';
 
                 html += '<a href="' + link + '">' + title + '</a>';
+                html += '<p>' + description + '</p>';
 
                 html += '</div>';
 

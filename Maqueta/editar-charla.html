@@ -1,48 +1,23 @@
 ﻿<div class="container" id="editar-charla">
-    <p data-field="Author">Ponente: Intranet1 Admin</p>
     <div class="row">
-        <div class="col-2">
-            <div class="form-group">
-                <label for="txtDate">Fecha</label><input type="text" class="form-control datepicker" id="txtDate" data-field="Fecha_x0020_de_x0020_Realizacion" />
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label for="txtHour">Hora</label>
-                <select class="form-control" id="hourSelect"></select>
-            </div>
+        <div class="col">
+            <p class="bold">Ponente: <span class="fw-normal" data-field="Author">Ponente</span></p>
         </div>
         <div class="col">
-            <div class="form-group">
-                <label for="roomSelect">Sala</label><input type="text" class="form-control" id="roomSelect" data-field="Lugar_x0020_de_x0020_Realizacion" value="Madrid - Planta 0 - Innovation Depot" />
-            </div>
-        </div>
-        <div class="col-2">
-            <div class="form-group">
-                <label for="txtAforo">Aforo</label><input type="number" class="form-control" id="txtAforo" data-field="Aforo" value="20" />
-            </div>
+            <p class="bold">Descripción: <span class="fw-normal" data-field="Descripcion">Descripción</span></p>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <p>
-                Estado:
-                <span id="txtStatus"></span>
-            </p>
+            <p class="bold">Fecha: <span class="fw-normal" data-field="Fecha" data-format="Date">Fecha</span></p>
+        </div>
+        <div class="col">
+            <p class="bold">Hora: <span class="fw-normal" data-field="Hora" data-format="Hour">Hora</span></p>
         </div>
     </div>
     <div class="row">
         <div class="col">
-            <div class="form">
-                <div class="form-group form-check" id="status">
-                    <input type="checkbox" class="form-check-input" id="chkAprobar" data-field="Estado_x0020_de_x0020_la_x0020_C">
-                    <label class="form-check-label" for="chkAprobar">Confirmar charla</label>
-                </div>
-                <div class="form-group form-check">
-                    <input type="checkbox" class="form-check-input" id="chkFinalizado" data-field="Estado_x0020_de_x0020_la_x0020_C">
-                    <label class="form-check-label" for="chkFinalizado">Charla realizada</label>
-                </div>
-            </div>
+            <p class="bold">Estado: <span class="fw-normal" id="txtStatus"></span></p>
         </div>
     </div>
     <div id="wizard-buttons">

@@ -39,7 +39,7 @@
             <div class="float-left" style="display:none" id="current-submenu"></div>
             <div class="col" id="highlight">
                 <div class="breadcrumb">
-                    <asp:SiteMapPath runat="server" ParentLevelsDisplayed="2" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
+                    <asp:SiteMapPath runat="server" ParentLevelsDisplayed="1" SiteMapProvider="CurrentNavigation" RenderCurrentNodeAsLink="false" SkipLinkText="" RootNodeStyle-CssClass="home" NodeStyle-CssClass="bc-node" CurrentNodeStyle-CssClass="current"/>
                 </div>
                 <h2 id="page-title">
                     <SharePointWebControls:ProjectProperty Property="Title" runat="server"/>

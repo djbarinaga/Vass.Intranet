@@ -132,7 +132,7 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.sociallinks = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Social Links')/items";
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Social Links')/items";
 
         var $ajax = $.ajax({
             url: url,
@@ -1587,14 +1587,8 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.events = function (options) {
         var $this = this;
-        var parent = $(this).prev();
 
-        $(parent).css('cursor', 'pointer');
-        $(parent).on('click', function () {
-            window.location.href = 'https://grupovass.sharepoint.com/es-es/marketing/Paginas/eventos.aspx';
-        })
-
-        var url = "https://grupovass.sharepoint.com/es-es/marketing/_api/web/lists/GetByTitle('Eventos')/items?$top=2&$orderby=EventDate";
+        var url = "https://grupovass.sharepoint.com/es-es/marketing/_api/web/lists/GetByTitle('Eventos')/items?$top=2&$orderby=EventDate desc";
 
         var $ajax = $.ajax({
             url: url,
@@ -1623,7 +1617,7 @@ function isNullOrEmpty(text) {
                     if (description == null)
                         description = '';
 
-                    $($this).append('<li><h4>' + title + '</h4>' + description + '<span class="icon-calendario"></span>' + dateAsString + '</li>');
+                    $($this).append('<li><h4>' + title + '</h4><p>' + stripHtml(description, 100) + '</p><span class="icon-calendario"></span>' + dateAsString + '</li>');
                 }
             }
         });
@@ -1634,7 +1628,7 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.carousel = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/_api/search/query?querytext='HomeHighlight:true'&trimduplicates=false&selectproperties='Title%2cPath%2cPublishingImage%2cHitHighlightedSummary,Description'";
+        var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Destacados Home')/items?$orderby=ID desc";
 
         var $ajax = $.ajax({
             url: url,
@@ -1650,40 +1644,23 @@ function isNullOrEmpty(text) {
         });
 
         $ajax.done(function (data) {
-            var totalRows = data.d.query.PrimaryQueryResult.RelevantResults.TotalRows;
-            var results = data.d.query.PrimaryQueryResult.RelevantResults.Table.Rows.results; 
+            var results = data.d.results; 
 
-            if (totalRows > 0) {
+            if (results.length > 0) {
                 var carouselInner = $($this).find('.carousel-inner');
                 carouselInner.empty();
 
                 for (var i = 0; i < results.length; i++) {
                     var result = results[i];
-                    var fields;
-                    var title;
-                    var description;
-                    var image;
-                    var url;
-                    var img;
-
-                    fields = result.Cells.results;
-                    title = getValue(fields, 'Title');
-                    description = getValue(fields, 'HitHighlightedSummary');
-                    image = getValue(fields, 'PublishingImage');
-                    url = getValue(fields, 'Path');
-                    img = $(image);
-
-                    img.addClass('d-block w-100');
-                    
 
                     var css = "carousel-item";
                     if (i == 0)
                         css += " active";
 
-                    var carouselItem = $('<div class="' + css + '" style="background-image:url(\'' + img.attr('src') + '\');background-size:cover;"/>');
+                    var carouselItem = $('<div class="' + css + '" style="background-image:url(\'' + result.Image.Url + '\');background-size:cover;"/>');
                     //$(carouselItem).append(img);
 
-                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><h5><a href="' + url + '">' + title + '</a></h5></div>');
+                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><div class="carousel-caption-container"><h5><a href="' + result.URL.Url + '">' + result.Title + '</a></h5><p>' + result.Description + '</p></div></div>');
                     carouselItem.append(carouselCaption);
 
                     carouselInner.append(carouselItem);
@@ -1730,12 +1707,16 @@ function isNullOrEmpty(text) {
 
             var teams = data.value;
             var counter = 0;
+            var guildsAdded = new Array();
 
             var renderTeams = function (index) {
                 var team = teams[index];
 
                 var renderTeamInfo = function (channelData) {
                     counter++;
+                    if (channelData == null) {
+                        return;
+                    }
                     var channel = channelData.value[0];
 
                     var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
@@ -1772,9 +1753,13 @@ function isNullOrEmpty(text) {
 
                     $($this).append(html);
 
+                    guildsAdded.push(team.displayName);
+
                     if (index < teams.length) {
-                        if (counter == 3)
+                        if (counter == 3) {
+                            console.log('Terminado');
                             return;
+                        }
                         var currentIndex = index + 1;
                         renderTeams(currentIndex);
                     }
@@ -1804,7 +1789,9 @@ function isNullOrEmpty(text) {
             var words = teamName.split(' ');
             var icon = '';
 
-            for (var i = 0; i < 1; i++) {
+            for (var i = 0; i < words.length; i++) {
+                if (i > 1)
+                    break;
                 var firstLetter = words[i].substring(0, 1).toUpperCase();
                 icon += firstLetter;
             }
@@ -2012,12 +1999,12 @@ function isNullOrEmpty(text) {
             }
 
             var teams = data.value;
-
             var counter = 0;
 
             for (var i = 0; i < teams.length; i++) {
                 if (counter == 3)
                     break;
+
                 var team = teams[i];
 
                 if (isGuild(team.displayName)) {
@@ -2068,7 +2055,10 @@ function isNullOrEmpty(text) {
             var words = teamName.split(' ');
             var icon = '';
 
-            for (var i = 0; i < 1; i++) {
+            for (var i = 0; i < words.length; i++) {
+                if (i > 1)
+                    break;
+
                 var firstLetter = words[i].substring(0, 1).toUpperCase();
                 icon += firstLetter;
             }
@@ -2246,7 +2236,7 @@ function isNullOrEmpty(text) {
         }
 
         function getFormacionTasks(callback) {
-            var url = "https://grupovass.sharepoint.com/es-es/formacion/_api/web/lists/getbytitle('Solicitud Cursos-empleados')/items?$select=Confirmacion_x0020_Asistencia,Nombre_x0020_curso/Fecha_x0020_Inicio,Nombre_x0020_curso,Email_x0020_empleado/Email&$expand=Email_x0020_empleado,Nombre_x0020_curso&$filter=Email_x0020_empleado/Email eq '" + _spPageContextInfo.userEmail + "'";
+            var url = "https://grupovass.sharepoint.com/es-es/formacion/_api/web/lists/getbytitle('Solicitud Cursos-empleados')/items?$select=Confirmacion_x0020_Asistencia,Nombre_x0020_curso/Fecha_x0020_Inicio,Nombre_x0020_curso&$expand=Nombre_x0020_curso&$filter=Author eq " + _spPageContextInfo.userId;
 
             var $ajax = $.ajax({
                 url: url,
@@ -2288,6 +2278,10 @@ function isNullOrEmpty(text) {
                     $($this).closest('.col').hide();
                     return;
                 }
+            });
+
+            $ajax.fail(function () {
+                callback(tasksArray);
             });
         }
     };
@@ -2543,7 +2537,7 @@ function isNullOrEmpty(text) {
     $.fn.tiles = function (options) {
         var type = $(this).data('type');
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Aplicaciones')/items?$orderby=Posicion";
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Aplicaciones')/items?$orderby=Posicion asc";
 
         var $ajax = $.ajax({
             url: url,
@@ -2559,28 +2553,154 @@ function isNullOrEmpty(text) {
             
             if (results != null && results.length > 0) {
                 var resultsLength = results.length;
-                
+
+                var html = '';
+                var counter = 0;
+
+                //Office 365
                 for (var i = 0; i < resultsLength; i++) {
                     var result = results[i];
-                    var css = 'medium';
-                    if (result.Size.toLowerCase() == 'grande')
-                        css = 'big';
-                    else if (result.Size.toLowerCase() == 'pequeño')
-                        css = 'small';
+                    if (result.Tipo == "Office 365") {
+                        var css = 'medium';
+                        if (result.Size.toLowerCase() == 'grande')
+                            css = 'big';
+                        else if (result.Size.toLowerCase() == 'pequeño')
+                            css = 'small';
 
-                    var html = '';
+                        if (result.Width == null || result.Width.toLowerCase() == 'simple')
+                            css += ' simple';
+                        else if (result.Width.toLowerCase() == 'doble')
+                            css += ' double';
+                        else if (result.Width.toLowerCase() == 'completo')
+                            css += ' full';
 
-                    html += '<div class="tile ' + css + '" style="background-color:' + result.Color + '">';
+                        if (counter == 0)
+                            html += '<div class="tile ' + css + '" style="background-color:' + result.Color + ';border-top-left-radius:5px;">';
+                        else
+                            html += '<div class="tile ' + css + '" style="background-color:' + result.Color + '">';
 
-                    html += '   <a href="' + result.URL.Url + '" target="_blank">';
+                        html += '   <a href="' + result.URL.Url + '" target="_blank">';
 
-                    html += '       <img src="' + result.Imagen.Url + '"/>';  
-                    html += '       <p>' + result.Title + '</p>';
-                    html += '   </a>';
-                    html += '<div>';
+                        html += '       <img src="' + result.Imagen.Url + '" alt="' + result.Title + '"/>';
+                        html += '       <p>' + result.Title + '</p>';
 
-                    $($this).append(html);
+                        html += '   </a>';
+                        html += '</div>';
+
+                        counter++;
+                    }
                 }
+
+                $($this).append(html);
+
+                //Office
+                html = '';
+                html = '<div class="float-left">';
+
+                counter = 0;
+
+                for (var i = 0; i < resultsLength; i++) {
+                    var result = results[i];
+                    if (result.Tipo == "Office") {
+                        var clear = '';
+
+                        if (counter == 2)
+                            clear = 'cl-left';
+
+                        if (counter == 1)
+                            html += '<div class="tile small ' + clear + '" style="background-color:' + result.Color + ';border-top-right-radius:5px;">';
+                        else
+                            html += '<div class="tile small ' + clear + '" style="background-color:' + result.Color + '">';
+
+                        html += '   <a href="' + result.URL.Url + '" target="_blank" data-container="body" data-toggle="popover" data-placement="left" data-content="' + result.Title + '" data-trigger="hover">';
+
+                        html += '       <img src="' + result.Imagen.Url + '" alt="' + result.Title + '"/>';
+
+                        html += '   </a>';
+                        html += '</div>';
+                        counter++;
+                    }
+                }
+
+                html += '</div>';
+                $($this).append(html);
+
+                html = '';
+                counter = 0;
+                //VASS
+                for (var i = 0; i < resultsLength; i++) {
+                    var result = results[i];
+                    if (result.Tipo == "VASS") {
+                        var css = 'medium';
+                        if (result.Size.toLowerCase() == 'grande')
+                            css = 'big';
+                        else if (result.Size.toLowerCase() == 'pequeño')
+                            css = 'small';
+
+                        if (result.Width == null || result.Width.toLowerCase() == 'simple')
+                            css += ' simple';
+                        else if (result.Width.toLowerCase() == 'doble')
+                            css += ' double';
+                        else if (result.Width.toLowerCase() == 'completo')
+                            css += ' full';
+
+                        if (counter == 0)
+                            css += ' cl-left';
+
+                        if (counter == 0)
+                            html += '<div class="tile ' + css + '" style="background-color:' + result.Color + ';border-bottom-left-radius:5px;">';
+                        else
+                            html += '<div class="tile ' + css + '" style="background-color:' + result.Color + '">';
+
+                        html += '   <a href="' + result.URL.Url + '" target="_blank">';
+
+                        html += '       <img src="' + result.Imagen.Url + '"/ alt="' + result.Title + '">';
+
+                        if (result.Size.toLowerCase() != 'pequeño')
+                            html += '       <p>' + result.Title + '</p>';
+
+                        html += '   </a>';
+                        html += '</div>';
+
+                        counter++;
+                    }
+                }
+
+                $($this).append(html);
+
+                //VASS 2
+                html = '';
+                html = '<div class="float-left">';
+
+                var counter = 0;
+
+                for (var i = 0; i < resultsLength; i++) {
+                    var result = results[i];
+                    if (result.Tipo == "VASS 2") {
+                        var clear = '';
+
+                        if (counter == 2)
+                            clear = 'cl-left';
+
+                        if (counter == 3)
+                            html += '<div class="tile small ' + clear + '" style="background-color:' + result.Color + ';border-bottom-right-radius:5px;">';
+                        else
+                            html += '<div class="tile small ' + clear + '" style="background-color:' + result.Color + '">';
+
+                        html += '   <a href="' + result.URL.Url + '" target="_blank" data-container="body" data-toggle="popover" data-placement="left" data-content="' + result.Title + '" data-trigger="hover">';
+
+                        html += '       <img src="' + result.Imagen.Url + '" alt="' + result.Title + '"/>';
+
+                        html += '   </a>';
+                        html += '</div>';
+                        counter++;
+                    }
+                }
+
+                html += '</div>';
+                $($this).append(html);
+
+                $('[data-toggle="popover"]').popover();
             }
         });
     };

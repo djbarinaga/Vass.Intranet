@@ -80,7 +80,7 @@ namespace AjustesOffering
         static void Main(string[] args)
         {
             //Responsables();
-            Comerciales();
+            //Comerciales();
             //ResponsablesOfertas();
             //UpdateList();
 

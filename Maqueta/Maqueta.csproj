@@ -43,6 +43,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="tiles.html" />
     <Content Include="valoracion-curso -tripartita.html" />
     <Content Include="valoracion-curso.html" />
     <Content Include="game-survey.html" />

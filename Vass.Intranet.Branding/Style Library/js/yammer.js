@@ -10,6 +10,8 @@
             "theme": "light"
         },
         "container": "#yammer",
-        network: 'grupovass.onmicrosoft.com'
+        network: 'grupovass.onmicrosoft.com',
+        feedType: "group",
+        feedId: "15465439"
     });
 })

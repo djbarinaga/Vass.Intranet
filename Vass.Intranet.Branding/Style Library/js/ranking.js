@@ -125,9 +125,9 @@
                 var html = '';
                 html += '<div class="row group-detail" data-aos="fade-up" data-aos-once="true">' +
                     '<p class="group-title">' + currentRanking.group.title + '</p>' +
-                    '<div class="col-4">' +
+                    '<div class="col-3">' +
                     '<div class="group-image">' +
-                    '<img src="' + currentRanking.group.image + '" />' +
+                    '<img src="' + currentRanking.group.image + '" class="img-fluid"/>' +
                     '</div>' +
                     '</div>' +
                     '<div class="col">' +

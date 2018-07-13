@@ -169,13 +169,13 @@ To build the master page directly from this HTML file, simply edit the page as y
                             <div>
                                 <ul id="socialLinks"></ul>
                             </div>
-                            <div>
+                            <%--<div>
                                 <ul id="contactLinks">
                                     <li><a href="#">Contacto</a></li>
                                     <li><a href="#">Aviso legal</a></li>
                                     <li><a href="#">Mapa web</a></li>
                                 </ul>
-                            </div>
+                            </div>--%>
                             <div>
                                 <p>© VASS 2018</p>
                                 <p>Todos los derechos reservados</p>

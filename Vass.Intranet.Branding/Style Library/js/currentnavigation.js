@@ -69,50 +69,50 @@ var menuIndex;
                     $('#current-submenu').fadeOut('fast');
                 }
             }
-            else {
-                $(ul).find('li a').each(function () {
-                    $(this).on('mouseover', function () {
-                        $(this).closest('ul').find('li').removeClass('active');
-                        $(this).parent().addClass('active');
-                        var idx = $(this).data('menu');
-                        if (idx != menuIndex) {
-                            var submenu = menu[idx].Nodes.results;
-                            hasItems = false;
+            //else {
+            //    $(ul).find('li a').each(function () {
+            //        $(this).on('mouseover', function () {
+            //            $(this).closest('ul').find('li').removeClass('active');
+            //            $(this).parent().addClass('active');
+            //            var idx = $(this).data('menu');
+            //            if (idx != menuIndex) {
+            //                var submenu = menu[idx].Nodes.results;
+            //                hasItems = false;
 
-                            if (submenu.length > 0) {
-                                var ul = $('<ul/>');
+            //                if (submenu.length > 0) {
+            //                    var ul = $('<ul/>');
 
-                                for (var i = 0; i < submenu.length; i++) {
-                                    if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
-                                        hasItems = true;
-                                        $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
-                                    }
-                                }
+            //                    for (var i = 0; i < submenu.length; i++) {
+            //                        if (!submenu[i].IsHidden && submenu[i].Title.toLowerCase() != 'recientes') {
+            //                            hasItems = true;
+            //                            $(ul).append('<li><a href="' + submenu[i].SimpleUrl + '" data-menu="' + i + '">' + submenu[i].Title + '</a></li>');
+            //                        }
+            //                    }
 
-                                $('#current-submenu').html('');
-                                $('#current-submenu').attr('data-hidden', 'true');
-                                $('#current-submenu').css('position', 'absolute');
-                                $('#current-submenu').css('z-index', '1');
-                                $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
-                                $('#current-submenu').css('min-height', $('#current-menu').height() + 132 + 'px'); // +80 padding
+            //                    $('#current-submenu').html('');
+            //                    $('#current-submenu').attr('data-hidden', 'true');
+            //                    $('#current-submenu').css('position', 'absolute');
+            //                    $('#current-submenu').css('z-index', '1');
+            //                    $('#current-submenu').css('left', $('#current-menu').width() - 15 + 'px'); //-20 padding
+            //                    $('#current-submenu').css('min-height', $('#current-menu').height() + 132 + 'px'); // +80 padding
 
-                                if (hasItems) {
-                                    $('#current-submenu').append(ul);
-                                    $('#current-submenu').fadeIn('fast');
-                                }
-                                else {
-                                    $('#current-submenu').hide();
-                                }
-                            }
-                            else {
-                                $('#current-submenu').fadeOut('fast');
-                            }
-                        }
+            //                    if (hasItems) {
+            //                        $('#current-submenu').append(ul);
+            //                        $('#current-submenu').fadeIn('fast');
+            //                    }
+            //                    else {
+            //                        $('#current-submenu').hide();
+            //                    }
+            //                }
+            //                else {
+            //                    $('#current-submenu').fadeOut('fast');
+            //                }
+            //            }
 
-                        menuIndex = idx;
-                    });
-                });
-            }
+            //            menuIndex = idx;
+            //        });
+            //    });
+            //}
         });
     };
 }(jQuery));

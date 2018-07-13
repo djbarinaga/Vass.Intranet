@@ -169,6 +169,9 @@ To build the master page directly from this HTML file, simply edit the page as y
                             <div>
                                 <ul id="socialLinks"></ul>
                             </div>
+                            <div>
+                                <ul id="enterpriseLinks"></ul>
+                            </div>
                             <%--<div>
                                 <ul id="contactLinks">
                                     <li><a href="#">Contacto</a></li>

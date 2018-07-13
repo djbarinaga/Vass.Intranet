@@ -160,6 +160,42 @@ function isNullOrEmpty(text) {
     };
 }(jQuery));
 
+/*Empresas PLUGIN*/
+(function ($) {
+    $.fn.companies = function (options) {
+        var $this = this;
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Empresas')/items";
+
+        var $ajax = $.ajax({
+            url: url,
+            type: "GET",
+            dataType: "json",
+            headers: {
+                Accept: "application/json;odata=verbose"
+            }
+        });
+
+        $ajax.done(function (data, textStatus, jqXHR) {
+            var results = data.d.results;
+
+            if (results != null && results.length > 0) {
+                var resultsLength = results.length;
+
+                for (var i = 0; i < resultsLength; i++) {
+                    var result = results[i];
+                    var url = "#";
+                    if (result.URL != null)
+                        url = result.URL.Url;
+
+                    var li = jQuery('<li><a href="' + url + '"><img src="' + result.Image.Url + '" class="img-fluid"/></span></li>');
+
+                    jQuery($this).append(li);
+                }
+            }
+        });
+    };
+}(jQuery));
+
 /*SEARCHBOX PLUGIN*/
 (function ($) {
     $.fn.searchbox = function (options) {
@@ -2740,6 +2776,11 @@ jQuery(document).ready(function () {
         jQuery('#socialLinks').each(function () {
             $(this).sociallinks();
         });
+
+        jQuery('#enterpriseLinks').each(function () {
+            $(this).companies();
+        });
+        
 
         jQuery('.search-box').each(function () {
             $(this).searchbox();

@@ -11,6 +11,8 @@ namespace FormacionIntranet
 {
     class Program
     {
+        static string adminUser = System.Configuration.ConfigurationManager.AppSettings["user"];
+
         static void Main(string[] args)
         {
             CheckCourses();
@@ -20,7 +22,7 @@ namespace FormacionIntranet
         {
             string today = DateTime.Today.ToString("yyyy-MM-ddTHH:mm:ssZ");
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/formacion");
-            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            context.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             CamlQuery query = new CamlQuery();
 
@@ -107,7 +109,7 @@ namespace FormacionIntranet
 
         static SecureString GetSecureString()
         {
-            string pwd = "Lunes.123";
+            string pwd = System.Configuration.ConfigurationManager.AppSettings["pwd"];
             char[] chars = pwd.ToCharArray();
             SecureString securePassword = new SecureString();
 

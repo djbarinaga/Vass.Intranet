@@ -14,6 +14,7 @@ namespace GamificacionIntranet
     class Program
     {
         static string everyoneGroup = "c:0-.f|rolemanager|spo-grid-all-users/b716c11f-16a3-4d15-8dbc-f11f7fdefe5a";
+        static string adminUser = System.Configuration.ConfigurationManager.AppSettings["user"];
 
         static void Main(string[] args)
         {
@@ -55,7 +56,7 @@ namespace GamificacionIntranet
             Console.WriteLine("{0}\tObteniendo encuestas", DateTime.Now);
 
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/gaming");
-            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            context.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             //Obtenemos los minijuegos (encuestas)
             CamlQuery query = new CamlQuery();
@@ -131,7 +132,7 @@ namespace GamificacionIntranet
             Console.WriteLine("{0}\tObteniendo juegos", DateTime.Now);
 
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/gaming");
-            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            context.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             //Obtenemos los minijuegos (encuestas)
             CamlQuery query = new CamlQuery();
@@ -154,7 +155,7 @@ namespace GamificacionIntranet
         static void SearchGames(ListItem game)
         {
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/");
-            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            context.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             WebCollection webs = context.Web.Webs;
 
@@ -251,7 +252,7 @@ namespace GamificacionIntranet
             Console.WriteLine("{0}\tAsignando {1} puntos a {2} por la partida {3}", DateTime.Now, game["Puntuacion"], loginName, game["Title"]);
 
             ClientContext adminContext = new ClientContext("https://grupovass-admin.sharepoint.com");
-            adminContext.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            adminContext.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             PeopleManager peopleManager = new PeopleManager(adminContext);
             PersonProperties personProperties = peopleManager.GetPropertiesFor(loginName);
@@ -307,7 +308,7 @@ namespace GamificacionIntranet
         static void SendSurvey(ListItem game)
         {
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue");
-            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            context.Credentials = new SharePointOnlineCredentials(adminUser, GetSecureString());
 
             CamlQuery q = new CamlQuery() { ViewXml = string.Format("<View><Query><Where><Eq><FieldRef Name='Charla' /><Value Type='Lookup'>{0}</Value></Eq></Where></Query></View>", game["Title"]) };
 
@@ -359,7 +360,7 @@ namespace GamificacionIntranet
 
         static SecureString GetSecureString()
         {
-            string pwd = "Lunes.123";
+            string pwd = System.Configuration.ConfigurationManager.AppSettings["pwd"];
             char[] chars = pwd.ToCharArray();
             SecureString securePassword = new SecureString();
 

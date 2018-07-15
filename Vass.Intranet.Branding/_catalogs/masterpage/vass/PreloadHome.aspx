@@ -4,7 +4,6 @@
 	<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	<script type="text/javascript">
         $(document).ready(function () {
-
             function animate(index) {
                 $($('.logo p span')[index]).animateCss('pulse', function () {
                     index++;
@@ -17,7 +16,6 @@
 
             animate(0);
 
-            setContext(variables.clientId.Graph);
             execute({
                 clientId: variables.clientId.Graph,
                 version: "v1.0",

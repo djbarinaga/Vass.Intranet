@@ -164,7 +164,7 @@ function isNullOrEmpty(text) {
 (function ($) {
     $.fn.companies = function (options) {
         var $this = this;
-        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Empresas')/items";
+        var url = "https://grupovass.sharepoint.com/_api/web/lists/getbytitle('Empresas')/items?$orderby=Position asc";
 
         var $ajax = $.ajax({
             url: url,

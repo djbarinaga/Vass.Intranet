@@ -170,6 +170,7 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <ul id="socialLinks"></ul>
                             </div>
                             <div>
+                                <p class="text-center mb-0"><img src="https://grupovass.sharepoint.com/PublishingImages/vassinside.png" class="img-fluid"/></p>
                                 <ul id="enterpriseLinks"></ul>
                             </div>
                             <%--<div>

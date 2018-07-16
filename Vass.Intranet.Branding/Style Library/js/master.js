@@ -206,7 +206,7 @@ function isNullOrEmpty(text) {
         }
 
         $(this).on('keydown', function (ev) {
-            var resultPages = ['paginas.aspx', 'documentos.aspx', 'personas.aspx'];
+            var resultPages = ['todo.aspx', 'documentos.aspx', 'personas.aspx'];
             var language = _spPageContextInfo.currentCultureName;
             var searchUrl = '/' + language;
             if (language == 'es-ES') {
@@ -219,7 +219,7 @@ function isNullOrEmpty(text) {
             if (resultPages.indexOf(currentPage) > -1)
                 searchUrl += currentPage;
             else
-                searchUrl += 'paginas.aspx';
+                searchUrl += 'todo.aspx';
 
             if (ev.keyCode == 13) {
                 ev.preventDefault();

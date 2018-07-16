@@ -3,8 +3,12 @@
     background-color: #022540 !important;
 }
 
-#O365_MainLink_TenantLogo{
+.o365cs-nav-header16.o365cs-newALV3-on .o365cs-nav-appTitle{
     display:none;
+}
+
+#O365_MainLink_TenantLogo {
+    display: none;
 }
 
 #s4-workspace{

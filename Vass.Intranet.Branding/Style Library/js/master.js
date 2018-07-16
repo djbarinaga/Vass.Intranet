@@ -151,7 +151,7 @@ function isNullOrEmpty(text) {
 
                 for (var i = 0; i < resultsLength; i++) {
                     var result = results[i];
-                    var li = jQuery('<li><a href="' + result.URL.Url + '"><span class="icon-' + result.Title + '"></span></li>');
+                    var li = jQuery('<li><a href="' + result.URL.Url + '" target="_blank"><span class="icon-' + result.Title + '"></span></li>');
 
                     jQuery($this).append(li);
                 }
@@ -187,7 +187,7 @@ function isNullOrEmpty(text) {
                     if (result.URL != null)
                         url = result.URL.Url;
 
-                    var li = jQuery('<li><a href="' + url + '"><img src="' + result.Image.Url + '" class="img-fluid"/></span></li>');
+                    var li = jQuery('<li><a href="' + url + '" target="_blank"><img src="' + result.Image.Url + '" class="img-fluid"/></span></li>');
 
                     jQuery($this).append(li);
                 }

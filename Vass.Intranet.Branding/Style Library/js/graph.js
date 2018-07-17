@@ -71,8 +71,8 @@ function execute(options) {
                 if (options.callback != null)
                     options.callback(response);
             }).fail(function (j, h, d) {
-                if (options.callback != null)
-                    options.callback(null);
+                localStorage.clear();
+                window.location.reload();
             });
         }
     });

@@ -84,7 +84,7 @@ namespace AjustesOffering
             //ResponsablesOfertas();
             //UpdateList();
 
-            //Lookups("Ofertas");
+            Lookups("Ofertas");
             //Lookups("Biblioteca Referencias ES");
             //Lookups("Biblioteca Referencias EN");
         }
@@ -881,6 +881,8 @@ namespace AjustesOffering
                         FieldLookupValue lvCliente = GetLookupValue(context, "Cliente", "Title", cliente);
                         if (lvCliente != null)
                             item[clienteLookupField] = lvCliente;
+                        else
+                            Console.WriteLine("Lookup Cliente no encontrado: {0}", cliente);
                     }
                 }
                     
@@ -893,6 +895,8 @@ namespace AjustesOffering
                         FieldLookupValue lvSector = GetLookupValue(context, "Sector", "Title", sector);
                         if (lvSector != null)
                             item[sectorLookupField] = lvSector;
+                        else
+                            Console.WriteLine("Lookup Sector no encontrado: {0}", sector);
                     }
                 }
 
@@ -908,6 +912,8 @@ namespace AjustesOffering
                             FieldLookupValue lvMulti = GetLookupValue(context, "Area de Negocio", "Title", area);
                             if (lvMulti != null)
                                 mlvNegocio.Add(lvMulti);
+                            else
+                                Console.WriteLine("Lookup Area de Negocio no encontrado: {0}", area);
                         }
 
                         item[areaNegocioLookupField] = (FieldLookupValue[])mlvNegocio.ToArray();
@@ -929,6 +935,8 @@ namespace AjustesOffering
                                 FieldLookupValue lvMulti = GetLookupValue(context, "Area Tecnica", "Title", area);
                                 if (lvMulti != null)
                                     mlvAreaTecnica.Add(lvMulti);
+                                else
+                                    Console.WriteLine("Lookup Area Tecnica no encontrado: {0}", area);
                             }
 
                             item[areaTecnicaLookupField] = (FieldLookupValue[])mlvAreaTecnica.ToArray();
@@ -948,6 +956,8 @@ namespace AjustesOffering
                             FieldLookupValue lvMulti = GetLookupValue(context, "Area Tecnica", "Title", tec);
                             if (lvMulti != null)
                                 mlvTecnologia.Add(lvMulti);
+                            else
+                                Console.WriteLine("Lookup Area Tecnica no encontrado: {0}", tec);
                         }
 
                         item[tecnologiaLookupField] = (FieldLookupValue[])mlvTecnologia.ToArray();
@@ -1066,6 +1076,7 @@ namespace AjustesOffering
                     return lv;
                 }
             }
+
             return null;
         }
 

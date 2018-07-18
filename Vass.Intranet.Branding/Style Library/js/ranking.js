@@ -175,6 +175,105 @@
     };
 }(jQuery));
 
+(function ($) {
+    $.fn.currentUserRanking = function (options) {
+        var $this = this;
+
+        var picture = 'https://outlook.office365.com/owa/service.svc/s/GetPersonaPhoto?email=' + _spPageContextInfo.userEmail + '&UA=0&size=HR96x96';
+
+        $('#userPhoto').attr('src', picture);
+        $('#userName').text(_spPageContextInfo.userDisplayName);
+
+        var clientContext = new SP.ClientContext('https://grupovass.sharepoint.com/es-es/businessvalue/gaming');
+
+        var oList = clientContext.get_web().get_lists().getByTitle('Clasificación');
+
+        var camlQuery = new SP.CamlQuery();
+        camlQuery.set_viewXml(
+            '<View><Query><Where><Eq><FieldRef Name=\'JuegoPadre\'/>' +
+            '<Value Type=\'Lookup\'>Juego de tronos</Value></Eq></Where><OrderBy><FieldRef Name="PuntuacionMinima" Ascending="False"/></OrderBy></Query></View>'
+        );
+
+        var groupCollection = oList.getItems(camlQuery);
+
+        clientContext.load(groupCollection);
+
+        clientContext.executeQueryAsync(
+            Function.createDelegate(this, function () {
+                var defaultScore = 0;
+                var listItemEnumerator = groupCollection.getEnumerator();
+                var gameGroups = new Array();
+                while (listItemEnumerator.moveNext()) {
+                    var oListItem = listItemEnumerator.get_current();
+                    var title = oListItem.get_item('Title');
+                    var image = oListItem.get_item('Imagen').get_url();
+                    var description = oListItem.get_item('Descripcion');
+                    var minimun = oListItem.get_item('PuntuacionMinima');
+                    var maximun = oListItem.get_item('PuntuacionMaxima');
+
+                    var gameGroup = {
+                        title: title,
+                        description: description,
+                        image: image,
+                        minimun: minimun,
+                        maximun: maximun
+                    }
+
+                    gameGroups.push(gameGroup);
+                }
+
+                getUserScore(gameGroups);
+                
+            }),
+            Function.createDelegate(this, function (sender, args) {
+                console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                //showErrorMessage("No se ha podido crear la solicitud");
+            })
+        );
+    };
+
+    function getUserScore(gameGroups) {
+        var clientContext = SP.ClientContext.get_current();
+        var user = clientContext.get_web().getUserById(_spPageContextInfo.userId);
+        clientContext.load(user);
+
+        clientContext.executeQueryAsync(
+            function () {
+                var login = user.get_loginName();
+                var peopleManager = new SP.UserProfiles.PeopleManager(clientContext);
+
+                var userProfileProperties = peopleManager.getPropertiesFor(login);
+
+                clientContext.load(userProfileProperties);
+
+                clientContext.executeQueryAsync(
+                    Function.createDelegate(this, function () {
+                        var properties = userProfileProperties.get_userProfileProperties();
+                        var userGameScore = Number(properties["GameScore"].split(';')[0]);
+
+                        $('#userScore').text(userGameScore);
+
+                        for (var i = 0; i < gameGroups.length; i++) {
+                            var gameGroup = gameGroups[i];
+                            if (gameGroup.minimun <= userGameScore && (gameGroup.maximun >= userGameScore || gameGroup.maximun == 3000)) {
+                                $('#rankingPhoto').attr('src', gameGroup.image);
+                                break;
+                            }
+                        }
+                    }),
+                    Function.createDelegate(this, function (sender, args) {
+                        console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        //showErrorMessage("No se ha podido crear la solicitud");
+                    }));
+            },
+            function (sender, args) {
+                console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+            }
+        );
+    }
+}(jQuery));
+
 jQuery(document).ready(function () {
     jQuery('#ranking').ranking();
+    jQuery('#currentUserRanking').currentUserRanking();
 });

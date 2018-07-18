@@ -72,7 +72,7 @@ function execute(options) {
                     options.callback(response);
             }).fail(function (j, h, d) {
                 if (options.callback != null)
-                    options.callback(response);
+                    options.callback(null);
             });
         }
     });

@@ -87,6 +87,23 @@
                 <div class="panel">
                     <div class="panel-body">
                         <p class="panel-title"><span class="font-weight-semi-bold">Charlas</span> @innovation depot</p>
+                        <div class="row thumbnail-container" id="currentUserRanking">
+                            <div class="col">
+                                <img id="userPhoto" />
+                            </div>
+                            <div class="col">
+                                <div class="row">
+                                    <div class="col">
+                                        <span id="userName"></span>
+                                        <br />
+                                        <span class="badge badge-pill badge-info" id="userScore"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <img id="rankingPhoto" />
+                            </div>
+                        </div>
                         <div id="ranking"></div>
                     </div>
                 </div>

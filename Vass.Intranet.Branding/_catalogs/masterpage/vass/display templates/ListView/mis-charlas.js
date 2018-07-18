@@ -20,6 +20,7 @@ function charlaTemplate(ctx) {
     var description = ctx.CurrentItem["Descripcion"];
     var location = ctx.CurrentItem["Lugar_x0020_de_x0020_Realizacion"];
     var charlaStartDate = ctx.CurrentItem["Fecha_x0020_de_x0020_Realizacion"];
+    var charlaEndDate = ctx.CurrentItem["Fecha_x0020_de_x0020_Finalizacio"];
     var aforo = ctx.CurrentItem["Aforo"];
     var charlaTime = ctx.CurrentItem["Tiempo"];
     var author = ctx.CurrentItem["Author"];
@@ -29,6 +30,11 @@ function charlaTemplate(ctx) {
     var charlaDay = charlaDateParts[0];
     var charlaMonthNumber = Number(charlaDateParts[1]) - 1;
     var charlaMonth = months[charlaMonthNumber];
+
+    var charlaStartHour = charlaStartDate.split(' ')[1];
+
+    var charlaEnd = charlaEndDate.split(' ');
+    var charlaEndHour = charlaEnd[1];
 
     var html = '<div class="row event-detail" data-aos="fade-up" data-aos-once="true">';
 
@@ -51,7 +57,7 @@ function charlaTemplate(ctx) {
     html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + '</span>';
     html += '               </div>';
     html += '               <div class="col event-hour">';
-    html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaTime + ' min.</span>';
+    html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaStartHour + '-' + charlaEndHour + '</span>';
     html += '               </div>';
     html += '           </div>';
     html += '       </div>';

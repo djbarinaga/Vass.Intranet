@@ -1688,6 +1688,10 @@ function isNullOrEmpty(text) {
 
                 for (var i = 0; i < results.length; i++) {
                     var result = results[i];
+                    var url = "#";
+
+                    if (result.URL != null)
+                        url = result.URL.Url;
 
                     var css = "carousel-item";
                     if (i == 0)
@@ -1696,7 +1700,7 @@ function isNullOrEmpty(text) {
                     var carouselItem = $('<div class="' + css + '" style="background-image:url(\'' + result.Image.Url + '\');background-size:cover;"/>');
                     //$(carouselItem).append(img);
 
-                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><div class="carousel-caption-container"><h5><a href="' + result.URL.Url + '">' + result.Title + '</a></h5><p>' + result.Description + '</p></div></div>');
+                    var carouselCaption = $('<div class="carousel-caption d-none d-md-block"><div class="carousel-caption-container"><h5><a href="' + url + '">' + result.Title + '</a></h5><p>' + result.Description + '</p></div></div>');
                     carouselItem.append(carouselCaption);
 
                     carouselInner.append(carouselItem);
@@ -3275,7 +3279,8 @@ function checkGdpr(callback) {
 
             $('#gdpr input[type="checkbox"]').each(function () {
                 $(this).on('click', function () {
-                    $('#gdprOk').prop('disabled', $('#gdpr input[type="checkbox"]:checked').length < 6);
+                    var enabled = ($('#gdprGeolocalizacionOk').is(':checked') && $('#gdprEnvioDatosOk').is(':checked') && $('#gdprCesionDatosOk').is(':checked') && $('#gdprPoliticaPrivacidadOk').is(':checked') && $('#gdprPoliticaPrivacidad2Ok').is(':checked'));
+                    $('#gdprOk').prop('disabled', !enabled);
 
                     checkedProperties[$(this).attr('name')] = $(this).is(":checked");
                 });
@@ -3311,7 +3316,7 @@ function checkGdpr(callback) {
                 );
             });
 
-            if (!geolocalizacion || !envioDatosPersonales || !imagenes || !cesionDatosPersonales) {
+            if (!geolocalizacion || !envioDatosPersonales || !cesionDatosPersonales) {
                 $('#gdpr').modal();
             }
             else {

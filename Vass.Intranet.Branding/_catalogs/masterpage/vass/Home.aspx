@@ -15,14 +15,6 @@
 <script type= "text/javascript" data-app-id="8Z6wlIYczbZAxWELw2Zyyg" src="https://c64.assets-yammer.com/assets/platform_js_sdk.js" ></script>
 <script type="text/javascript" src="/style library/js/yammer.js"></script>
 <script type="text/javascript" src="/style library/js/ranking.js"></script>
-    <script type="text/javascript" src="/style library/js/masonry.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            $('.tiles').masonry({
-              itemSelector: '.tile'
-            });
-        });
-    </script>
 </asp:Content>
 <asp:Content contentplaceholderid="PlaceHolderPageTitle" runat="server">
 	<SharePointWebControls:FieldValue FieldName="Title" runat="server"/>
@@ -106,7 +98,7 @@
                     <div class="col">
                         <div class="panel">
                           <div class="panel-body">
-                            <p class="panel-title"><span class="font-weight-semi-bold">Próximos</span> eventos</p>
+                            <p class="panel-title"><span class="font-weight-semi-bold">Calendario</span> de eventos</p>
                             <ul id="vass-calendar"></ul>
                             <div class="toolbar">
                                 <a href="/es-es/marketing/Paginas/Eventos.aspx"><span class="icon-mas span-corrector"></span>ver todos</a>

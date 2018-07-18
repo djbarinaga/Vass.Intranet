@@ -3,12 +3,13 @@
     $.fn.chat = function (options) {
         var $this = this;
         populateHours('#hourSelect');
+        populateHours('#hourEndSelect');
 
         $(this).find('#btnOk').on('click', function () {
             var chatName = $('#txtNombreCharla').val();
             var chatDescription = $('#txtDescripcionCharla').val();
             var chatDate = $('#txtFechaCharla').val();
-            var chatTime = $('#txtTiempoCharla').val();
+            var chatEndHours = $('#hourEndSelect').val();
             var chatHours = $('#hourSelect').val();
 
             var chatSplit = chatDate.split('/');
@@ -18,7 +19,11 @@
             var chatHour = chatHours.split(':')[0];
             var chatMinutes = chatHours.split(':')[1];
 
+            var chatEndHour = chatEndHours.split(':')[0];
+            var charEndMinutes = chatEndHours.split(':')[1];
+
             var date = new Date(chatYear, chatMonth - 1, chatDay, chatHour, chatMinutes);
+            var endDate = new Date(chatYear, chatMonth - 1, chatDay, chatEndHour, charEndMinutes);
 
             var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
 
@@ -30,7 +35,7 @@
             gameItem.set_item('Title', chatName);
             gameItem.set_item('Descripcion', chatDescription);
             gameItem.set_item('Fecha_x0020_de_x0020_Realizacion', date);
-            gameItem.set_item('Tiempo', chatTime);
+            gameItem.set_item('Fecha_x0020_de_x0020_Finalizacio', endDate);
             gameItem.update();
 
             clientContext.load(gameItem);
@@ -76,20 +81,36 @@
             var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
             var item = oList.getItemById(Number(charlaId));
 
-            clientContext.load(item, 'Title', 'Author');
+            item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Confirmada');
 
-            clientContext.executeQueryAsync(
-                Function.createDelegate(this, function () {
-                    var game = item.get_item('Title');
-                    var user = item.get_item('Author');
+            item.update();
+        });
 
-                    editGame(game, user);
-                }),
-                Function.createDelegate(this, function (sender, args) {
-                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
-                    //showErrorMessage("No se ha podido crear la solicitud");
-                })
-            );
+        $(this).find('#btnReject').on('click', function () {
+            bootbox.prompt("Introduzca el motivo del rechazo:", function (result) {
+                var clientContext = new SP.ClientContext(_spPageContextInfo.webAbsoluteUrl);
+
+                var oList = clientContext.get_web().get_lists().getByTitle('Charlas');
+                var item = oList.getItemById(Number(charlaId));
+
+                item.set_item('Estado_x0020_de_x0020_la_x0020_C', 'Rechazada');
+                item.set_item('Comentarios', result);
+
+                item.update();
+
+                clientContext.executeQueryAsync(
+                    Function.createDelegate(this, function () {
+                        bootbox.alert('Los cambios se han guardado correctamente', function () {
+                            window.location.href = "https://grupovass.sharepoint.com/es-es/businessvalue";
+                        });
+                    }),
+                    Function.createDelegate(this, function (sender, args) {
+                        console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        bootbox.alert('No se han podido guardar los cambios');
+                    })
+                );
+            })
+            
         });
 
         function loadCharla() {

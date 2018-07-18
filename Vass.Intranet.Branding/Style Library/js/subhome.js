@@ -102,7 +102,7 @@
 
             var listItemEnumerator = collListItem.getEnumerator();
 
-            var carouselItems = $($this).find('.carousel .carousel-inner');
+            var carouselItems = $($this).find('.carousel-inner');
             carouselItems.empty();
 
             var counter = 0;

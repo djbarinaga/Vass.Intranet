@@ -486,7 +486,6 @@ ul.root > li ul li.selected {
 
 .carousel .carousel-item {
     height: 550px;
-    padding: 40px;
     text-align: right;
 }
 
@@ -606,7 +605,7 @@ ul.root > li ul li.selected {
 }
 
 #subhome .carousel .carousel-image {
-    height: 400px;
+    height: 550px;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -2092,4 +2091,9 @@ a.btn-orange, a.btn-orange:hover, a.btn-orange:focus, a.btn-orange:visited{
     margin:20px;
     background-color: #fafafa;
     padding: 30px;
+}
+
+.event-location .icon-location {
+    font-size: 20px !important;
+    top: 0px;
 }

@@ -83,17 +83,22 @@ To build the master page directly from this HTML file, simply edit the page as y
         </SharePoint:AjaxDelta>
         <SharePoint:CssRegistration Name="Themable/corev15.css" runat="server" />
         <SharePoint:AjaxDelta id="DeltaSPWebPartManager" runat="server">
-            <WebPartPages:SPWebPartManager runat="server" />
+            <WebPartPages:SPWebPartManager runat="server"/>
         </SharePoint:AjaxDelta>
 
-        <PublishingWebControls:EditModePanel runat="server">
+        <PublishingWebControls:EditModePanel runat="server" __designer:Preview="&lt;Regions&gt;&lt;Region Name=&quot;0&quot; Editable=&quot;True&quot; Content=&quot;&amp;#xD;&amp;#xA;            &amp;lt;SharePoint:CssRegistration runat=&amp;quot;server&amp;quot; ID=&amp;quot;CssRegistration5&amp;quot; Name=&amp;quot;/style library/vass/editmode.css&amp;quot; After=&amp;quot;corev15.css&amp;quot; __designer:Preview=&amp;quot;&amp;quot; __designer:Values=&amp;quot;&amp;amp;lt;P N=&amp;amp;#39;Name&amp;amp;#39; T=&amp;amp;#39;/style library/vass/editmode.css&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;After&amp;amp;#39; T=&amp;amp;#39;corev15.css&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;ID&amp;amp;#39; T=&amp;amp;#39;CssRegistration5&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;AppRelativeTemplateSourceDirectory&amp;amp;#39; R=&amp;amp;#39;-1&amp;amp;#39; /&amp;amp;gt;&amp;quot;/&amp;gt;&amp;#xD;&amp;#xA;        &quot; /&gt;&lt;/Regions&gt;
+            &lt;SharePoint:CssRegistration runat=&quot;server&quot; ID=&quot;CssRegistration5&quot; Name=&quot;/style library/vass/editmode.css&quot; After=&quot;corev15.css&quot; /&gt;
+        " __designer:Values="&lt;P N=&#39;ID&#39; T=&#39;ctl00&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;&lt;P N=&#39;Visible&#39; T=&#39;False&#39; /&gt;">
             <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
         </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">
-        <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent" />
-        <SharePoint:ImageLink runat="server" />
-        <SharePoint:SharePointForm onsubmit="if (typeof(_spFormOnSubmitWrapper) != 'undefined') {return _spFormOnSubmitWrapper();} else {return true;}" runat="server">
+        <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent" __designer:Preview="" __designer:Values="&lt;P N=&#39;ServerControlID&#39; T=&#39;DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent&#39; /&gt;&lt;P N=&#39;ID&#39; T=&#39;ctl01&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;"/>
+        <SharePoint:ImageLink runat="server" __designer:Preview="" __designer:Values="&lt;P N=&#39;ID&#39; T=&#39;ctl02&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;"/>
+        <SharePoint:SharePointForm onsubmit="if (typeof(_spFormOnSubmitWrapper) != 'undefined') {return _spFormOnSubmitWrapper();} else {return true;}" runat="server" __designer:Preview="&lt;table cellpadding=4 cellspacing=0 style=&quot;font:messagebox;color:buttontext;background-color:buttonface;border: solid 1px;border-top-color:buttonhighlight;border-left-color:buttonhighlight;border-bottom-color:buttonshadow;border-right-color:buttonshadow&quot;&gt;
+              &lt;tr&gt;&lt;td nowrap&gt;&lt;span style=&quot;font-weight:bold&quot;&gt;SharePointForm&lt;/span&gt; - Unnamed4&lt;/td&gt;&lt;/tr&gt;
+              &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
+            &lt;/table&gt;" __designer:Values="&lt;P N=&#39;Method&#39; T=&#39;post&#39; /&gt;&lt;P N=&#39;Name&#39; ID=&#39;1&#39; T=&#39;aspnetForm&#39; /&gt;&lt;P N=&#39;TagName&#39; T=&#39;form&#39; /&gt;&lt;P N=&#39;ID&#39; T=&#39;ctl03&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;3&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;">
             <asp:ScriptManager ID="ScriptManager" runat="server" EnablePageMethods="false" EnablePartialRendering="true" EnableScriptGlobalization="false" EnableScriptLocalization="true" />
             <div id="ms-designer-ribbon">
 
@@ -155,7 +160,7 @@ To build the master page directly from this HTML file, simply edit the page as y
                         </div>--%>
                         <SharePoint:AjaxDelta id="DeltaPlaceHolderMain" IsMainContent="true" runat="server">
                             <asp:ContentPlaceHolder ID="PlaceHolderMain" runat="server">
-                                <div class="DefaultContentBlock" style="border: medium black solid; background: yellow; color: black;">
+								<div class="DefaultContentBlock" style="border: medium black solid; background: yellow; color: black;">
                                     This area will be filled in by content you create in your page layouts.
                             
                                 </div>
@@ -164,14 +169,14 @@ To build the master page directly from this HTML file, simply edit the page as y
 
                         <footer>
                             <div>
-                                <ul id="quickLinks"></ul>
-                            </div>
-                            <div>
-                                <ul id="socialLinks"></ul>
-                            </div>
-                            <div>
                                 <p class="text-center mb-0"><img src="https://grupovass.sharepoint.com/PublishingImages/vassinside.png" class="img-fluid"/></p>
                                 <ul id="enterpriseLinks"></ul>
+                            </div>                            
+							<div style="max-width: 500px; margin: 0 auto;">
+							    <hr style="color: white; background: white;">
+							</div>                            
+                            <div>
+                                <ul id="socialLinks"></ul>
                             </div>
                             <%--<div>
                                 <ul id="contactLinks">
@@ -286,7 +291,7 @@ To build the master page directly from this HTML file, simply edit the page as y
             </div>
             <SharePoint:AjaxDelta id="DeltaFormDigest" BlockElement="true" runat="server">
                 <asp:ContentPlaceHolder ID="PlaceHolderFormDigest" runat="server">
-                    <SharePoint:formdigest runat="server" />
+					<SharePoint:formdigest runat="server" />
                 </asp:ContentPlaceHolder>
             </SharePoint:AjaxDelta>
         </SharePoint:SharePointForm><SharePoint:AjaxDelta id="DeltaPlaceHolderUtilityContent" runat="server"><asp:ContentPlaceHolder ID="PlaceHolderUtilityContent" runat="server" />

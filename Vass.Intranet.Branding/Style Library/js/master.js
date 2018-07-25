@@ -1474,8 +1474,10 @@ function isNullOrEmpty(text) {
 
             var queryEndDate = selectedDate.getFullYear() + '-' + (Number(currentMonth) + 2) + '-01';
 
-            var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and start/dateTime le '" + queryEndDate + "'&$orderby=start/dateTime";
+            //var endpoint = "/me/events?$filter=start/dateTime ge '" + startDate + "' and start/dateTime le '" + queryEndDate + "'&$orderby=start/dateTime";
 
+			var endpoint = "/me/calendar/calendarView?startDateTime=" + startDate + "&endDateTime=" + queryEndDate + "&$top=200";
+			
             execute({
                 clientId: variables.clientId.Graph,
                 version: "v1.0",
@@ -2203,7 +2205,8 @@ function isNullOrEmpty(text) {
 
         function render(data) {
             if (data.value.length == 0) {
-                $($this).closest('.col').hide();
+                // $($this).closest('.col').hide();
+                $($this).append(printTask({title:'No hay tareas.'}));
                 return;
             }
 
@@ -2217,8 +2220,9 @@ function isNullOrEmpty(text) {
                 }
 
                 if (tasks.length == 0) {
-                    $($this).closest('.col').hide();
-                    return;
+                	// $($this).closest('.col').hide();
+                	$($this).append(printTask({title:'No hay tareas.'}));
+                	return;
                 }
 
                 var length = tasks.length;
@@ -2238,27 +2242,31 @@ function isNullOrEmpty(text) {
 
                     taskDate = new Date(taskDate);
 
-                    var taskDateString = taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear();
-
-                    var html = '';
-
-                    if (dateDiff(taskDate, new Date()) < 0)
-                        html += '<li>';
-                    else
-                        html += '<li class="fg-red">';
-
-                    if (task.link == null)
-                        html += '   <h4>' + task.title + '</h4>';
-                    else
-                        html += '   <h4><a class="fg-red" href="' + task.link + '">' + task.title + '</a></h4>';
-
-                    html += '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>';
-                    html += '</li>';
-
+					var html = printTask(task, taskDate);
                     $($this).append(html);
                 }
 
             });
+        }
+        
+        function printTask(task, taskDate = undefined) {
+        	var html = '';
+        	var taskDateString = taskDate ? taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear() : '';
+
+            if (taskDate && dateDiff(taskDate, new Date()) < 0)
+                html += '<li>';
+            else
+                html += '<li class="fg-red">';
+
+            if (task.link == null)
+                html += '   <h4>' + task.title + '</h4>';
+            else
+                html += '   <h4><a class="fg-red" href="' + task.link + '">' + task.title + '</a></h4>';
+
+            html += taskDate ? '   <span class="icon-calendario"></span><span>' + taskDateString + '</span>' : '';
+            html += '</li>';
+            
+			return html;
         }
 
         function getPendingTasks(allTasks) {
@@ -2572,6 +2580,16 @@ function isNullOrEmpty(text) {
     };
 }(jQuery));
 
+function removeDuplicatedTiles(arr) {
+	var newArr = [];
+	arr.map(element => {
+		if (newArr.filter(e => { return e.Title == element.Title; }).length == 0) {
+			newArr.push(element);
+		}
+	});
+	return newArr;
+}
+
 /*TILES PLUGIN*/
 (function ($) {
     $.fn.tiles = function (options) {
@@ -2589,9 +2607,9 @@ function isNullOrEmpty(text) {
         });
 
         $ajax.done(function (data, textStatus, jqXHR) {
-            var results = data.d.results;
-            
-            if (results != null && results.length > 0) {
+            var results = data.d.results;	
+            results = removeDuplicatedTiles(results);
+            if (results != null && results.length > 0) {            	
                 var resultsLength = results.length;
 
                 var html = '';

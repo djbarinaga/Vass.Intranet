@@ -30,6 +30,7 @@ function headerTemplate(ctx) {
             break;
         case "logos grupo vass":
         case "logos fabricantes":
+        case "partners":
             return ThumbnailList.headerTemplate(ctx);
             break;
         case "plantillas corporativas":
@@ -82,6 +83,7 @@ function itemTemplate(ctx) {
             break;
         case "logos grupo vass":
         case "logos fabricantes":
+        case "partners":
             return ThumbnailList.itemTemplate(ctx);
             break;
         case "plantillas corporativas":
@@ -134,6 +136,7 @@ function footerTemplate(ctx) {
             break;
         case "logos grupo vass":
         case "logos fabricantes":
+        case "partners":
             return ThumbnailList.footerTemplate(ctx);
             break;
         case "plantillas corporativas":
@@ -185,6 +188,7 @@ function postRender(ctx) {
             return PagesList.onpostrender(ctx);
             break;
         case "logos grupo vass":
+        case "partners":
         case "logos fabricantes":
             return ThumbnailList.onpostrender(ctx);
             break;

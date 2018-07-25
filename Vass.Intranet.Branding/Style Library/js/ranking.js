@@ -230,6 +230,12 @@
                 //showErrorMessage("No se ha podido crear la solicitud");
             })
         );
+        
+        var userImageWidth = $("#userPhoto").width();
+        if (userImageWidth < 30) {
+        	picture = '/_layouts/15/userphoto.aspx?size=L&accountname=' + _spPageContextInfo.userEmail;
+        	$('#userPhoto').attr('src', picture);
+        }
     };
 
     function getUserScore(gameGroups) {

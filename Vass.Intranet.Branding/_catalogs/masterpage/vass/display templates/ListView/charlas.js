@@ -29,6 +29,11 @@ function charlaTemplate(ctx) {
     var charlaMonthNumber = Number(charlaDateParts[1]) - 1;
     var charlaMonth = months[charlaMonthNumber];
     charlaMonth = charlaMonth.substring(0, 3);
+    var charlaEndDate = ctx.CurrentItem["Fecha_x0020_de_x0020_Finalizacio"];
+	var charlaStartHour = charlaStartDate.split(' ')[1];
+
+    var charlaEnd = charlaEndDate.split(' ');
+    var charlaEndHour = charlaEnd[1];
 
     var html = '<div class="row event-detail" data-aos="fade-up" data-aos-once="true">';
 
@@ -46,7 +51,7 @@ function charlaTemplate(ctx) {
     html += '                   <span class="icon-calendario"></span><span class="span-corrector">' + charlaDay + ' ' + charlaMonth + ' ' + charlaStartDate.split(' ')[1]; + '</span>';
     html += '               </div>';
     html += '               <div class="col event-hour">';
-    html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaTime + ' min.</span>';
+    html += '                   <span class="icon-reloj"></span><span class="span-corrector">' + charlaStartHour + '-' + charlaEndHour + ' min.</span>';
     html += '               </div>';
     html += '           </div>';
     html += '       </div>';

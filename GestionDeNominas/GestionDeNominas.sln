@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2015
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nominas", "VassNominas\Nominas.csproj", "{735B85D2-CD00-4872-8550-91DE44E2CC93}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Instalador_VassNominas", "Instalador_VassNominas\Instalador_VassNominas.vdproj", "{3792D14C-3D67-4AE3-83FE-DA904320F0DC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{735B85D2-CD00-4872-8550-91DE44E2CC93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{735B85D2-CD00-4872-8550-91DE44E2CC93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{735B85D2-CD00-4872-8550-91DE44E2CC93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{735B85D2-CD00-4872-8550-91DE44E2CC93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3792D14C-3D67-4AE3-83FE-DA904320F0DC}.Debug|Any CPU.ActiveCfg = Debug
+		{3792D14C-3D67-4AE3-83FE-DA904320F0DC}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E983A130-5885-44D4-96CB-D77C191FA502}
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+EndGlobal

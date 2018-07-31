@@ -29,7 +29,7 @@ function charlaTemplate(ctx) {
     var charlaDateParts = charlaStartDate.split('/');
     var charlaDay = charlaDateParts[0];
     var charlaMonthNumber = Number(charlaDateParts[1]) - 1;
-    var charlaMonth = months[charlaMonthNumber];
+    var charlaMonth = months[charlaMonthNumber]; 
 
     var charlaStartHour = charlaStartDate.split(' ')[1];
 

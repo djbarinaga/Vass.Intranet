@@ -86,19 +86,14 @@ To build the master page directly from this HTML file, simply edit the page as y
             <WebPartPages:SPWebPartManager runat="server"/>
         </SharePoint:AjaxDelta>
 
-        <PublishingWebControls:EditModePanel runat="server" __designer:Preview="&lt;Regions&gt;&lt;Region Name=&quot;0&quot; Editable=&quot;True&quot; Content=&quot;&amp;#xD;&amp;#xA;            &amp;lt;SharePoint:CssRegistration runat=&amp;quot;server&amp;quot; ID=&amp;quot;CssRegistration5&amp;quot; Name=&amp;quot;/style library/vass/editmode.css&amp;quot; After=&amp;quot;corev15.css&amp;quot; __designer:Preview=&amp;quot;&amp;quot; __designer:Values=&amp;quot;&amp;amp;lt;P N=&amp;amp;#39;Name&amp;amp;#39; T=&amp;amp;#39;/style library/vass/editmode.css&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;After&amp;amp;#39; T=&amp;amp;#39;corev15.css&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;ID&amp;amp;#39; T=&amp;amp;#39;CssRegistration5&amp;amp;#39; /&amp;amp;gt;&amp;amp;lt;P N=&amp;amp;#39;AppRelativeTemplateSourceDirectory&amp;amp;#39; R=&amp;amp;#39;-1&amp;amp;#39; /&amp;amp;gt;&amp;quot;/&amp;gt;&amp;#xD;&amp;#xA;        &quot; /&gt;&lt;/Regions&gt;
-            &lt;SharePoint:CssRegistration runat=&quot;server&quot; ID=&quot;CssRegistration5&quot; Name=&quot;/style library/vass/editmode.css&quot; After=&quot;corev15.css&quot; /&gt;
-        " __designer:Values="&lt;P N=&#39;ID&#39; T=&#39;ctl00&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;&lt;P N=&#39;Visible&#39; T=&#39;False&#39; /&gt;">
+        <PublishingWebControls:EditModePanel runat="server">
             <SharePoint:CssRegistration runat="server" ID="CssRegistration5" Name="/style library/vass/editmode.css" After="corev15.css" />
         </PublishingWebControls:EditModePanel>
     </head>
     <body onhashchange="if (typeof(_spBodyOnHashChange) != 'undefined') _spBodyOnHashChange();">
-        <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent" __designer:Preview="" __designer:Values="&lt;P N=&#39;ServerControlID&#39; T=&#39;DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent&#39; /&gt;&lt;P N=&#39;ID&#39; T=&#39;ctl01&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;"/>
-        <SharePoint:ImageLink runat="server" __designer:Preview="" __designer:Values="&lt;P N=&#39;ID&#39; T=&#39;ctl02&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;1&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;"/>
-        <SharePoint:SharePointForm onsubmit="if (typeof(_spFormOnSubmitWrapper) != 'undefined') {return _spFormOnSubmitWrapper();} else {return true;}" runat="server" __designer:Preview="&lt;table cellpadding=4 cellspacing=0 style=&quot;font:messagebox;color:buttontext;background-color:buttonface;border: solid 1px;border-top-color:buttonhighlight;border-left-color:buttonhighlight;border-bottom-color:buttonshadow;border-right-color:buttonshadow&quot;&gt;
-              &lt;tr&gt;&lt;td nowrap&gt;&lt;span style=&quot;font-weight:bold&quot;&gt;SharePointForm&lt;/span&gt; - Unnamed4&lt;/td&gt;&lt;/tr&gt;
-              &lt;tr&gt;&lt;td&gt;&lt;/td&gt;&lt;/tr&gt;
-            &lt;/table&gt;" __designer:Values="&lt;P N=&#39;Method&#39; T=&#39;post&#39; /&gt;&lt;P N=&#39;Name&#39; ID=&#39;1&#39; T=&#39;aspnetForm&#39; /&gt;&lt;P N=&#39;TagName&#39; T=&#39;form&#39; /&gt;&lt;P N=&#39;ID&#39; T=&#39;ctl03&#39; /&gt;&lt;P N=&#39;Page&#39; ID=&#39;2&#39; /&gt;&lt;P N=&#39;TemplateControl&#39; ID=&#39;3&#39; /&gt;&lt;P N=&#39;AppRelativeTemplateSourceDirectory&#39; R=&#39;-1&#39; /&gt;">
+        <SharePoint:SPClientIDGenerator runat="server" ServerControlID="DeltaPlaceHolderMain;DeltaPlaceHolderPageTitleInTitleArea;DeltaPlaceHolderUtilityContent"/>
+        <SharePoint:ImageLink runat="server"/>
+        <SharePoint:SharePointForm onsubmit="if (typeof(_spFormOnSubmitWrapper) != 'undefined') {return _spFormOnSubmitWrapper();} else {return true;}" runat="server">
             <asp:ScriptManager ID="ScriptManager" runat="server" EnablePageMethods="false" EnablePartialRendering="true" EnableScriptGlobalization="false" EnableScriptLocalization="true" />
             <div id="ms-designer-ribbon">
 
@@ -128,9 +123,8 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <div class="col-2">
                                     <div class="logo">
                                         <a href="#">
-                                            <img src="/style library/images/logo.png" />
+                                            <img src="/style library/images/logo.png" style="width: 150%;"/>
                                         </a>
-                                        <span>intranet</span>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -289,6 +283,67 @@ To build the master page directly from this HTML file, simply edit the page as y
                     </div>
                 </div>
             </div>
+			
+			<div class="modal" id="bienvenidaSlider" tabindex="-1" role="dialog" data-backdrop="static">
+                <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark-blue">
+                            <h3 class="modal-title">Bienvenido a SKYNET</h3>
+                        </div>
+                        <div class="modal-body">
+						
+						<div id="demo" class="carousel slide" data-ride="carousel" style="height: 350px;">
+
+						  <!-- Indicators -->
+						  <ul class="carousel-indicators">
+							<li data-target="#demo" data-slide-to="0" class="active"></li>
+							<li data-target="#demo" data-slide-to="1"></li>
+							<li data-target="#demo" data-slide-to="2"></li>
+							<li data-target="#demo" data-slide-to="3"></li>
+							<li data-target="#demo" data-slide-to="4"></li>
+							<li data-target="#demo" data-slide-to="5"></li>
+						  </ul>
+
+						  <!-- The slideshow -->
+						  <div class="carousel-inner">
+							<div class="carousel-item active" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider1.png" alt="Slider1" style="height: inherit;">
+							</div>
+							<div class="carousel-item" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider2.png" alt="Slider2" style="height: inherit;">
+							</div>
+							<div class="carousel-item" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider3.png" alt="Slider3" style="height: inherit;">
+							</div>
+							<div class="carousel-item" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider4.png" alt="Slider4" style="height: inherit;">
+							</div>
+							<div class="carousel-item" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider5.png" alt="Slider5" style="height: inherit;">
+							</div>
+							<div class="carousel-item" style="text-align: center; height: 350px">
+							  <img src="/style library/images/Slider6.png" alt="Slider6" style="height: inherit;">
+							</div>
+						  </div>
+
+						  <!-- Left and right controls -->
+						  <a class="carousel-control-prev" href="#demo" data-slide="prev">
+							<span class="carousel-control-prev-icon"></span>
+						  </a>
+						  <a class="carousel-control-next" href="#demo" data-slide="next">
+							<span class="carousel-control-next-icon"></span>
+						  </a>
+
+						</div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" id="bienvenidaSliderOk">Comenzar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+			
             <SharePoint:AjaxDelta id="DeltaFormDigest" BlockElement="true" runat="server">
                 <asp:ContentPlaceHolder ID="PlaceHolderFormDigest" runat="server">
 					<SharePoint:formdigest runat="server" />

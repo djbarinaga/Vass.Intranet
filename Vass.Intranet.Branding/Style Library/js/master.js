@@ -1176,7 +1176,9 @@ function isNullOrEmpty(text) {
                     setInterval(checkSite(teamSiteUrl, id, counter, callback), 3000);
                 }
                 else {
-                    teamSiteUrl = teamSiteUrl + id;
+                	if(id != null) {
+                    	teamSiteUrl = teamSiteUrl + id;
+                    }
                     callback(teamSiteUrl, data.d.GetContextWebInformation.FormDigestValue);
                 }
                 }).fail(function (j) {
@@ -1774,7 +1776,7 @@ function isNullOrEmpty(text) {
                         html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
                         html += '       </div>';
                         html += '       <div class="col">';
-                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '           <h4><a href="'+ url +'" target="_blank">' + team.displayName + '</a></h4>';
                         html += '       </div>';
                         html += '   </div>';
                         html += '</li>';
@@ -1786,7 +1788,7 @@ function isNullOrEmpty(text) {
                         html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
                         html += '       </div>';
                         html += '       <div class="col">';
-                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '           <h4><a href="'+ url +'" target="_blank">' + team.displayName + '</a></h4>';
                         html += '           <p>' + team.description + '</p>';
                         html += '       </div>';
                         html += '   </div>';
@@ -1913,7 +1915,7 @@ function isNullOrEmpty(text) {
                             html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
                             html += '       </div>';
                             html += '       <div class="col">';
-                            html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                            html += '           <h4><a href="'+ url +'" target="_blank">' + team.displayName + '</a></h4>';
                             html += '       </div>';
                             html += '   </div>';
                             html += '</li>';
@@ -1925,7 +1927,7 @@ function isNullOrEmpty(text) {
                             html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
                             html += '       </div>';
                             html += '       <div class="col">';
-                            html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                            html += '           <h4><a href="'+ url +'" target="_blank">' + team.displayName + '</a></h4>';
                             html += '           <p>' + team.description + '</p>';
                             html += '       </div>';
                             html += '   </div>';
@@ -2021,7 +2023,7 @@ function isNullOrEmpty(text) {
             setContext(variables.clientId.Graph);
             var $this = $(this);
 
-            var endpoint = "/groups";
+            var endpoint = "/groups?$top=500";
 
             execute({
                 clientId: variables.clientId.Graph,
@@ -3303,7 +3305,31 @@ function checkGdpr(callback) {
                     checkedProperties[$(this).attr('name')] = $(this).is(":checked");
                 });
             })
+			
+			$('#bienvenidaSliderOk').on('click', function () {
+                var clientContext = SP.ClientContext.get_current();
+                var user = clientContext.get_web().get_siteUsers().getById(_spPageContextInfo.userId);
 
+                clientContext.load(user);
+                clientContext.executeQueryAsync(
+                    function () {
+                        clientContext.executeQueryAsync(
+                            Function.createDelegate(this, function () {
+                                //$('#bienvenidaSlider').modal();
+								window.location.reload();
+                            }),
+                            Function.createDelegate(this, function (sender, args) {
+                                console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                                //showErrorMessage("No se ha podido crear la solicitud");
+                            }));
+                    },
+                    function (sender, args) {
+                        console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                        //showErrorMessage("No se ha podido crear la solicitud");
+                    }
+                );
+            });
+			
             $('#gdprOk').on('click', function () {
                 var clientContext = SP.ClientContext.get_current();
                 var user = clientContext.get_web().get_siteUsers().getById(_spPageContextInfo.userId);
@@ -3320,7 +3346,10 @@ function checkGdpr(callback) {
 
                         clientContext.executeQueryAsync(
                             Function.createDelegate(this, function () {
-                                window.location.reload();
+								var modalExit = document.getElementById('gdpr');
+								modalExit.style.display = "none";
+                                $('#bienvenidaSlider').modal();
+								//window.location.reload();
                             }),
                             Function.createDelegate(this, function (sender, args) {
                                 console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());

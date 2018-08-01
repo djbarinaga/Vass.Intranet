@@ -362,7 +362,7 @@
 		</div>
 		</div>
 		<div id="s4-workspace" class="ms-core-overlay">
-		<div id="s4-bodyContainer">
+		<div id="s4-bodyContainer" style="background-image:url('/style library/images/LogoSKYNET.jpg'); background-size:cover;">
 		<div id="s4-titlerow"
 			class="ms-dialogHidden s4-titlerowhidetitle">
 		<div id="titleAreaBox"

@@ -2005,6 +2005,7 @@ function isNullOrEmpty(text) {
         var $this = this;
 
         var guilds;
+        var myGroups;
 
         var url = "https://grupovass.sharepoint.com/es-es/_api/web/lists/getbytitle('Teams')/items?$filter=TeamType eq 'Gremio'";
 
@@ -2024,7 +2025,6 @@ function isNullOrEmpty(text) {
             var $this = $(this);
 
             var endpoint = "/groups?$top=500";
-
             execute({
                 clientId: variables.clientId.Graph,
                 version: "v1.0",
@@ -2043,50 +2043,73 @@ function isNullOrEmpty(text) {
             }
 
             var teams = data.value;
-            var counter = 0;
 
-            for (var i = 0; i < teams.length; i++) {
-                if (counter == 3)
+            execute({
+                clientId: variables.clientId.Graph,
+                version: "v1.0",
+                endpoint: "/me/memberOf?$top=999",
+                type: "GET",
+                callback: function (data) {
+                    var groups = data.value;
+                    var counter = 0;
+
+                    for (var i = 0; i < teams.length; i++) {
+                        if (counter == 3)
+                            break;
+
+                        var team = teams[i];
+
+                        if (isGuild(team.displayName) && isMemberOf(groups, team.displayName)) {
+                            var bgColor = getIconColor();
+
+                            var html = '';
+
+                            if ($($this).is('ul')) {
+                                html += '<li>';
+                                html += '   <div class="row">';
+                                html += '       <div class="col-3 text-center">';
+                                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                                html += '       </div>';
+                                html += '       <div class="col">';
+                                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                                html += '       </div>';
+                                html += '   </div>';
+                                html += '</li>';
+                            }
+                            else {
+                                html += '<div class="col-5">';
+                                html += '   <div class="row">';
+                                html += '       <div class="col-3 text-center">';
+                                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                                html += '       </div>';
+                                html += '       <div class="col">';
+                                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                                html += '           <p>' + team.description + '</p>';
+                                html += '       </div>';
+                                html += '   </div>';
+                                html += '</div>';
+                            }
+
+                            $($this).append(html);
+
+                            counter++;
+                        }
+                    }
+                }
+            });
+        }
+
+        function isMemberOf(groups, groupName) {
+            var isMember = false;
+
+            for (var i = 0; i < groups.length; i++) {
+                if (groups[i].displayName.toLowerCase() == groupName.toLowerCase()) {
+                    isMember = true;
                     break;
-
-                var team = teams[i];
-
-                if (isGuild(team.displayName)) {
-                    var bgColor = getIconColor();
-
-                    var html = '';
-
-                    if ($($this).is('ul')) {
-                        html += '<li>';
-                        html += '   <div class="row">';
-                        html += '       <div class="col-3 text-center">';
-                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                        html += '       </div>';
-                        html += '       <div class="col">';
-                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                        html += '       </div>';
-                        html += '   </div>';
-                        html += '</li>';
-                    }
-                    else {
-                        html += '<div class="col-5">';
-                        html += '   <div class="row">';
-                        html += '       <div class="col-3 text-center">';
-                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                        html += '       </div>';
-                        html += '       <div class="col">';
-                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                        html += '           <p>' + team.description + '</p>';
-                        html += '       </div>';
-                        html += '   </div>';
-                        html += '</div>';
-                    }
-
-                    $($this).append(html);
-
-                    counter++;
                 }
             }
+
+            return isMember;
         }
 
         function getIconColor() {
@@ -2873,11 +2896,17 @@ function checkPermissions() {
             if (!per.get_value()) {
                 $('#s4-ribbonrow').hide();
 
+                var warrerCounter = 0;
+
                 var checkExist = setInterval(function () {
                     if ($('#O365_MainLink_Settings').length) {
                         $('#O365_MainLink_Settings').parent().hide();
-                        clearInterval(checkExist);
+
+                        if(warrerCounter == 10)
+                            clearInterval(checkExist);
                     }
+
+                    warrerCounter++;
                 }, 100);
             }
         },

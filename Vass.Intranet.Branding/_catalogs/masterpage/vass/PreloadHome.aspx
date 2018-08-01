@@ -4,28 +4,13 @@
 	<SharePointWebControls:CssRegistration name="<% $SPUrl:~sitecollection/Style Library/~language/Themable/Core Styles/pagelayouts15.css %>" runat="server"/>
 	<script type="text/javascript">
         $(document).ready(function () {
-            function animate(index) {
-                $($('.logo p span')[index]).animateCss('pulse', function () {
-                    index++;
-                    if (index == 3)
-                        index = 0;
-
-                    animate(index);
-                });
-            }
-
-            animate(0);
-
             execute({
                 clientId: variables.clientId.Graph,
                 version: "v1.0",
                 endpoint: "/me",
                 type: "GET",
                 callback: function () {
-                    $('.logo').animateCss('flipOutY', function () {
-                        window.location.href = '/Pages/VariationRoot.aspx';
-                        $('.logo').hide();
-                    });
+                    window.location.href = '/Pages/VariationRoot.aspx';
                 }
             });
         });
@@ -40,5 +25,5 @@
 <asp:Content ContentPlaceHolderId="PlaceHolderTitleBreadcrumb" runat="server"> 
 	<SharePointWebControls:ListSiteMapPath runat="server" SiteMapProviders="CurrentNavigationSwitchableProvider" RenderCurrentNodeAsLink="false" PathSeparator="" CssClass="s4-breadcrumb" NodeStyle-CssClass="s4-breadcrumbNode" CurrentNodeStyle-CssClass="s4-breadcrumbCurrentNode" RootNodeStyle-CssClass="s4-breadcrumbRootNode" NodeImageOffsetX=0 NodeImageOffsetY=289 NodeImageWidth=16 NodeImageHeight=16 NodeImageUrl="/_layouts/15/images/fgimg.png?rev=44" HideInteriorRootNodes="true" SkipLinkText=""/> </asp:Content>
 <asp:Content ContentPlaceholderID="PlaceHolderMain" runat="server">
-			<img src="/style library/images/LogoSKYNET.jpg" style="width: 100%;" />
+			
 </asp:Content>

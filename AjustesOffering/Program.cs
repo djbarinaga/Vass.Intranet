@@ -89,6 +89,167 @@ namespace AjustesOffering
             //Lookups("Biblioteca Referencias EN");
         }
 
+        #region Clientes
+        private static void Clientes()
+        {
+            GetClientes();
+        }
+
+        private static void GetClientes()
+        {
+            Console.WriteLine("Contectando...");
+            ClientContext context = new ClientContext("http://vassvm-08096/OFVASS");
+            context.Credentials = new System.Net.NetworkCredential("vassdesk\\intranet1", "Lunes.123");
+
+            List list = context.Web.Lists.GetByTitle("Biblioteca Referencias ES");
+
+            CamlQuery query = new CamlQuery();
+            query = CamlQuery.CreateAllItemsQuery();
+
+            ListItemCollection items = list.GetItems(query);
+
+            context.Load(list);
+            context.Load(items, i => i.Include(
+                item => item["C_x00d3_DIGO"],
+                item => item["Cliente"],
+                item => item["A_x00d1_O"]));
+
+            context.Load(list.Fields);
+            context.ExecuteQuery();
+
+            List<Item> exportItems = new List<Item>();
+
+            int itemCount = items.Count;
+            int counter = 0;
+
+            foreach (ListItem listItem in items)
+            {
+                if (listItem["Cliente"] != null)
+                {
+                    FieldLookupValue lookup = listItem["Comercial_x003a_Codigo_x0020_Com"] as FieldLookupValue;
+
+                    if (lookup.LookupValue != null)
+                    {
+                        Item currentItem = new Item();
+                        currentItem.CodigoComercial = lookup.LookupValue.ToString();
+                        currentItem.AnioOferta = listItem["A_x00d1_O"].ToString();
+                        currentItem.CodigoOferta = listItem["C_x00d3_DIGO"].ToString();
+
+                        exportItems.Add(currentItem);
+                    }
+                }
+
+                counter++;
+
+                int percentage = (counter * 100) / itemCount;
+                Console.Write("Obteniendo elmentos...{0}%\r", percentage);
+
+                if (percentage == 100)
+                    Console.WriteLine();
+            }
+
+            GetLookupsId(exportItems);
+        }
+
+        private static void GetLookupsId(List<Item> exportItems)
+        {
+            Console.WriteLine("Conectando a https://grupovass.sharepoint.com/es-es/businessvalue/offering...");
+
+            ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/offering");
+            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            List list = context.Web.Lists.GetByTitle("Codigos Comercial VASS");
+
+            int counter = 0;
+
+            List<Item> exportItemsComplete = new List<Item>();
+
+            foreach (Item exportItem in exportItems)
+            {
+                CamlQuery query = new CamlQuery();
+                query.ViewXml = string.Format(@"<View>
+                                    <Query>
+                                        <Where>
+                                            <Eq>
+                                                <FieldRef Name='Codigo_x0020_Comercial'/>
+                                                <Value Type='Text'>{0}</Value>
+                                            </Eq>
+                                        </Where>
+                                    </Query>
+                                </View>", exportItem.CodigoComercial);
+
+                ListItemCollection items = list.GetItems(query);
+
+                context.Load(items);
+                context.ExecuteQuery();
+
+                if (items.Count == 1)
+                {
+                    Item newItem = exportItem;
+                    newItem.TargetLookupId = Convert.ToInt32(items[0]["ID"]);
+                    exportItemsComplete.Add(newItem);
+                }
+
+                counter++;
+
+                int percentage = (counter * 100) / exportItems.Count;
+                Console.Write("Obteniendo códigos comerciales...{0}%\r", percentage);
+            }
+
+            UpdateItems(exportItemsComplete);
+        }
+
+        private static void UpdateItems(List<Item> exportItems)
+        {
+            ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/offering");
+            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            List list = context.Web.Lists.GetByTitle("Ofertas");
+
+            int counter = 0;
+
+            foreach (Item exportItem in exportItems)
+            {
+                CamlQuery query = new CamlQuery();
+                query.ViewXml = string.Format(@"<View>
+                                    <Query>
+                                        <Where>
+                                            <And>
+                                                <Eq>
+                                                    <FieldRef Name='C_x00d3_DIGO'/>
+                                                    <Value Type='Text'>{0}</Value>
+                                                </Eq>
+                                                <Eq>
+                                                    <FieldRef Name='A_x00d1_O'/>
+                                                    <Value Type='Text'>{1}</Value>
+                                                </Eq>
+                                            </And>
+                                        </Where>
+                                    </Query>
+                                </View>", exportItem.CodigoOferta, exportItem.AnioOferta);
+
+                ListItemCollection items = list.GetItems(query);
+
+                context.Load(items);
+                context.ExecuteQuery();
+
+                if (items.Count == 1)
+                {
+                    ListItem item = items[0];
+                    FieldLookupValue lv = new FieldLookupValue();
+                    lv.LookupId = exportItem.TargetLookupId;
+
+                    item["Comercial"] = lv;
+                    item.Update();
+                    context.ExecuteQuery();
+                }
+
+                counter++;
+
+                int percentage = (counter * 100) / exportItems.Count;
+                Console.Write("Actualizando elementos...{0}%\r", percentage);
+            }
+        }
+        #endregion
+
         #region Comerciales
         private static void Comerciales()
         {
@@ -1097,7 +1258,7 @@ namespace AjustesOffering
 
         private static SecureString GetSecureString()
         {
-            string pwd = "Lunes.123";
+            string pwd = "KfV3XH9L";
             char[] chars = pwd.ToCharArray();
             SecureString securePassword = new SecureString();
 

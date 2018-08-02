@@ -332,7 +332,6 @@ header > .row{
 
 .logo a{
     display: inline-block;
-    border-right: solid 1px #50bbeb;
     float: left;
     width: 112px;
     height: 100%;
@@ -359,7 +358,7 @@ header > .row{
 }
 
 .ms-core-listMenu-horizontalBox ul, .ms-core-listMenu-horizontalBox li, .ms-core-listMenu-horizontalBox .ms-core-listMenu-item, .ms-core-listMenu-horizontalBox > ul > li > table{
-    padding: 5px;
+    padding: 5px 2px;
     display: inline-block;
 }
 
@@ -2096,4 +2095,8 @@ a.btn-orange, a.btn-orange:hover, a.btn-orange:focus, a.btn-orange:visited{
 .event-location .icon-location {
     font-size: 20px !important;
     top: 0px;
+}
+
+.table thead th{
+    font-weight: 600;
 }

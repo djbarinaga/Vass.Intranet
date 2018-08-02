@@ -979,90 +979,115 @@ function isNullOrEmpty(text) {
 
             $('#alert').text('Creando grupo');
 
-            //Creamos el grupo
+            //Comprobamos si existe el grupo
             execute({
                 clientId: variables.clientId.Graph,
                 version: "v1.0",
-                endpoint: "/groups",
-                type: "POST",
-                data: {
-                    "description": groupName,
-                    "displayName": groupName,
-                    "groupTypes": [
-                        "Unified"
-                    ],
-                    "mailEnabled": true,
-                    "mailNickname": mailNickName,
-                    "securityEnabled": false
-                },
+                endpoint: "/groups?$filter=displayName eq '" + groupName + "'",
+                type: "GET",
                 callback: function (result) {
-                    var groupId = result.id;
-
-                    console.log('Grupo creado: ' + groupId);
-
-                    currentAction++;
-                    setProgress();
-
-                    $('#alert').text('Añadiendo propietario al grupo');
-
-                    //Asignamos el propietario
-                    execute({
-                        clientId: variables.clientId.Graph,
-                        version: "v1.0",
-                        endpoint: "/groups/" + groupId + "/owners/$ref",
-                        type: "POST",
-                        data: {
-                            "@odata.id": "https://graph.microsoft.com/v1.0/users/" + $('#txtOwner').val()
-                        },
-                        callback: function (result) {
-
-                            console.log('Propietario añadido');
-
-                            currentAction++;
-                            setProgress();
-
-                            $('#alert').text('Creando equipo');
-
-                            //Creamos el equipo
+                    if (result.value != null && result.value.length > 0) {
+                        bootbox.alert('Ya existe un grupo con el nombre ' + groupName + '. Por favor, elija otro nombre.');
+                    }
+                    else {
+                        log('Creando grupo ' + groupName + ' en Office 365', function () {
                             execute({
                                 clientId: variables.clientId.Graph,
-                                version: "beta",
-                                endpoint: "/groups/" + groupId + "/team",
-                                type: "PUT",
+                                version: "v1.0",
+                                endpoint: "/groups",
+                                type: "POST",
                                 data: {
-                                    "memberSettings": {
-                                        "allowCreateUpdateChannels": true
-                                    },
-                                    "messagingSettings": {
-                                        "allowUserEditMessages": true,
-                                        "allowUserDeleteMessages": true
-                                    },
-                                    "funSettings": {
-                                        "allowGiphy": true,
-                                        "giphyContentRating": "strict"
-                                    }
+                                    "description": groupName,
+                                    "displayName": groupName,
+                                    "groupTypes": [
+                                        "Unified"
+                                    ],
+                                    "mailEnabled": true,
+                                    "mailNickname": mailNickName,
+                                    "securityEnabled": false
                                 },
                                 callback: function (result) {
-                                    console.log('Equipo creado en Teams');
+                                    var groupId = result.id;
 
-                                    currentAction++;
-                                    setProgress();
+                                    log('Grupo ' + groupName + ' creado. Id: ' + groupId, function () {
+                                        currentAction++;
+                                        setProgress();
 
-                                    var projectType = $('input[name=teamType]:checked').val();
+                                        $('#alert').text('Añadiendo propietario al grupo');
 
-                                    if (projectType.toLowerCase() == 'gremio')
-                                        addTeamToList(function () {
-                                            $('.progress-bar').css('width', '100%');
-                                            $('#alert').text('Equipo creado');
-                                        });
-                                    else
-                                        createFolder(0);
+                                        log('Añadiendo a ' + $('#txtOwner').val() + ' como propietario del grupo ' + groupName, function () {
+                                            //Asignamos el propietario
+                                            execute({
+                                                clientId: variables.clientId.Graph,
+                                                version: "v1.0",
+                                                endpoint: "/groups/" + groupId + "/owners/$ref",
+                                                type: "POST",
+                                                data: {
+                                                    "@odata.id": "https://graph.microsoft.com/v1.0/users/" + $('#txtOwner').val()
+                                                },
+                                                callback: function (result) {
+
+                                                    console.log('Propietario añadido');
+
+                                                    currentAction++;
+                                                    setProgress();
+
+                                                    $('#alert').text('Creando equipo');
+
+                                                    log('Creando equipo en Microsoft Teams', function () {
+                                                        //Creamos el equipo
+                                                        execute({
+                                                            clientId: variables.clientId.Graph,
+                                                            version: "beta",
+                                                            endpoint: "/groups/" + groupId + "/team",
+                                                            type: "PUT",
+                                                            data: {
+                                                                "memberSettings": {
+                                                                    "allowCreateUpdateChannels": true
+                                                                },
+                                                                "messagingSettings": {
+                                                                    "allowUserEditMessages": true,
+                                                                    "allowUserDeleteMessages": true
+                                                                },
+                                                                "funSettings": {
+                                                                    "allowGiphy": true,
+                                                                    "giphyContentRating": "strict"
+                                                                }
+                                                            },
+                                                            callback: function (result) {
+                                                                currentAction++;
+                                                                setProgress();
+
+                                                                log('Equipo creado en Microsoft Teams', function () {
+                                                                    var projectType = $('input[name=teamType]:checked').val();
+
+                                                                    if (projectType.toLowerCase() == 'gremio')
+                                                                        log('Agregando equipo a la lista de equipos', function () {
+                                                                            addTeamToList(function () {
+                                                                                $('.progress-bar').css('width', '100%');
+                                                                                $('#alert').text('Equipo creado');
+                                                                                window.location.href = 'https://grupovass.sharepoint.com/es-es/Lists/Teams/AllItems.aspx';
+                                                                            });
+                                                                        })
+                                                                        
+                                                                    else
+                                                                        createFolder(0);
+                                                                })
+                                                            }
+                                                        })
+                                                    })
+                                                }
+                                            })
+                                        })
+                                    });
                                 }
-                            })
-                        }
-                    })
+                            });
+                        });
+                    }
                 }
-            });
+            })
+
+            
         };
 
         function createFolder(index) {
@@ -1071,60 +1096,70 @@ function isNullOrEmpty(text) {
 
             $('#alert').text('Esperando la creación del sitio');
 
-            var counter = 0;
-            checkSite(teamSiteUrl, null, counter, function (teamSiteUrl, formDigest) {
-                checkFolder(teamSiteUrl, formDigest, function () {
+            log('Esperando la creación del sitio ' + teamSiteUrl, function () {
+                var counter = 0;
+                checkSite(teamSiteUrl, null, counter, function (teamSiteUrl, formDigest) {
+                    checkFolder(teamSiteUrl, formDigest, function () {
 
-                    $('#alert').text('Creando estructura de carpetas');
+                        $('#alert').text('Creando estructura de carpetas');
 
-                    var create = function (index) {
+                        log('Creando estructura de carpetas', function () {
+                            var create = function (index) {
 
-                        if (index < folders.length) {
-                            var folder = folders[index];
+                                if (index < folders.length) {
+                                    var folder = folders[index];
 
-                            var folderName = '';
+                                    var folderName = '';
 
-                            if (folder.parent == null)
-                                folderName = folder.name;
-                            else
-                                folderName = folder.parent + "/" + folder.name
+                                    if (folder.parent == null)
+                                        folderName = folder.name;
+                                    else
+                                        folderName = folder.parent + "/" + folder.name
 
-                            console.log('Creando carpeta ' + folder.name + ' en ' + folder.parent);
+                                    console.log('Creando carpeta ' + folder.name + ' en ' + folder.parent);
 
-                            var url = teamSiteUrl + "/_api/web/getfolderbyserverrelativeurl('Shared%20Documents/General";
+                                    log('Creando carpeta ' + folder.name + ' en ' + folder.parent, function () {
+                                        var url = teamSiteUrl + "/_api/web/getfolderbyserverrelativeurl('Shared%20Documents/General";
 
-                            if (folder.parent != null)
-                                url += "/" + folder.parent;
+                                        if (folder.parent != null)
+                                            url += "/" + folder.parent;
 
-                            url += "')/Folders/add(url='" + folder.name + "')";
+                                        url += "')/Folders/add(url='" + folder.name + "')";
 
-                            $.ajax({
-                                url: url,
-                                type: "POST",
-                                dataType: "json",
-                                headers: {
-                                    Accept: "application/json;odata=verbose",
-                                    "X-RequestDigest": formDigest
+                                        $.ajax({
+                                            url: url,
+                                            type: "POST",
+                                            dataType: "json",
+                                            headers: {
+                                                Accept: "application/json;odata=verbose",
+                                                "X-RequestDigest": formDigest
+                                            }
+                                        }).done(function (data) {
+
+                                            console.log('Carpeta creada');
+
+                                            currentAction++;
+                                            setProgress();
+
+                                            index++;
+                                            create(index);
+                                        }).fail(function (j) {
+                                            console.log(j);
+                                        });
+                                    })
+
+                                    
                                 }
-                            }).done(function (data) {
+                                else {
+                                    createLists(teamSiteUrl, 0, formDigest);
+                                }
+                            }
 
-                                console.log('Carpeta creada');
+                            create(index);
+                        })
 
-                                currentAction++;
-                                setProgress();
-
-                                index++;
-                                create(index);
-                            }).fail(function (j) {
-                                console.log(j);
-                            });
-                        }
-                        else {
-                            createLists(teamSiteUrl, 0, formDigest);
-                        }
-                    }
-
-                    create(index);
+                        
+                    });
                 });
             });
         }
@@ -1189,60 +1224,67 @@ function isNullOrEmpty(text) {
 
         function createLists(url, index, formDigest) {
             $('#alert').text('Creando listas');
+            log('Creando listas', function () {
+                var createList = function (url, index) {
 
-            var createList = function (url, index) {
+                    if (index < lists.length) {
+                        var list = lists[index];
 
-                if (index < lists.length) {
-                    var list = lists[index];
-
-                    var listBody = {
-                        '__metadata': {
-                            'type': 'SP.List'
-                        },
-                        'BaseTemplate': 100,
-                        'Description': list.name,
-                        'Title': list.name
-                    }
-
-                    console.log('Creando lista ' + list.name);
-
-                    var $ajax = $.ajax({
-                        url: url + '/_api/web/lists',
-                        type: "POST",
-                        data: JSON.stringify(listBody),
-                        dataType: "json",
-                        headers: {
-                            Accept: "application/json;odata=verbose",
-                            "content-type": "application/json;odata=verbose",
-                            "X-RequestDigest": formDigest
+                        var listBody = {
+                            '__metadata': {
+                                'type': 'SP.List'
+                            },
+                            'BaseTemplate': 100,
+                            'Description': list.name,
+                            'Title': list.name
                         }
-                    });
 
-                    $ajax.done(function (data) {
-                        list.id = data.d.Id;
+                        console.log('Creando lista ' + list.name);
 
-                        console.log('Lista creada ' + list.id);
+                        log('Creando lista ' + list.name, function () {
+                            var $ajax = $.ajax({
+                                url: url + '/_api/web/lists',
+                                type: "POST",
+                                data: JSON.stringify(listBody),
+                                dataType: "json",
+                                headers: {
+                                    Accept: "application/json;odata=verbose",
+                                    "content-type": "application/json;odata=verbose",
+                                    "X-RequestDigest": formDigest
+                                }
+                            });
 
-                        currentAction++;
-                        setProgress();
+                            $ajax.done(function (data) {
+                                list.id = data.d.Id;
 
-                        index++;
-                        createList(url, index);
-                    });
+                                console.log('Lista creada ' + list.id);
 
-                    $ajax.fail(function (jqXSR, text, err) {
-                        console.log(jqXSR);
-                        console.log(text);
-                        console.log(err);
-                    });
+                                currentAction++;
+                                setProgress();
+
+                                index++;
+                                createList(url, index);
+                            });
+
+                            $ajax.fail(function (jqXSR, text, err) {
+                                log(jqXSR);
+                                log(text);
+                                log(err);
+                            });
+                        })
+                    }
+                    else {
+                        $('#alert').text('Creando campos en listas');
+                        log('Creando campos en listas', function () {
+                            createFields(url, formDigest, 0);
+                        })
+                    }
                 }
-                else {
-                    $('#alert').text('Creando campos en listas');
-                    createFields(url, formDigest, 0);
-                }
-            }
 
-            createList(url, index, formDigest);
+                createList(url, index, formDigest);
+            })
+
+            
         }
 
         function createFields(url, formDigest, index) {
@@ -1304,36 +1346,37 @@ function isNullOrEmpty(text) {
                         }
 
                         console.log('Creando campo ' + field.name + ' en ' + list.name);
+                        log('Creando campo ' + field.name + ' en ' + list.name, function () {
+                            var $ajax = $.ajax({
+                                url: auxUrl,
+                                type: "POST",
+                                data: JSON.stringify(fieldBody),
+                                dataType: "json",
+                                headers: {
+                                    Accept: "application/json;odata=verbose",
+                                    "content-type": "application/json;odata=verbose",
+                                    "X-RequestDigest": formDigest
+                                }
+                            });
 
-                        var $ajax = $.ajax({
-                            url: auxUrl,
-                            type: "POST",
-                            data: JSON.stringify(fieldBody),
-                            dataType: "json",
-                            headers: {
-                                Accept: "application/json;odata=verbose",
-                                "content-type": "application/json;odata=verbose",
-                                "X-RequestDigest": formDigest
-                            }
-                        });
+                            $ajax.done(function (data) {
+                                console.log('Campo creado');
 
-                        $ajax.done(function (data) {
-                            console.log('Campo creado');
+                                addFieldToDefaultView(url, list, field, formDigest);
 
-                            addFieldToDefaultView(url, list, field, formDigest);
+                                currentAction++;
+                                setProgress();
 
-                            currentAction++;
-                            setProgress();
+                                fieldIndex++;
+                                createField(listUrl, formDigest, list, fieldIndex, listIndex);
+                            });
 
-                            fieldIndex++;
-                            createField(listUrl, formDigest, list, fieldIndex, listIndex);
-                        });
-
-                        $ajax.fail(function (jqXSR, text, err) {
-                            console.log(jqXSR);
-                            console.log(text);
-                            console.log(err);
-                        });
+                            $ajax.fail(function (jqXSR, text, err) {
+                                log(jqXSR);
+                                log(text);
+                                log(err);
+                            });
+                        })
                     }
                     else {
                         listIndex++;
@@ -1440,6 +1483,32 @@ function isNullOrEmpty(text) {
         function setProgress() {
             var currentProgress = (currentAction * 100) / totalSteps;
             $('.progress-bar').css('width', currentProgress + '%');
+        }
+
+        function log(message, callback) {
+            var clientContext = SP.ClientContext.get_current();
+
+            var oList = clientContext.get_web().get_lists().getByTitle('TeamLog');
+
+            var itemCreateInfo = new SP.ListItemCreationInformation();
+            item = oList.addItem(itemCreateInfo);
+
+            item.set_item('Event', message);
+            item.set_item('Team', $('#txtGroupName').val());
+            item.update();
+
+            clientContext.load(item);
+
+            clientContext.executeQueryAsync(
+                Function.createDelegate(this, function () {
+                    if (callback != null)
+                        callback();
+                }),
+                Function.createDelegate(this, function (sender, args) {
+                    console.log('Request failed. ' + args.get_message() + '\n' + args.get_stackTrace());
+                    showErrorMessage("No se ha podido crear la solicitud");
+                })
+            );
         }
     };
 }(jQuery));
@@ -1733,7 +1802,7 @@ function isNullOrEmpty(text) {
         setContext(variables.clientId.Graph);
         var $this = $(this);
 
-        var endpoint = "/me/joinedteams";
+        var endpoint = "/me/joinedteams?$top=999";
 
         execute({
             clientId: variables.clientId.Graph,
@@ -1757,7 +1826,6 @@ function isNullOrEmpty(text) {
                 var team = teams[index];
 
                 var renderTeamInfo = function (channelData) {
-                    counter++;
                     if (channelData == null) {
                         return;
                     }
@@ -1780,6 +1848,7 @@ function isNullOrEmpty(text) {
                         html += '       </div>';
                         html += '   </div>';
                         html += '</li>';
+                        counter++;
                     }
                     else {
                         html += '<div class="col-5">';
@@ -1869,11 +1938,11 @@ function isNullOrEmpty(text) {
             setContext(variables.clientId.Graph);
             var $this = $(this);
 
-            var endpoint = "/groups?$top=500";
+            var endpoint = "/me/joinedteams?$top=999";
 
             execute({
                 clientId: variables.clientId.Graph,
-                version: "v1.0",
+                version: "beta",
                 endpoint: endpoint,
                 type: "GET",
                 callback: render
@@ -1899,7 +1968,6 @@ function isNullOrEmpty(text) {
                 if (isGuild(team.displayName)) {
 
                     var renderTeamInfo = function (channelData) {
-                        counter++;
                         var channel = channelData.value[0];
 
                         var url = 'https://teams.microsoft.com/_#/conversations/' + channel.displayName + '?threadId=' + channel.id.replace(/-/gi, "") + '&ctx=channel';
@@ -1909,6 +1977,7 @@ function isNullOrEmpty(text) {
                         var html = '';
 
                         if ($($this).is('ul')) {
+                            counter++;
                             html += '<li>';
                             html += '   <div class="row">';
                             html += '       <div class="col-3 text-center">';
@@ -2024,10 +2093,10 @@ function isNullOrEmpty(text) {
             setContext(variables.clientId.Graph);
             var $this = $(this);
 
-            var endpoint = "/groups?$top=500";
+            var endpoint = "/me/joinedteams?$top=999";
             execute({
                 clientId: variables.clientId.Graph,
-                version: "v1.0",
+                version: "beta",
                 endpoint: endpoint,
                 type: "GET",
                 callback: render
@@ -2044,72 +2113,50 @@ function isNullOrEmpty(text) {
 
             var teams = data.value;
 
-            execute({
-                clientId: variables.clientId.Graph,
-                version: "v1.0",
-                endpoint: "/me/memberOf?$top=999",
-                type: "GET",
-                callback: function (data) {
-                    var groups = data.value;
-                    var counter = 0;
+            var counter = 0;
 
-                    for (var i = 0; i < teams.length; i++) {
-                        if (counter == 3)
-                            break;
-
-                        var team = teams[i];
-
-                        if (isGuild(team.displayName) && isMemberOf(groups, team.displayName)) {
-                            var bgColor = getIconColor();
-
-                            var html = '';
-
-                            if ($($this).is('ul')) {
-                                html += '<li>';
-                                html += '   <div class="row">';
-                                html += '       <div class="col-3 text-center">';
-                                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                                html += '       </div>';
-                                html += '       <div class="col">';
-                                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                                html += '       </div>';
-                                html += '   </div>';
-                                html += '</li>';
-                            }
-                            else {
-                                html += '<div class="col-5">';
-                                html += '   <div class="row">';
-                                html += '       <div class="col-3 text-center">';
-                                html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
-                                html += '       </div>';
-                                html += '       <div class="col">';
-                                html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
-                                html += '           <p>' + team.description + '</p>';
-                                html += '       </div>';
-                                html += '   </div>';
-                                html += '</div>';
-                            }
-
-                            $($this).append(html);
-
-                            counter++;
-                        }
-                    }
-                }
-            });
-        }
-
-        function isMemberOf(groups, groupName) {
-            var isMember = false;
-
-            for (var i = 0; i < groups.length; i++) {
-                if (groups[i].displayName.toLowerCase() == groupName.toLowerCase()) {
-                    isMember = true;
+            for (var i = 0; i < teams.length; i++) {
+                if (counter == 3)
                     break;
+
+                var team = teams[i];
+
+                if (isGuild(team.displayName)) {
+                    var bgColor = getIconColor();
+
+                    var html = '';
+
+                    if ($($this).is('ul')) {
+                        html += '<li>';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</li>';
+
+                        counter++;
+                    }
+                    else {
+                        html += '<div class="col-5">';
+                        html += '   <div class="row">';
+                        html += '       <div class="col-3 text-center">';
+                        html += '           <p class="team-icon ' + bgColor + '">' + getTeamIcon(team.displayName) + '</p>';
+                        html += '       </div>';
+                        html += '       <div class="col">';
+                        html += '           <h4><a href="https://teams.microsoft.com" target="_blank">' + team.displayName + '</a></h4>';
+                        html += '           <p>' + team.description + '</p>';
+                        html += '       </div>';
+                        html += '   </div>';
+                        html += '</div>';
+                    }
+
+                    $($this).append(html);
                 }
             }
-
-            return isMember;
         }
 
         function getIconColor() {

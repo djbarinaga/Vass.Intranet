@@ -202,6 +202,7 @@ function isNullOrEmpty(text) {
         var location = window.location.href;
         if (location.indexOf('k=') > -1) {
             var locationSplit = location.split('k=');
+			locationSplit[1] = locationSplit[1].substring(0, locationSplit[1].indexOf('#'));
             $(this).val(decodeURIComponent(locationSplit[1]));
         }
 

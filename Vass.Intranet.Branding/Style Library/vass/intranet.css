@@ -399,7 +399,7 @@ header > .row{
     border:none !important;
     width:100% !important;
     padding: 35px 0px 0px 10px !important;
-    height: 100% !important;
+    height: auto !important;
     color:#fff !important;
     border-radius:0px !important;
     margin-bottom: 1px;

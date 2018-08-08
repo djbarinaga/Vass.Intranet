@@ -82,10 +82,10 @@ namespace FormacionIntranet
 
         static void SendSurvey(ClientContext context, ListItem item, ListItem course)
         {
-            var url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion.aspx?c={0}", item["ID"]);
+            var url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion.aspx?c={0}", course["ID"]);
 
             if(course["Tipo_x0020_de_x0020_encuesta"].ToString() == "FUNDAE")
-                url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion-2.aspx?c={0}", item["ID"]);
+                url = string.Format("https://grupovass.sharepoint.com/es-es/formacion/Paginas/Encuesta-formacion-2.aspx?c={0}", course["ID"]);
 
             string body = string.Format(@"<p>El curso ya ha finalizado, solo falta un último paso, ¡queremos saber tu satisfacción sobre el mismo!</p>
                                     <p>Por favor completa la siguiente <a href='{0}'>encuesta</a>.</p>

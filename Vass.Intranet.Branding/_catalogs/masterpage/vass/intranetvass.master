@@ -208,6 +208,7 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 <h5><span class="icon-geo"></span>&nbsp;Geolocalización</h5>
                                 <div class="container">
                                     <p>Finalidad: Herramienta de MDM corporativo para gestión de dispositivos móviles corporativos.</p>
+                                    <p>Sólo para móviles con línea de VASS, excluídos los móviles personales.</p>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
                                             <input type="checkbox" name="Geolocalizacion" class="form-check-input" id="gdprGeolocalizacionOk" value="true">
@@ -230,9 +231,9 @@ To build the master page directly from this HTML file, simply edit the page as y
                                 </div>
                             </div>
                             <div id="gdprImagenes" class="gdpr-form mb-20">
-                                <h5><span class="icon-geo"></span>&nbsp;Imágenes</h5>
+                                <h5><span class="icon-geo"></span>&nbsp;Imágenes (No es obligatorio)</h5>
                                 <div class="container">
-                                    <p>Consiento la publicación de mi imagen en la página web de la entidad, Internet y otros medios similares para difundir las actividades de su entidad:</p>
+                                    <p>Consiento la publicación de mi imagen en la página web de la entidad, Internet y otros medios similares para difundir las actividades de su entidad.</p>
                                     <div class="form-inline">
                                         <div class="form-group form-check mr-20">
                                             <input type="checkbox" name="Imagenes" class="form-check-input" id="gdprImagenesOk" value="true">

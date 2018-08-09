@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 using Microsoft.SharePoint.Client;
+using Microsoft.SharePoint.Client.Utilities;
 using Newtonsoft.Json.Linq;
 
 namespace AjustesOffering
@@ -22,6 +23,13 @@ namespace AjustesOffering
         public int TargetLookupId;
     }
 
+    public struct Cliente
+    {
+        public string FileLeafRef;
+        public string Name;
+        public int TargetLookupId;
+    }
+
     public struct Responsable
     {
         public int UserId;
@@ -29,6 +37,14 @@ namespace AjustesOffering
         public string FileLeafRef;
         public string CodigoOferta;
         public string AnioOferta;
+    }
+
+    public struct DocumentacionOferta
+    {
+        public string CodigoOferta;
+        public string AnioOferta;
+        public string Enlace;
+        public string Descripcion;
     }
 
     public struct Field
@@ -76,6 +92,7 @@ namespace AjustesOffering
     {
         private static Hashtable lookupsTable = new Hashtable();
         private static Hashtable errores = new Hashtable();
+        private static List<string> fallos = new List<string>();
 
         static void Main(string[] args)
         {
@@ -84,7 +101,11 @@ namespace AjustesOffering
             //ResponsablesOfertas();
             //UpdateList();
 
-            Lookups("Ofertas");
+            //Clientes();
+
+            DocumentacionOfertas();
+
+            //Lookups("Ofertas");
             //Lookups("Biblioteca Referencias ES");
             //Lookups("Biblioteca Referencias EN");
         }
@@ -110,14 +131,13 @@ namespace AjustesOffering
 
             context.Load(list);
             context.Load(items, i => i.Include(
-                item => item["C_x00d3_DIGO"],
-                item => item["Cliente"],
-                item => item["A_x00d1_O"]));
+                item => item["FileLeafRef"],
+                item => item["Cliente"]));
 
             context.Load(list.Fields);
             context.ExecuteQuery();
 
-            List<Item> exportItems = new List<Item>();
+            List<Cliente> exportItems = new List<Cliente>();
 
             int itemCount = items.Count;
             int counter = 0;
@@ -126,17 +146,11 @@ namespace AjustesOffering
             {
                 if (listItem["Cliente"] != null)
                 {
-                    FieldLookupValue lookup = listItem["Comercial_x003a_Codigo_x0020_Com"] as FieldLookupValue;
+                    Cliente currentClient = new Cliente();
+                    currentClient.FileLeafRef = listItem["FileLeafRef"].ToString();
+                    currentClient.Name = listItem["Cliente"].ToString();
 
-                    if (lookup.LookupValue != null)
-                    {
-                        Item currentItem = new Item();
-                        currentItem.CodigoComercial = lookup.LookupValue.ToString();
-                        currentItem.AnioOferta = listItem["A_x00d1_O"].ToString();
-                        currentItem.CodigoOferta = listItem["C_x00d3_DIGO"].ToString();
-
-                        exportItems.Add(currentItem);
-                    }
+                    exportItems.Add(currentClient);
                 }
 
                 counter++;
@@ -148,34 +162,34 @@ namespace AjustesOffering
                     Console.WriteLine();
             }
 
-            GetLookupsId(exportItems);
+            GetLookupsIdClientes(exportItems);
         }
 
-        private static void GetLookupsId(List<Item> exportItems)
+        private static void GetLookupsIdClientes(List<Cliente> exportItems)
         {
             Console.WriteLine("Conectando a https://grupovass.sharepoint.com/es-es/businessvalue/offering...");
 
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/offering");
             context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
-            List list = context.Web.Lists.GetByTitle("Codigos Comercial VASS");
+            List list = context.Web.Lists.GetByTitle("Cliente");
 
             int counter = 0;
 
-            List<Item> exportItemsComplete = new List<Item>();
+            List<Cliente> exportItemsComplete = new List<Cliente>();
 
-            foreach (Item exportItem in exportItems)
+            foreach (Cliente exportItem in exportItems)
             {
                 CamlQuery query = new CamlQuery();
                 query.ViewXml = string.Format(@"<View>
                                     <Query>
                                         <Where>
                                             <Eq>
-                                                <FieldRef Name='Codigo_x0020_Comercial'/>
+                                                <FieldRef Name='Title'/>
                                                 <Value Type='Text'>{0}</Value>
                                             </Eq>
                                         </Where>
                                     </Query>
-                                </View>", exportItem.CodigoComercial);
+                                </View>", exportItem.Name);
 
                 ListItemCollection items = list.GetItems(query);
 
@@ -184,7 +198,7 @@ namespace AjustesOffering
 
                 if (items.Count == 1)
                 {
-                    Item newItem = exportItem;
+                    Cliente newItem = exportItem;
                     newItem.TargetLookupId = Convert.ToInt32(items[0]["ID"]);
                     exportItemsComplete.Add(newItem);
                 }
@@ -192,13 +206,13 @@ namespace AjustesOffering
                 counter++;
 
                 int percentage = (counter * 100) / exportItems.Count;
-                Console.Write("Obteniendo códigos comerciales...{0}%\r", percentage);
+                Console.Write("Obteniendo códigos de clientes...{0}%\r", percentage);
             }
 
-            UpdateItems(exportItemsComplete);
+            UpdateItemsClientes(exportItemsComplete);
         }
 
-        private static void UpdateItems(List<Item> exportItems)
+        private static void UpdateItemsClientes(List<Cliente> exportItems)
         {
             ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/offering");
             context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
@@ -206,39 +220,23 @@ namespace AjustesOffering
 
             int counter = 0;
 
-            foreach (Item exportItem in exportItems)
+            foreach (Cliente exportItem in exportItems)
             {
-                CamlQuery query = new CamlQuery();
-                query.ViewXml = string.Format(@"<View>
-                                    <Query>
-                                        <Where>
-                                            <And>
-                                                <Eq>
-                                                    <FieldRef Name='C_x00d3_DIGO'/>
-                                                    <Value Type='Text'>{0}</Value>
-                                                </Eq>
-                                                <Eq>
-                                                    <FieldRef Name='A_x00d1_O'/>
-                                                    <Value Type='Text'>{1}</Value>
-                                                </Eq>
-                                            </And>
-                                        </Where>
-                                    </Query>
-                                </View>", exportItem.CodigoOferta, exportItem.AnioOferta);
+                string fileUrl = "/es-es/businessvalue/offering/Bliblioteca Referencias ES/" + exportItem.FileLeafRef;
+                Microsoft.SharePoint.Client.File file = context.Web.GetFileByServerRelativeUrl(fileUrl);
+                ListItem fileItem = file.ListItemAllFields;
 
-                ListItemCollection items = list.GetItems(query);
-
-                context.Load(items);
+                context.Load(file);
+                context.Load(fileItem);
                 context.ExecuteQuery();
 
-                if (items.Count == 1)
+                if (fileItem != null)
                 {
-                    ListItem item = items[0];
                     FieldLookupValue lv = new FieldLookupValue();
                     lv.LookupId = exportItem.TargetLookupId;
 
-                    item["Comercial"] = lv;
-                    item.Update();
+                    fileItem["ClienteLookup"] = lv;
+                    fileItem.Update();
                     context.ExecuteQuery();
                 }
 
@@ -1138,6 +1136,159 @@ namespace AjustesOffering
                     Console.WriteLine();
             }
         }
+        #endregion
+
+        #region Documentación ofertas
+        public static void DocumentacionOfertas()
+        {
+            GetDocumentacion();
+        }
+
+        private static void GetDocumentacion()
+        {
+            Console.WriteLine("Contectando...");
+            ClientContext context = new ClientContext("http://vassvm-08096/OFVASS");
+            context.Credentials = new System.Net.NetworkCredential("vassdesk\\intranet1", "Lunes.123");
+
+            List list = context.Web.Lists.GetByTitle("Ofertas");
+
+            CamlQuery query = new CamlQuery();
+            query = CamlQuery.CreateAllItemsQuery();
+
+            ListItemCollection items = list.GetItems(query);
+
+            context.Load(list);
+            context.Load(items, i => i.Include(
+                item => item["Documentaci_x00f3_n"],
+                item => item["C_x00d3_DIGO"],
+                item => item["A_x00d1_O"]));
+
+            context.ExecuteQuery();
+
+            List<DocumentacionOferta> exportItems = new List<DocumentacionOferta>();
+
+            int itemCount = items.Count;
+            int counter = 0;
+
+            foreach (ListItem listItem in items)
+            {
+                if(listItem["C_x00d3_DIGO"] != null)
+                {
+                    DocumentacionOferta currentDocumentacion = new DocumentacionOferta();
+                    FieldUrlValue fieldUrl = listItem["Documentaci_x00f3_n"] as FieldUrlValue;
+                    currentDocumentacion.Enlace = fieldUrl.Url;
+                    currentDocumentacion.Descripcion = fieldUrl.Description;
+                    currentDocumentacion.CodigoOferta = listItem["C_x00d3_DIGO"].ToString();
+                    currentDocumentacion.AnioOferta = listItem["A_x00d1_O"].ToString();
+
+                    exportItems.Add(currentDocumentacion);
+                }
+                
+
+                counter++;
+
+                int percentage = (counter * 100) / itemCount;
+                Console.Write("Obteniendo elmentos...{0}%\r", percentage);
+
+                if (percentage == 100)
+                    Console.WriteLine();
+            }
+
+            SetDocumentacion(exportItems);
+        }
+
+        private static void SetDocumentacion(List<DocumentacionOferta> exportItems)
+        {
+            Console.WriteLine("Conectando a https://grupovass.sharepoint.com/es-es/businessvalue/offering...");
+
+            ClientContext context = new ClientContext("https://grupovass.sharepoint.com/es-es/businessvalue/offering");
+            context.Credentials = new SharePointOnlineCredentials("intranet1@vass.es", GetSecureString());
+            List list = context.Web.Lists.GetByTitle("Ofertas");
+
+            int counter = 0;
+
+            foreach (DocumentacionOferta exportItem in exportItems)
+            {
+                CamlQuery query = new CamlQuery();
+                query.ViewXml = string.Format(@"<View>
+                                    <Query>
+                                        <Where>
+                                            <And>
+                                                <Eq>
+                                                    <FieldRef Name='C_x00d3_DIGO'/>
+                                                    <Value Type='Text'>{0}</Value>
+                                                </Eq>
+                                                <Eq>
+                                                    <FieldRef Name='A_x00d1_O'/>
+                                                    <Value Type='Text'>{1}</Value>
+                                                </Eq>
+                                            </And>
+                                        </Where>
+                                    </Query>
+                                </View>", exportItem.CodigoOferta, exportItem.AnioOferta);
+
+                ListItemCollection items = list.GetItems(query);
+
+                context.Load(items);
+                context.ExecuteQuery();
+
+                if (items.Count == 1)
+                {
+                    string url = exportItem.Enlace;
+
+                    if (url.IndexOf("FolderCTID") > -1)
+                        url = url.Substring(0, exportItem.Enlace.IndexOf("&FolderCTID"));
+
+                    url = url.Replace("\\", "/").Replace("http://vassvm-08096/OFVASS/", "https://grupovass.sharepoint.com/es-es/businessvalue/offering/").Replace("OFVASS", "es-es/businessvalue/offering");
+                    string uriPath = string.Empty;
+
+                    try
+                    {
+                        Uri uri = new Uri(System.Web.HttpUtility.UrlDecode(url));
+                        string uriQuery = uri.Query;
+                        uriPath = uri.AbsolutePath;
+
+                        string[] parameters = uriQuery.Split('&');
+
+                        foreach(string parameter in parameters)
+                        {
+                            string[] param = parameter.Split('=');
+                            if(param[0] == "?RootFolder")
+                            {
+                                uriPath += string.Format("{0}={1}", param[0], System.Web.HttpUtility.UrlEncode(System.Web.HttpUtility.UrlDecode(param[1])));
+                            }
+                        }
+
+                    
+                        FieldUrlValue fieldUrl = new FieldUrlValue();
+                        fieldUrl.Description = exportItem.Descripcion;
+                        fieldUrl.Url = uriPath;
+
+                        ListItem item = items[0];
+                        item["Documentaci_x00f3_n"] = fieldUrl;
+                        item.Update();
+
+                        context.ExecuteQuery();
+                    }
+                    catch(Exception ex)
+                    {
+                        fallos.Add(string.Format("Código: {0}. Año: {1}. Url: {2}", exportItem.CodigoOferta, exportItem.AnioOferta, uriPath));
+                    }
+                }
+
+                counter++;
+
+                int percentage = (counter * 100) / exportItems.Count;
+                Console.Write("Asignando documentación...{0}%\r", percentage);
+            }
+
+            foreach(string fallo in fallos)
+            {
+                Console.WriteLine(fallo);
+            }
+        }
+
+
         #endregion
 
         private static bool ContainsField(FieldCollection fields, string fieldName)

@@ -2654,12 +2654,19 @@ function isNullOrEmpty(text) {
 }(jQuery));
 
 function removeDuplicatedTiles(arr) {
-	var newArr = [];
-	arr.map(element => {
-		if (newArr.filter(e => { return e.Title == element.Title; }).length == 0) {
-			newArr.push(element);
-		}
-	});
+    var newArr = [];
+    var auxArr = [];
+    for (var i = 0; i < arr.length; i++) {
+        if (auxArr.indexOf(arr[i].Title) == -1) {
+            auxArr.push(arr[i].Title);
+            newArr.push(arr[i]);
+        }
+    }
+	//arr.map(element => {
+	//	if (newArr.filter(e => { return e.Title == element.Title; }).length == 0) {
+	//		newArr.push(element);
+	//	}
+	//});
 	return newArr;
 }
 

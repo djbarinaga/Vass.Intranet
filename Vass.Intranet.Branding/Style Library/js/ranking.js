@@ -149,6 +149,11 @@
 
                 $($this).append(html);
             }
+
+            if (checkMSIE()) {
+                $("[data-aos^=fade][data-aos^=fade]").css("opacity", "1");
+                $("[data-aos^=fade][data-aos^=fade]").css("transform", "none");
+            }
         }
 
         function compare(a, b) {

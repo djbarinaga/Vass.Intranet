@@ -26,6 +26,13 @@ function isNullOrEmpty(text) {
     return text == null || text == '';
 };
 
+function checkMSIE() {
+    var ua = window.navigator.userAgent;
+    var msie = ua.indexOf("MSIE ");
+
+    return msie > 0;
+};
+
 /*MENU PLUGIN*/
 (function ($) {
     $.fn.menu = function (options) {
@@ -2322,7 +2329,7 @@ function isNullOrEmpty(text) {
             });
         }
         
-        function printTask(task, taskDate = undefined) {
+        function printTask(task, taskDate) {
         	var html = '';
         	var taskDateString = taskDate ? taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear() : '';
 
@@ -2849,7 +2856,8 @@ jQuery(document).ready(function () {
     checkGdpr(function () {
         checkPermissions();
 
-        AOS.init();
+        if (!checkMSIE())
+            AOS.init();
 
         setHomePage();
 

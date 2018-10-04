@@ -2330,6 +2330,7 @@ function checkMSIE() {
         }
         
         function printTask(task, taskDate) {
+
         	var html = '';
         	var taskDateString = taskDate ? taskDate.getDate() + '/' + (taskDate.getMonth() + 1) + '/' + taskDate.getFullYear() : '';
 

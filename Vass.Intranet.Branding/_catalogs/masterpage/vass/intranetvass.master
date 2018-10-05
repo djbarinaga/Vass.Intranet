@@ -67,13 +67,13 @@ To build the master page directly from this HTML file, simply edit the page as y
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js"></script>
         <script type="text/javascript" src="/style library/js/graph.js?rev=20181005"></script>
         <script type="text/javascript" src="/style library/js/animate.js"></script>
-        <script type="text/javascript" src="/style library/js/master.js?rev=20181005"></script>
+        <script type="text/javascript" src="/style library/js/master.js?rev=20181005_2"></script>
         <script type="text/javascript" src="/style library/js/gaming.js?rev=20181005"></script>
         <script type="text/javascript" src="/style library/js/aos/aos.js"></script>
         <script type="text/javascript" src="/style library/datepicker/js/bootstrap-datepicker.min.js"></script>
         <script type="text/javascript" src="/style library/datepicker/locales/bootstrap-datepicker.es.min.js"></script>
         <script type="text/javascript" src="/style library/lightbox/js/lightbox.min.js"></script>
-        <script type="text/javascript" src="/_catalogs/masterpage/vass/Display%20Templates/ListView/jsobjects.js"></script>
+        <script type="text/javascript" src="/_catalogs/masterpage/vass/Display%20Templates/ListView/jsobjects.js?rev=20181005"></script>
 
         <SharePoint:AjaxDelta id="DeltaPlaceHolderAdditionalPageHead" Container="false" runat="server">
             <asp:ContentPlaceHolder ID="PlaceHolderAdditionalPageHead" runat="server">

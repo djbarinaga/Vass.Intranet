@@ -1886,15 +1886,17 @@ function checkMSIE() {
                     }
                 }
 
-                endpoint = '/groups/' + team.id + '/channels';
+                if (team != null) {
+                    endpoint = '/groups/' + team.id + '/channels';
 
-                execute({
-                    clientId: variables.clientId.Graph,
-                    version: "beta",
-                    endpoint: endpoint,
-                    type: "GET",
-                    callback: renderTeamInfo
-                });
+                    execute({
+                        clientId: variables.clientId.Graph,
+                        version: "beta",
+                        endpoint: endpoint,
+                        type: "GET",
+                        callback: renderTeamInfo
+                    });
+                }
             }
 
             renderTeams(0);
